@@ -43,7 +43,7 @@ namespace GiroZilla
             InitializeComponent();
 
             VerifyLogsFolder();
-            CheckLicense();
+            //CheckLicense();
             SetTitle();
         }
 
