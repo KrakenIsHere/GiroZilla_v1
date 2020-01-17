@@ -141,17 +141,18 @@
         </GroupBox>
 
         <GroupBox Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" Margin="10">
-            <DataGrid Name="ServiceGrid" 
-                      HorizontalScrollBarVisibility="Auto"
-                      CanUserResizeRows="False"
-                      CanUserDeleteRows="False"
-                      CanUserReorderColumns="False"
-                      CanUserAddRows="False"
-                      IsReadOnly="True" 
-                      Grid.Column="0" 
-                      Grid.ColumnSpan="3"
-                      Margin="0,0,0,-5" 
-                      Grid.Row="2"/>
+            <DataGrid 
+                Name="ServiceGrid" 
+                HorizontalScrollBarVisibility="Auto"
+                CanUserResizeRows="False"
+                CanUserDeleteRows="False"
+                CanUserReorderColumns="False"
+                CanUserAddRows="False"
+                IsReadOnly="True" 
+                Grid.Column="0" 
+                Grid.ColumnSpan="3"
+                Margin="0,0,0,-5" 
+                Grid.Row="2"/>
         </GroupBox>
 
         <materialDesign:DialogHost 

@@ -26,7 +26,7 @@ namespace GiroZilla.Views
         private DataSet _customerData = new DataSet();
         private DataTable _printRouteCustomerData = new DataTable();
 
-        private int _routeSelectIndex;
+        private int _routeSelectId;
         private readonly List<string[]> _customerDataList = new List<string[]>();
         // 0 = CustomerID
         // 1 = Services
@@ -920,7 +920,7 @@ namespace GiroZilla.Views
             if (RouteGrid.SelectedIndex != -1)
             {
                 ClearAddEditCustomerDialog();
-                _routeSelectIndex = RouteGrid.SelectedIndex;
+
                 AddEditCustomersToDataGrid();
 
                 EditRouteDialog.IsOpen = true;
@@ -1098,8 +1098,7 @@ namespace GiroZilla.Views
             try
             {
                 //Finds the last route that was just created and gets it's ID
-                var selectedRow = CustomerGrid.Items[_routeSelectIndex] as DataRowView;
-                var id = selectedRow?.Row["Rute ID"];
+                var id = _routeSelectId;
 
                 var rows = EditCustomerList.Items;
 
@@ -1432,7 +1431,9 @@ namespace GiroZilla.Views
         {
             try
             {
-                var query = $"SELECT * FROM `all_route-customers` WHERE `Rute ID` = {row.Row.ItemArray[0]}";
+                _routeSelectId = int.Parse(row.Row.ItemArray[0].ToString());
+
+                var query = $"SELECT * FROM `all_route-customers` WHERE `Rute ID` = {_routeSelectId}";
 
                 _customerData = AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString").Result;
 
