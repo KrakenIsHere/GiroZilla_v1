@@ -1,0 +1,212 @@
+﻿<metro:MetroWindow x:Class="GiroZilla.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:views="clr-namespace:GiroZilla.Views"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:s="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        ResizeMode="CanMinimize"
+        GlowBrush="{DynamicResource AccentColorBrush}"
+        BorderThickness="1"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="13"      
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
+        WindowStartupLocation="CenterScreen"
+        Height="900" 
+        Width="1600"
+        KeyDown="MainWindow_OnKeyDown"
+        Loaded="MainWindow_OnLoaded">
+        
+    <metro:MetroWindow.RightWindowCommands>
+        <metro:WindowCommands>
+            <Button Content="{materialDesign:PackIcon Update}" 
+                    Click="Update" />
+        </metro:WindowCommands>
+    </metro:MetroWindow.RightWindowCommands>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid.Resources>
+            <DataTemplate x:Key="MenuItemTemplate" DataType="{x:Type metro:HamburgerMenuIconItem}">
+                <Grid x:Name="RootGrid"
+                      Height="48"
+                      Background="Transparent">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="48" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <ContentControl Grid.Column="0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Content="{Binding Icon}"
+                                    Focusable="False" />
+                    <TextBlock Grid.Column="1"
+                               VerticalAlignment="Center"
+                               FontSize="16"
+                               Text="{Binding Label}" />
+                </Grid>
+            </DataTemplate>
+        </Grid.Resources>
+
+        <materialDesign:DialogHost Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsOpen="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=IsDialogOpen}" DialogTheme="Dark">
+            <materialDesign:DialogHost.DialogContent>
+                <StackPanel Width="500" Height="300">
+                    <Grid Height="300" Width="500">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="50" />
+                        </Grid.RowDefinitions>
+
+                        <Viewbox Grid.Column="0" Grid.Row="0" Stretch="Uniform">
+                            <Label Content="Aktiver Produkt" />
+                        </Viewbox>
+
+                        <xctk:MaskedTextBox x:Name="LicenseTextBox"
+                                            Mask="AAAA-AAAA-AAAA"
+                                            PromptChar=" "
+                                            ValueDataType="{x:Type s:String}"
+                                            MaxLength="14"
+                                            Grid.Column="0"
+                                            Grid.Row="1"
+                                            materialDesign:HintAssist.Hint="Licens (f.eks. XXXX-XXXX-XXXX)"
+                                            Style="{StaticResource MaterialDesignFilledTextFieldTextBox}" 
+                                            AcceptsReturn="False" 
+                                            TextWrapping="NoWrap" 
+                                            Margin="25,0,25,0"
+                                            FontSize="16" 
+                                            Height="70" 
+                                            VerticalAlignment="Top"
+                                            TextChanged="LicenseTextboxTextChanged" />
+
+                        <StackPanel Grid.Column="0" Grid.Row="1" Margin="25,0" VerticalAlignment="Bottom" Height="50">
+                            <TextBlock x:Name="ErrorText" 
+                                       Foreground="Red"
+                                       TextWrapping="Wrap" 
+                                       FontSize="20" />
+                        </StackPanel>
+
+                        <Button x:Name="VerifyBtn" 
+                                Grid.Column="0"
+                                Grid.Row="2" 
+                                Content="Verificer"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center" 
+                                Margin="25,0,0,0" 
+                                Height="40" 
+                                Width="85"
+                                Click="VerifyLicense" />
+
+                        <Button Grid.Column="0" 
+                                Grid.Row="2" 
+                                Content="Afbryd" 
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center" 
+                                Margin="0,0,25,0" 
+                                Height="40" 
+                                Width="77"
+                                Click="CancelLicense"
+                                Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" />
+                    </Grid>
+                </StackPanel>
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
+
+        <metro:HamburgerMenu x:Name="Menu"
+                             IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=IsLicenseVerified}"
+                             Grid.Column="0"
+                             Grid.ColumnSpan="3"
+                             Grid.Row="0"
+                             Grid.RowSpan="3"
+                             ItemTemplate="{StaticResource MenuItemTemplate}"
+                             OptionsItemTemplate="{StaticResource MenuItemTemplate}"
+                             SelectedIndex="0"
+                             ItemClick="Menu_OnItemClick"
+                             OptionsItemClick="Menu_OnItemClick"
+                             Foreground="White"
+                             PaneBackground="#FF444444"
+                             IsPaneOpen="False"
+                             DisplayMode="CompactInline">
+
+            <metro:HamburgerMenu.ContentTemplate>
+                <DataTemplate DataType="{x:Type metro:HamburgerMenuItem}">
+                    <Grid x:Name="ContentGrid">
+                        <Frame x:Name="TheContent"
+                               NavigationUIVisibility="Hidden"
+                               Focusable="False"
+                               Foreground="{DynamicResource BlackBrush}"
+                               Content="{Binding Tag}" />
+                    </Grid>
+                </DataTemplate>
+            </metro:HamburgerMenu.ContentTemplate>
+
+            <metro:HamburgerMenu.ItemsSource>
+                <metro:HamburgerMenuItemCollection>
+
+                    <metro:HamburgerMenuIconItem Icon="{materialDesign:PackIcon Kind=AccountSupervisor}" Label="Kunder">
+                        <metro:HamburgerMenuIconItem.Tag>
+                            <views:Customers />
+                        </metro:HamburgerMenuIconItem.Tag>
+                    </metro:HamburgerMenuIconItem>
+
+                    <metro:HamburgerMenuIconItem Icon="{materialDesign:PackIcon Kind=LocalPrintShop}" Label="Faktura">
+                        <metro:HamburgerMenuIconItem.Tag>
+                            <views:Invoice />
+                        </metro:HamburgerMenuIconItem.Tag>
+                    </metro:HamburgerMenuIconItem>
+
+                    <metro:HamburgerMenuIconItem Icon="{materialDesign:PackIcon Kind=RoadVariant}" Label="Ruteplan">
+                        <metro:HamburgerMenuIconItem.Tag>
+                            <views:Routes />
+                        </metro:HamburgerMenuIconItem.Tag>
+                    </metro:HamburgerMenuIconItem>
+
+                    <metro:HamburgerMenuIconItem Icon="{materialDesign:PackIcon Kind=CheckboxesBlankOutline}" Label="Produkter">
+                        <metro:HamburgerMenuIconItem.Tag>
+                            <views:Products />
+                        </metro:HamburgerMenuIconItem.Tag>
+                    </metro:HamburgerMenuIconItem>
+
+                </metro:HamburgerMenuItemCollection>
+
+            </metro:HamburgerMenu.ItemsSource>
+
+            <metro:HamburgerMenu.OptionsItemsSource>
+                <metro:HamburgerMenuItemCollection>
+
+                    <metro:HamburgerMenuIconItem Icon="{materialDesign:PackIcon Kind=QuestionMarkRhombus}" Label="Hjælp">
+                        <metro:HamburgerMenuIconItem.Tag>
+                            <views:Help />
+                        </metro:HamburgerMenuIconItem.Tag>
+                    </metro:HamburgerMenuIconItem>
+
+                    <metro:HamburgerMenuIconItem Icon="{materialDesign:PackIcon Kind=SettingsOutline}" Label="Indstillinger">
+                        <metro:HamburgerMenuIconItem.Tag>
+                            <views:Settings />
+                        </metro:HamburgerMenuIconItem.Tag>
+                    </metro:HamburgerMenuIconItem>
+
+                </metro:HamburgerMenuItemCollection>
+            </metro:HamburgerMenu.OptionsItemsSource>
+        </metro:HamburgerMenu>
+    </Grid>
+</metro:MetroWindow>

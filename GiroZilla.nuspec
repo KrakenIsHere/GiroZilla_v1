@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>GiroZilla</id>
+        <title>GiroZilla</title>
+        <icon>lib\net45\Assets\Icon\Icon Lines.png</icon>
+        <owners>Minik Gaarde Lambrect, Kristian Kraken Sarka Nielsen</owners>
+        <version>1.0.663</version>
+        <authors>PyroSquid</authors>
+        <description>GiroZilla DFS custom version</description>
+        <copyright>Copyright © 2019 Minik Gaarde Lambrect &#38; Kristian Kraken Sarka Nielsen</copyright>
+    </metadata>
+    <files>
+        <file src="GiroZilla\obj\Release\**"
+              exclude="**\*.pdb;**\*.vhost;**\*app.publish\**;**\*TempPE\**;**\*de\**;**\*es\**;**\*fr\**;**\*hu\**;**\*it\**;**\*pt-BR\**;**\*ro\**;**\*ru\**;**\*sv\**;**\*zh-Hans\**;"
+              target="lib/net45" />
+    </files>
+</package>

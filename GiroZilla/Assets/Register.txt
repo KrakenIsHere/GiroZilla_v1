@@ -1,0 +1,459 @@
+Henrik Burgaard,Højskolevej 48,5700,Svendborg,754_
+Henry Ravn,Ternevej 5,5600,Faaborg,751_
+Henry Ravn,Ternevej 5,5600,Faaborg,747_
+Bjarne Ravn,Svendborgvej 136,5600,Faaborg,741_
+Vibeke Por,Brahesvej 18,5600,Faaborg,740_
+Julie og Jakob Wade,Brahsvej 34,5600,Faaborg,740_
+Finn Møller,Sundbrovej 65,5700,Svendborg,739_
+Otto Rasmussen,Reventlowsvej 46,5600,Faaborg,729_
+Michael Thrane,Spanget 3a,5600,Faaborg,728_
+Lene Kristina Rasmussen,Spanget 3b,5600,Faaborg,727_
+Flemming Hansen,Horsehoved 41,5600,Faaborg,724_
+Henrik Hansen,Vester Nørremarksvej 14,5600,Faaborg,721_
+Szymon Jdczak,Reventlowsvej 26A,5600,Faaborg,720_
+Jeppe Hedemann,Stenbækvej 34 Håstrup,5600,Faaborg,719_
+Bruno Stub,Mellemhaverne 1,5600,Faaborg,718_
+NULL,Spanget 3C,5600,Faaborg,717_
+NULL,Spanget 3,5600,Faaborg,716_
+Svend Ankjær,Reventlowsvej 80,5600,Faaborg,715_
+Svend Ankjær,Reventlowsvej 64,5600,Faaborg,714_
+Jens-Christian Nielsen,Fritz Sybergsvej 4,5600,Faaborg,713_
+Daniel Ottesen,Sybilsvej 36,5600,Faaborg,712_
+Niel Stærkær,Fagsted 5,5600,Faaborg,711_
+Elly og Niels Nielsen,Svendborgvej 349,5600,Faaborg,709_
+Benny Jørgensen,Kildegårdsvej 4,5600,Faaborg,708_
+Gudrun Rasmussen,Kildegårdsvej 1,5600,Faaborg,707_
+Jan Villebro,Østergyden 36,5600,Faaborg,706_
+Finn Hansen,Østergyden 26,5600,Faaborg,705_
+Eva og Jørn Hvilsted,Østergyden 18,5600,Faaborg,704_
+Kennth Krogh,Svendborgvej 364,5600,Faaborg,703_
+Flemming Pedersen,Østergyden 12,5600,Faaborg,702_
+Gunner Kristensen,Svendborgvej 324,5600,Faaborg,701_
+Hans Billum Jensen,Svendborgvej 308,5600,Faaborg,700_
+Mentor Kelani,Svendborgvej 299,5600,Faaborg,699_
+Anette og kristian Mørk Skou,Svendborgvej 297,5600,Faaborg,698_
+Torben Sloth,Svendborgvej 292,5600,Faaborg,697_
+Bjarne Madsen,Svendborgvej 277,5600,Faaborg,696_
+Ann Kristensen,Svendborgvej 267,5600,Faaborg,695_
+Berit Schioldan,Svendborgvej 263,5600,Faaborg,694_
+Henning Bjarke Sørensen,Svendborgvej 259,5600,Faaborg,693_
+Søren Lind,Svendborgvej 251,5600,Faaborg,692_
+Hennning Lindhardtsen,Svendborgvej 313,5600,Faaborg,691_
+Henny Kreutz,Svendborgvej 261,5600,Faaborg,690_
+Mikkel Eriksen,Nabgyden 15,5600,Faaborg,689_
+Ann Henriksen,Sanatorievej 6,5600,Faaborg,688_
+Lone Vandkok,Sanatorievej 5,5600,Faaborg,687_
+Hardy Bonde Sørensen,Sanatorievej 14,5600,Faaborg,686_
+Gynnar Horde,Sanatorievej 15,5600,Faaborg,685_
+Gunild Vejlby Jørgensen,Nabgyden 58,5600,Faaborg,684_
+Per Svenstrup,Nabgyden 53,5600,Faaborg,683_
+Tim Storgaard,Nabgyden 47,5600,Faaborg,682_
+Stig Møller,Nabgyeden 40,5600,Faaborg,681_
+Julie og Nathan Milling-Benson,Nabgyden 38 Strandgården,5600,Faaborg,680_
+Bjarne Tychsen,Møllerhøj 63,5600,Faaborg,679_
+Hans Martin Rasmussen,Møllehøj 6,5600,Faaborg,678_
+Erling Jørgensen,Gyvermosen 21,5600,Faaborg,677_
+Morten Andersen,Gyvermosen 14,5600,Faaborg,676_
+Jette Møller Sørensen,Eskemosegyden 72,5600,Faaborg,675_
+Birgit Ostergård,Eskemosegyden 69,5600,Faaborg,674_
+Kirsten og Leif Breuner-Schou,Eskemosegyden 51,5600,Faaborg,673_
+John Christensen,Eskemosegyden 49,5600,Faaborg,672_
+Janne Tømmerholdt,Eskemosegyden 43,5600,Faaborg,671_
+Michael levin,Eskemosegyden 57,5600,Faaborg,670_
+Erhard Launtoft,Eskemosegyden 27,5600,Faaborg,669_
+Jens Skyggebjerg,Eskemosegyden 10,5600,Faaborg,668_
+Liselotte Og Frank Binau,Bystævnevej 50,5600,Faaborg,511_
+Niels Løgstrup,Dyndkrogvej 8,5600,Faaborg,510_
+Erik Weiis,Bøjden Landevej 14,5600,Faaborg,509_
+Erland Christensen,Stenshøjvej 6,5600,Faaborg,508_
+Jesper Durr,Ramsevej 12,5600,Faaborg,507_
+Henrik Bønneland Nielsen,Ramsevej 22,5600,Faaborg,506_
+Mogens Lysmose,Kousbækvej 3,5600,Faaborg,505_
+Leif Nikolajsen,Kousbækvej 11,5600,Faaborg,504_
+Ebbe Nielsen,Kalvørvej 10,5600,Faaborg,503_
+Martin Bønneland,Dyndkrogvej 2,5600,Faaborg,502_
+Tom Pedersen,Hestehauge 6,5600,Faaborg,501_
+Palle Jensen,Sølvbjergvej 19,5600,Faaborg,496_
+Svend Åge Nielsen,Bøgebjergvej 60,5600,Faaborg,495_
+Anders Skade Madsen,Strandvejen 6,5600,Faaborg,494_
+Pernille Risbank,Faurshøjvej 3,5600,Faaborg,493_
+Erik Launtoft,Sølvbjergvej 1,5600,Faaborg,492_
+Kurt Pedersen,Møllergårdsvej 20,5600,Faaborg,491_
+Erik Jensen,Frederiksbergvej 46,5600,Faaborg,490_
+Morten Skov,Frederiksbergvej 40,5600,Faaborg,489_
+Gunner Damholt,Frederiksbergvej 24,5600,Faaborg,488_
+Bjarne Christoffersen,Svendborgvej 371,5600,Faaborg,486_
+Betina Og Benny Jeppesen,Toftevej 6,5600,Faaborg,485_
+Bjarne Pedersen,Toftevej 16,5600,Faaborg,484_
+Ejgil Simonsen,Svendborgvej 455,5600,Faaborg,483_
+Kurt Jensen,Svendborgvej 452,5600,Faaborg,482_
+Birthe Clausen,Svendborgvej 445,5600,Faaborg,481_
+Jens Gudmund Hansen,Sønderhjørnevej 8,5600,Faaborg,395_
+Robert Madsen,Nørreballevej 12,5600,Faaborg,394_
+Lasse Hansen,Perlestrædet 6,5600,Faaborg,393_
+Gunvor og Per Ramming-Andersen,Møllervej 3,5600,Faaborg,392_
+Svend Åge Christiansen,Nørreballevej 10,5600,Faaborg,391_
+Hans Pedersen,Møllervej 2,5600,Faaborg,390_
+Gregory Zilinck,Nørreballevej 20,5600,Faaborg,389_
+Stine K Bebe,Hornelandevej 2F,5600,Faaborg,388_
+Dorthe og Jørgen Traum,Dueredsvænget 4,5600,Faaborg,387_
+Ib Hjort Pedersen,Vesterballe 35,5600,Faaborg,386_
+Jørgen Juul Hansen,Tåstebjerggyden 1B,5600,Faaborg,385_
+Søren Stage,Tåstebjerggyden 17,5600,Faaborg,384_
+Ken Stjerneby,Tåstebjerggyden 9,5600,Faaborg,383_
+Frede B Larsen,Tåstebjerggyden 8,5600,Faaborg,382_
+Ida og Ole Andersen,Stenshøjvej 3,5600,Faaborg,381_
+Gitte Skov Jochumsen,Stenshøjvej 13,5600,Faaborg,380_
+Flemming Madsen,Kirkeballe 6,5600,Faaborg,379_
+Emma Hansen,Kirkeballe 12,5600,Faaborg,378_
+Lilly Pedersen,Horne Landevej 17,5600,Faaborg,377_
+Jørn Stensdal,Hornegyden 15,5600,Faaborg,376_
+Bjarke Bramming,Egsgyden 9,5600,Faaborg,375_
+Conni Larsen,Bystævnevej 21,5600,Faaborg,374_
+Poul Erik Witt,Sinebjergvej 58,5600,Faaborg,373_
+Vibeke Og Åge Bergefeldt,Vesterballe 41,5600,Faaborg,372_
+Kim Demuth Christensen,Præstegårdsgyden 19A,5600,Faaborg,371_
+Michael og Hanne Andersen,Hvedeholms Alle 3,5600,Faaborg,370_
+Bent Mogens Pedersen,Hestehauge 1,5600,Faaborg,369_
+Anne Thorslund,kalekovænget 13,5600,Faaborg,368_
+Jytte Nielsen,Mosevej 7,5600,Faaborg,367_
+Knud Andersen,Mosevej 5,5600,Faaborg,366_
+Åge Nielsen,Rørdumsvej 19,5600,Faaborg,365_
+Ove Rasmussen,Hellig Korsvænget 6,5600,Faaborg,364_
+Sanne Ambo Rasmussen,Assensvej 60A,5600,Faaborg,363_
+Jan Christensen,Østerbrogade 6,5600,Faaborg,362_
+John Dalsgård Nielsen,Østermøllevej 17,5600,Faaborg,361_
+Asger Clausen,Østerled 12,5600,Faaborg,360_
+Marianne og Jørgen Olsen,Østerled 11,5600,Faaborg,359_
+Vivi Larsen,Øster Møllevej 10,5600,Faaborg,358_
+Anders og Grethe Vejlmark,Toldertoften 29,5600,Faaborg,357_
+Annegrethe Jørgensen,Søtoften 49,5600,Faaborg,356_
+Maria Wind Pedersen,Søtoften 41,5600,Faaborg,355_
+Finn Flintegård,Søtoften 32,5600,Faaborg,354_
+Prebem Storm,Søtoften 30,5600,Faaborg,353_
+Helle og Niels Hansen,Søtoften 17,5600,Faaborg,352_
+Dorthe og Henrik Andersen,Svendborgvej 98,5600,Faaborg,351_
+Benny Hedehård,Svendborgvej 65A,5600,Faaborg,350_
+Niels Aaderup,Svendborgvej 46,5600,Faaborg,349_
+Jens og Vivi Aaderup,Svendborgvej 163,5600,Faaborg,348_
+Mogens From,Svendborgvej 134,5600,Faaborg,347_
+Jimmi Madsen,Svendborgvej 120,5600,Faaborg,346_
+Helmuth Andersen,Råmosevej 2,5600,Faaborg,345_
+Lise Sørensen,Røde Kro 7,5600,Faaborg,344_
+Ingelise og Gunner Larsen Birkelund,Røde kro 3,5600,Faaborg,343_
+Allan Sørensen,Ruagerparken 16,5600,Faaborg,342_
+Flemming Clausen,Pugesøvej 10,5600,Faaborg,341_
+Hanne Mortensen,Priorensgade 4,5600,Faaborg,340_
+Annelise Poulsen,Priorensgade 39,5600,Faaborg,339_
+Grethe Johansen,Priorensgade 23,5600,Faaborg,338_
+Tommy Pedersen,Peter Hansensvej 16,5600,Faaborg,337_
+Allan Jensen,Parkvej 27,5600,Faaborg,336_
+Claus A Jensen,Hornegyden 25,5600,Faaborg,335_
+Kirsten Stricker,Lagonis Minde 3,5600,Faaborg,335_
+Karin Kristensen,Lagonis Minde 1,5600,Faaborg,334_
+Niels Erik Møller,Klostergade 33,5600,Faaborg,333_
+Sten Gundersen,Klostergade 29,5600,Faaborg,332_
+Søren Nielsen,Klostergade 23,5600,Faaborg,331_
+Kirsten Skov,Klintevej 10A,5600,Faaborg,330_
+Poul Isaksen,Klintevej 10,5600,Faaborg,329_
+Per Axelsen,Kildetoften 19,5600,Faaborg,328_
+Karsten Larsen,Kalekovej 73,5600,Faaborg,327_
+Iver og Gitte Hallundbæk,Kalekovej 71,5600,Faaborg,326_
+Kim Pedersen,Kalekovej 60,5600,Faaborg,325_
+Jan Gertsen,Kalekovej 68,5600,Faaborg,324_
+Ole Eske Hansen,Kalekovej 37,5600,Faaborg,323_
+Jeppe Skov,Hede Marken 2,5600,Faaborg,322_
+Christian Frederiksen,Hans Rasmussens Have 7A,5600,Faaborg,321_
+Flemming Bennebjerg,Hans Rasmussens Have 17,5600,Faaborg,320_
+Jørgen Vendeltorp,Hans Rasmussens Have 11,5600,Faaborg,319_
+Erik Andreasen,Færgvej 8,5600,Faaborg,318_
+Børge og Grethe Hast,Damtoften 30,5600,Faaborg,317_
+Ole Pedersen,Damtoften 13,5600,Faaborg,316_
+Flemming Westergård,Brevikvej 12,5600,Faaborg,315_
+Erik Severin,Assensvej 32,5600,Faaborg,314_
+Klaus Jørgen Lapdrup,Assensvej 40,5600,Faaborg,313_
+Else Marie og Erik Antvorskov,Ærøvej 10,5600,Faaborg,312_
+Elisebeth Henriksen,Vigøvej 9,5600,Faaborg,311_
+Ole Ahrentsen,Vigøvej 10,5600,Faaborg,310_
+Bjarne Nielsson,Vibevej 21,5600,Faaborg,309_
+Thordis og Flemming Bihl,Vibevej 19,5600,Faaborg,308_
+Sven Nørregård Larsen,Vibevej 15,5600,Faaborg,307_
+Karen marie andersen,Vibevej 9,5600,Faaborg,306_
+Annie og Jens Ove Bang,Tåstebjerggyden 12,5600,Faaborg,305_
+Ulla Jensen,Thornhøjvej 9,5600,Faaborg,304_
+Tony Schack,Tornhøjvej 10,5600,Faaborg,303_
+Irene Jørgensen,Thurøvej 32,5600,Faaborg,302_
+Jørgen Jensen,Thurøvej 17,5600,Faaborg,301_
+Lars Haldbo Poulsen,Thurøvej 26,5600,Faaborg,300_
+Ane Petersen,Thurøvej 50,5600,Faaborg,299_
+Prebem Juul og Estrid Pedersen,Thurøvej 42,5600,Faaborg,298_
+Ulla Breum Jensen,Thurøvej 36,5600,Faaborg,297_
+Poul Erik Christensen,Thurøvej 28,5600,Faaborg,296_
+Bjarne Holm,Thurøvej 27,5600,Faaborg,295_
+Helle og Claus Nielsen,Ternevej 12,5600,Faaborg,294_
+Reidar Kleven,Ternevej 9,5600,Faaborg,293_
+Knud Hansen,Ternevej 7,5600,Faaborg,292_
+Niels Enghave Larsen,Strynøvej 11,5600,Faaborg,290_
+Erik Andersen,Strynøvej 12,5600,Faaborg,289_
+Torben Hvid Pedersen,Strynøvej 10,5600,Faaborg,288_
+Elise og Tage Søndermark,Strandløkken 13,5600,Faaborg,287_
+Marry og Bjarne Hansen,Strandholmen 52,5600,Faaborg,286_
+Jørgen Christensen,Strandholmen 54A,5600,Faaborg,285_
+Rasmus Jørgensen,Strandholmen 50,5600,Faaborg,284_
+Peter og Henriette Lind,Strandholmen 41A,5600,Faaborg,283_
+Per og Kirsten Bjørk,Strandholmen 38,5600,Faaborg,282_
+Willy Sørensen,Strandholmen 12A,5600,Faaborg,281_
+Knud Jeppesen,Strandholmen 2,5600,Faaborg,280_
+Uffe Pedersen,Skarøvej 7,5600,Faaborg,279_
+Chris Terkelsen,Skarøvej 6,5600,Faaborg,278_
+Knud og Elise Reffstrup,Skarøvej 30,5600,Faaborg,277_
+Ammy Hansen,Skarøvej 28,5600,Faaborg,276_
+Hans Henning Haldbo,Skarøvej 16,5600,Faaborg,275_
+Palle Hoffmann Mikkelsen,Skarøvej 9,5600,Faaborg,274_
+Jens Haack Madsen,Skarøvej 8,5600,Faaborg,273_
+Kaj Michalsen,Skarøvej 1,5600,Faaborg,272_
+Erik Mønster,Siøvej 6,5600,Faaborg,271_
+Henriette Holch,Siøvej 36,5600,Faaborg,270_
+ChristianDyhre Cristensen,Siøvej 34,5600,Faaborg,269_
+Sven Børge Larsen,Siøvej 26,5600,Faaborg,268_
+Henning Jacobsen,Siøvej 24,5600,Faaborg,267_
+Leif Pedersen,Siøvej 22,5600,Faaborg,266_
+Ole Petersen,Siøvej 4,5600,Faaborg,265_
+Poul Erik Pedersen,Siøvej 1,5600,Faaborg,264_
+Niels Ove Nielsen,Sinebjergskov 8,5600,Faaborg,263_
+NULL,Sinebjergskov 10,5600,Faaborg,262_
+Arent Bak Josefsen,Sandageren 17,5600,Faaborg,261_
+NULL,Sandageren 22,5600,Faaborg,260_
+Ulla Christensen,Sandageren 12,5600,Faaborg,259_
+Kirsten Lohse,Sandageren 11,5600,Faaborg,258_
+Leonora Knudsen,Sandageren 8,5600,Faaborg,257_
+Peter Andersen,Sandageren 3,5600,Faaborg,256_
+Kirsten Bjoljahn,Ny Holstensprøve 13,5600,Faaborg,255_
+Jens Rasmussen,Mågevej 25,5600,Faaborg,254_
+Knud Fejerskov,Lærkevej 32,5600,Faaborg,253_
+Flemming Eriksen,Lærkevej 5,5600,Faaborg,252_
+Lars Henriksen,Lærkevej 3,5600,Faaborg,251_
+Søren og Kirsten Præstegaard,Lærkevej 1,5600,Faaborg,250_
+Carsten Krogh,Lille Stege 18,5600,Faaborg,249_
+Søren Nielsen,Klinteholmvej 10,5600,Faaborg,248_
+Gudrun Rasmussen,Kildegårdsvej 49,5600,Faaborg,247_
+Sten-Peter Lundbye-Kristiansen,Kalvørevej 8,5600,Faaborg,246_
+Bodil jensen,Illumøvej 9,5600,Faaborg,245_
+Anette Bisgaard,Illumøvej 16,5600,Faaborg,244_
+Jørn Plet,Horsehoved 29,5600,Faaborg,243_
+Hardy Vølund,Horsehoved 16,5600,Faaborg,242_
+Knud Hansen,Horsehoved 27,5600,Faaborg,241_
+Grethe Koli,Horsehoved 24,5600,Faaborg,240_
+Kaj Christensen,Horsehoved 22,5600,Faaborg,239_
+Jørgen Rasmussen,Horsehoved 19,5600,Faaborg,238_
+Lene og Carsten Toft,Horsehoved 11,5600,Faaborg,237_
+Claus Eickstedt,Horsehoved 3,5600,Faaborg,236_
+NULL,Hjortøvænget 6,5600,Faaborg,235_
+Kirsten og Søren Maagaard,Hjortøvænget 7,5600,Faaborg,234_
+Marianne Hansen,Hesseløjevej 16,5600,Faaborg,233_
+Tage Christensen,Hesseløjevej 4,5600,Faaborg,232_
+Arne Mølborg,Hegnet 18,5600,Faaborg,230_
+Helle Lehn,Hegnet 16,5600,Faaborg,229_
+Preben Bagge,Hegnet 15,5600,Faaborg,228_
+Jørgen Rasmussen,Hegnet 7,5600,Faaborg,227_
+Kaj Hansen,Fruerlund 47,5600,Faaborg,226_
+Hans Sylvest,Fruerlund 43,5600,Faaborg,225_
+Carsten Clausen,Fruerlund 40,5600,Faaborg,224_
+Birte Petersen,Fruerlund 31,5600,Faaborg,223_
+Jørn Andersen,Fruerlund 30,5600,Faaborg,222_
+Henning Rasmussen,Fruerlund 26,5600,Faaborg,221_
+Frede Madsen,Fruerlund 17,5600,Faaborg,220_
+Frank Mackeprang,Fruerlund 2,5600,Faaborg,219_
+Flemming Bruun,Fiskerstien 22,5600,Faaborg,218_
+Thomas og Laila Hansen-Fogtmann,Fiskerstien 13,5600,Faaborg,217_
+K. Mortensen,Fiskerstien 18,5600,Faaborg,216_
+Jørn Meier,Fiskerstien 14,5600,Faaborg,215_
+Gyllich Gulliksen,Fiskerstien 11,5600,Faaborg,214_
+Lars Boe,Egeholmvej 24,5600,Faaborg,213_
+Lars Boe,Egeholmvej 14,5600,Faaborg,212_
+Ulrik Christensen,Dybskrog 1,5600,Faaborg,211_
+Renate Katarina Topp,Dueredsvænget 7,5600,Faaborg,210_
+Dorthe Slot,Bjørnøvænget 10,5600,Faaborg,209_
+Jørn Grøn,Bjørnøvænget 4,5600,Faaborg,208_
+Ulla og Vagn Andersen,Bøgebjerglund 57,5600,Faaborg,207_
+Flemming Arnoldsen,Bøgebjerglund 56,5600,Faaborg,206_
+Bente og Poul Erik Bentsen,Bøgebjerglund 48,5600,Faaborg,205_
+Ebbe Hansen,Bøgebjerglund 47,5600,Faaborg,204_
+Jacob Kjær Larsen,Birkolmvej 5,5600,Faaborg,203_
+Jytte Nielsen,Bursminde 9,5600,Faaborg,202_
+Doris Andersen,Bjørnevænget 9,5600,Faaborg,201_
+Niels Råhauge,Bjerghammer 23,5600,Faaborg,200_
+Pernille Jensen,Birkholmvej 7,5600,Faaborg,199_
+NULL,Avernakøvej 29,5600,Faaborg,198_
+Jens Gudmund Hansen,Avernakøvej 4,5600,Faaborg,197_
+Gunner Møller,Østergyden 40,5600,Faaborg,196_
+Kurt Pedersen,Østergyden 4A,5600,Faaborg,195_
+Flemming Berg Pedersen,Tværvej 8,5600,Faaborg,194_
+Morten Jensen,Svendborgvej 352,5600,Faaborg,193_
+Jørn hansen,Svendborg 298,5600,Faaborg,192_
+Anders Jørgensen,Svendborgvej 721,5600,Faaborg,191_
+JR Sydfyn APS Stofmøllen,Svendborgvej 303,5600,Faaborg,190_
+Erik Knudsen,Eskemosegyden 68,5600,Faaborg,189_
+Per Hansen,Svendborgvej 331,5600,Faaborg,188_
+Henning Bastrup,Peter Hansenvej 2A,5600,Faaborg,187_
+Jan Rasmussen,Rørdrumsvej 21,5600,Faaborg,186_
+G. Udeby,Hyrdehøj 5,5600,Faaborg,185_
+Jørn Steen,Fiskerstien 16,5600,Faaborg,184_
+Peter Meinche,Hågerupvej 49A,5600,Faaborg,184_
+Rasmus Birkholm,Hellebjergvej 5,5600,Faaborg,183_
+Bjarke Laursen,Flenningevej 7,5600,Faaborg,182_
+Charlotte & Michael Abildtrup,Arreskovvej 11,5600,Faaborg,181_
+Anders Ploug Sørensen,Tåstebjergyden 13,5600,Faaborg,180_
+Kasber Rasch Jensen,Tåstebjerggyden 1,5600,Faaborg,179_
+Torben Poulsen,Hornelandevej 105,5600,Faaborg,178_
+Palle Jensen Find,Vesterballe 21,5600,Faaborg,177_
+Per Uglebjerg Jensen,Tværgyden 1,5600,Faaborg,176_
+Henning Krog,Sinebjergvej 57,5600,Faaborg,175_
+J-S Elmelund,Sinebjergvej 56,5600,Faaborg,174_
+Erik Nøhr,Sinebjergvej 52,5600,Faaborg,173_
+NULL,Ternevej 4,5600,Faaborg,172_
+Sussanne Trolle,Præstegårdsgyden 20,5600,Faaborg,171_
+Mikkel Lundsgård,Lillemarksvej 11,5600,Faaborg,170_
+Jes Roy,Hornelandevej 4,5600,Faaborg,169_
+Torben Poulsen,Hornelandevej 103,5600,Faaborg,168_
+Per Skerning,Hornegyden 23,5600,Faaborg,167_
+Gert Rasmussen,Horne Strandvej 5,5600,Faaborg,166_
+Jørgen Hansen,Hornelandevej 2B,5600,Faaborg,165_
+Jens Gudmund Hansen,Dyndkrogvej 5,5600,Faaborg,164_
+Jørgen Holm Larsen,Dueredsvænget 1,5600,Faaborg,163_
+Finn Christoffersen,Bønnelandevej 2,5600,Faaborg,162_
+Kirsten Lohse,Bystævnevej 68 Bøjden,5600,Faaborg,161_
+Lars Lind Conradsen,Bystævnevej 14 Bøjden,5600,Faaborg,160_
+Benny Kaslund,Strandvejen 70,5600,Faaborg,159_
+Bjarne Madsen,Skovgårdsvej 9,5600,Faaborg,158_
+Carsten & Anette Rasmussen,Sølvbjergvej 15,5600,Faaborg,157_
+Knud Jørgensen,Svelmegårdsvej 11,5600,Faaborg,156_
+Freddy Kjær,Strandvejen 78,5600,Faaborg,155_
+Finn Urebjerg Pedersen,Pejrupvej 28,5600,Faaborg,154_
+Gitte Degn Hansen,Pejrupvej 60,5600,Faaborg,153_
+Poul Erik Lundsfryd,Frederiksbergvej 35,5600,Faaborg,151_
+Bjarne Madsen,Skovgårdsvej 9,5600,Faaborg,158_
+Laust Lange Christensen,Egemosevej 16,5853,Ørbæk,150_
+I-S Haramara,Strandvejen 20,5762,Vesterskerninge,149_
+Brigitta & Benny Jensen,Højdong 16 Stenstrup,5600,Faaborg,148_
+Mogen Pedersen,Nyløkke 1 Fauershøj,5600,Faaborg,147_
+Peder Christiansen,Odensevej 178,5600,Faaborg,146_
+Vivi Birk Nielsen,Assensvej 272 Millinge,5600,Faaborg,145_
+Thilde Søsborg,Mellemhaverne 42 Korinth,5600,Faaborg,144_
+Niels Erik Jensen,Brahesvej 29 Millinge,5600,Faaborg,143_
+Per Jørgensen,Frisenvængevej 2 V. Åby,5600,Faaborg,140_
+Jens Andersen,Bygaden 32 Håstrup,5600,Faaborg,139_
+Preben Storm,Arreskovvej 2 Ø. Hæsinge,5600,Faaborg,138_
+Inge & Oluf Matinussen,Bjerne Langgyden 4,5600,Faaborg,136_
+Bente & Flemming Jørgensen,Dyreborgvej 32,5600,Faaborg,135_
+Christian Skytte,Dyreborgvej 57,5600,Faaborg,134_
+Leif Johansen,Dyreborgvej 16,5600,Faaborg,133_
+Lone Møller,Smedebakken 26,5600,Faaborg,132_
+Karsten Neldberg,Smedebakken 24,5600,Faaborg,131_
+Morten Kjærgård Christensen,Østergyden 23,5600,Faaborg,129_
+Flemming Berg Pedersen,Tværvej 4,5600,Faaborg,128_
+Keld Winther Jensen,Nabgyden 33,5600,Faaborg,127_
+Swittana Nocicka,Svendborgvej 312,5600,Faaborg,126_
+Bjarne B Jensen,Tværvej 12,5600,Faaborg,125_
+Kurt Pedersen,Østergyden 4,5600,Faaborg,124_
+BSJ Ejendomme,Svendborgvej 356,5600,Faaborg,123_
+BSJ Ejendomme,Svendborg 354,5600,Faaborg,122_
+John Rasmussen,Svendborgvej 340,5600,Faaborg,121_
+Tommy Ploug,Svendborgvej 307,5600,Faaborg,120_
+Hans M Hansen,Svendborgvej 288,5600,Faaborg,119_
+Jesper Green Rasmussen,Hågerupvej 27,5600,Faaborg,118_
+Inge Marie Rasmussen,Svendborgvej 278,5600,Faaborg,118_
+Niels Christensen,Svendborgvej 255,5600,Faaborg,117_
+Dorthe Flytkjær Madsen,Svendborgvej 245,5600,Faaborg,116_
+Brian Larsen,Svendborgvej 243,5600,Faaborg,115_
+NULL,Svelmø 55,5600,Faaborg,114_
+NULL,Svelmø 49,5600,Faaborg,113_
+Hanne Guldbjerg,Nabgyden 11,5600,Faaborg,112_
+Jimmi Lykke Rasmussen,Møllerhøj 55,5600,Faaborg,111_
+Gudrun Rasmussen,Kildegårdsvej 2,5600,Faaborg,110_
+Bjørn Nake,Gyvermosen 2,5600,Faaborg,109_
+Georg Svendsen,Gyvermosen 6,5600,Faaborg,108_
+Kennet Laasby Hoel,Eskemosegyden 47,5600,Faaborg,107_
+Ebba Launtoft,Eksemosegyden 31,5600,Faaborg,106_
+Ulf Kauserud,Eskemosegyden 28,5600,Faaborg,105_
+Peter Marshall,Eskemosegyden 18,5600,Faaborg,104_
+Pia Søgård Hansen,Eskemosegyden 12,5600,Faaborg,103_
+Inge &Egon Grøndal,Eskemosegyden 45,5600,Faaborg,102_
+Rene Flintegaard,Strandparken 50,5600,Faaborg,101_
+Niels Nørrelund Nielsen,Østerbyvej 10,5600,Faaborg,100_
+Heinz Serup,Nørremarksvej 8,5600,Faaborg,99_
+Michael Stokholm,Assensvej 416,5600,Faaborg,98_
+Gitte Majbritt Jensen,Assensvej 531,5600,Faaborg,97_
+Karin Peterson,Birkevej 4,5600,Faaborg,96_
+Lars Lind,Ahornvej 5,5600,Faaborg,95_
+Jan Andersen & Anne-Sofie,BisgåAssensvej 543,5600,Faaborg,94_
+Birgit Andersen,Strandparken 5,5600,Faaborg,93_
+Henning Larsen,Ahornvej 6,5600,Faaborg,92_
+Preben Jørgensen,Birkevej 3,5600,Faaborg,91_
+Torben Søndergaard,Assensvej 519,5600,Faaborg,90_
+Jonna Nielsen,Assensvej 512,5600,Faaborg,89_
+Henning Rasmussen,Assensvej 503,5600,Faaborg,88_
+Carina Aagaard,Assensvej 488,5600,Faaborg,87_
+Sussane Munkesø,Assensvej 465,5600,Faaborg,86_
+Johanne Frederiksen,Gyvelvej 1,5600,Faaborg,85_
+Martin Nielsen,Klinteholmsvej 1,5600,Faaborg,84_
+Mogen Hjære Hansen,Søvænget 22,5600,Faaborg,83_
+Niels Raahauge,Søvænget 21,5600,Faaborg,82_
+Lorens Vestergaard,Søvænget 16,5600,Faaborg,81_
+Lars Fredberg,Strandparken 8,5600,Faaborg,80_
+Poul Clemmensen,Strandparken 74,5600,Faaborg,79_
+J-A Filtenborg,Strandparken 17,5600,Faaborg,78_
+Knud Jeppesen,Strandholmen 2,5600,Faaborg,77_
+Willy Sørensen,Strandholmen 12a,5600,Faaborg,76_
+Finn Vilhelmsen,Lykkevej 6,5600,Faaborg,75_
+Peer Henning Pedersen,Birkevej 8,5600,Faaborg,74_
+Kurt Castello Nielsen,Assensvej 551,5600,Faaborg,73_
+Verner Storm Hansen,Assensvej 538,5600,Faaborg,72_
+Ingolf Simm Jeppesen,Ahornvej 7,5600,Faaborg,71_
+Lars Lindø,Ahornvej 16,5600,Faaborg,70_
+Jens Linder,Lindevej 8,5600,Faaborg,69_
+Anja Nielsen,Lindevej 31,5600,Faaborg,68_
+Jimmi Østerberg,Saugstedvang 7,5600,Faaborg,67_
+Jannie Glad og Mogens Højgård,Lindevej 14,5600,Faaborg,66_
+Christina og Sven Nielsen,Lindevej 18,5600,Faaborg,65_
+Kurt Rasmussen,Lindevej 16,5600,Faaborg,64_
+Christina og Sven Nielsen,Margrethevang 53,5600,Faaborg,63_
+Steen poulsen,Østerbyvej 4,5600,Faaborg,62_
+Torben Torft Nielsen,Flægemosevej 3A,5600,Faaborg,61_
+Herdis Larsen,lindevej 19,5600,Faaborg,60_
+Brian Mosegaard,Østerbyvej 7,5600,Faaborg,59_
+Heinz Serup,Strandvænget 4,5600,Faaborg,58_
+Niels Nørrelund Nielsen,Flægemosevej 1,5600,Faaborg,57_
+Freddy Winther,Egemosevej 17,5600,Faaborg,56_
+Jan Albjerg,Østerbyvej 5,5600,Faaborg,55_
+Pernille Trappenhave,Assensvej 326,5600,Faaborg,54_
+Niclas Jørgensen,Assensvej 216,5600,Faaborg,53_
+De Røde Sjæle,Krogsbjergvej 27,5600,Faaborg,52_
+Jørgen Berg Andersen,Øksenhaverne 3,5600,Faaborg,51_
+Kaare Munch,Nyløkken 23,5600,Faaborg,50_
+Jørgen Berg Andersen,Nyløkken 4,5600,Faaborg,49_
+Sven Pedersen,Fauershøjvej 52,5600,Faaborg,48_
+Gitte Ladegård,Holstenshuusvej 3,5600,Faaborg,47_
+Hans Pade Nielsen,Sølvbjergvej 33,5600,Faaborg,46_
+Mette og Kaare Munch,Nyløkken 19,5600,Faaborg,45_
+Bodil Hansen,Nyløkken 12,5600,Faaborg,44_
+Benny Bondesen,Nyløkken 2,5600,Faaborg,43_
+Marianne Nedergaard,Grønderupvej 21,5600,Faaborg,42_
+Jacob Alsted,Grønderupvej 19,5600,Faaborg,41_
+Lars Rasmussen,Guldbjergvej 6,5600,Faaborg,40_
+Kim Sørensen,Guldbjergvej 5,5600,Faaborg,39_
+Erik Knudsen,Faurshøjvej 35,5600,Faaborg,38_
+Mona Inger Jørgensen,Radbyvej 50 Håstrup,5600,Faaborg,34_
+Jens Sylvest,Pallesgyden 2 Håstrup,5600,Faaborg,33_
+Torben E Hedeman,Skelbanke 1 Håstrup,5600,Faaborg,32_
+Peter Richardy Sørensen,Bygaden 35 Håstrup,5600,Faaborg,31_
+Jørgen Sørensen,Bygaden 52 Håstrup,5600,Faaborg,30_
+Jens Sylvester,Håstrupvej 20,5600,Faaborg,13_
+Ernst Kristensen,Assensvej 522,5600,Faaborg,12_
+Pernille Trappehave,Assensvej 501,5600,Faaborg,11_
+Sten Nordtorp,Søvænget 17,5600,Faaborg,10_
+Mogens Hansen,Strandparken 62,5600,Faaborg,9_
+Palle Bragt,Assensvej 516,5600,Faaborg,8_
+Søren Nielsen,Stenager 21,5602,Avernakø,3_
+Maria Woller Brandt,Hovedvejen 53,5602,Avernakø,2_
+Søren Nielsen,Hovedvejen 26,5602,Avernakø,1

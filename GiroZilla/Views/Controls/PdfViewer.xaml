@@ -1,0 +1,30 @@
+﻿<UserControl x:Class="GiroZilla.Views.Controls.PdfViewer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:GiroZilla.Views.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="900" 
+             d:DesignWidth="1202"
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             Background="{DynamicResource MaterialDesignPaper}"
+             TextElement.FontWeight="Medium"
+             TextElement.FontSize="14"
+             FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto">
+
+    <ScrollViewer 
+        x:Name="PDFScrollViewer" 
+        PanningMode="Both" 
+        Background="LightGray" 
+        VerticalScrollBarVisibility="Auto" 
+        CanContentScroll="True">
+        <ItemsControl x:Name="PagesContainer">
+            <ItemsControl.ItemContainerStyle>
+                <Style>
+                    <Setter Property="Control.MaxHeight" Value="1131"/>
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+        </ItemsControl>
+    </ScrollViewer>
+</UserControl>
