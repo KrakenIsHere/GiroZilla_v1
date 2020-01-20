@@ -48,7 +48,7 @@ namespace GiroZilla.Views
 
         //Month Print
         private readonly List<string[]> _monthPrintList = new List<string[]>();
-        private readonly int AreaAmount = 9;
+        private int AreaAmount = 9;
         private int _areaNum = 1;
         private bool _isNewPage;
 
@@ -472,7 +472,7 @@ namespace GiroZilla.Views
         {
             try
             {
-                string[] routeCustomerData = new string[10];
+                string[] routeCustomerData = new string[12];
 
                 routeCustomerData[0] = CustomerIDTextBox.Text;
                 routeCustomerData[1] = CustomerServiceNumTextBox.Text;
@@ -484,6 +484,8 @@ namespace GiroZilla.Views
                 routeCustomerData[7] = CustomerDiaTextBox.Text;
                 routeCustomerData[8] = CustomerLengthTextBox.Text;
                 routeCustomerData[9] = CustomerTypeTextBox.Text;
+                routeCustomerData[10] = CustomerCommentTextBox.Text;
+                routeCustomerData[11] = ContainCommentCheck.IsChecked.ToString();
 
                 await Task.FromResult(true);
                 return routeCustomerData;
@@ -511,6 +513,11 @@ namespace GiroZilla.Views
                 CustomerCountyTextBox.Text = "";
                 CustomerServicesTextBox.Text = "";
                 CustomerServiceNumTextBox.Text = "";
+
+                CustomerCommentTextBox.Text = "";
+                CustomerCommentTextBox.IsEnabled = false;
+                ContainCommentCheck.IsChecked = false;
+                ContainCommentCheck.IsEnabled = false;
             }
 
             //Service
@@ -571,6 +578,7 @@ namespace GiroZilla.Views
                 serviceNum = 0;
             }
 
+            var comment = table.Rows[_routeCustomerNum - 1]["Kommentar"].ToString();
 
             var serviceNeeded = table.Rows[_routeCustomerNum - 1]["Fejninger"].ToString();
 
@@ -582,6 +590,13 @@ namespace GiroZilla.Views
             CustomerCountyTextBox.Text = table.Rows[_routeCustomerNum - 1]["By"].ToString();
             CustomerServicesTextBox.Text = serviceNeeded;
             CustomerServiceNumTextBox.Text = (serviceNum + 1).ToString();
+
+            if (!string.IsNullOrWhiteSpace(comment))
+            {
+                CustomerCommentTextBox.Text = comment;
+                CustomerCommentTextBox.IsEnabled = true;
+                ContainCommentCheck.IsEnabled = true;
+            }
 
             var customerId = table.Rows[_routeCustomerNum - 1]["Kunde ID"].ToString();
 
@@ -886,7 +901,13 @@ namespace GiroZilla.Views
 
             DoNextCustomerRow(true);
 
-            PrintHelper.SetupRoutePrint(_customerData, table.Rows[_routeSelected]["Maaned"].ToString(), table.Rows[_routeSelected]["Aar"].ToString(), _customerDataList, table.Rows[_routeSelected]["Navn"].ToString());
+            PrintHelper.SetupRoutePrint(
+                _customerData, 
+                table.Rows[_routeSelected]["Maaned"].ToString(), 
+                table.Rows[_routeSelected]["Aar"].ToString(), 
+                _customerDataList, 
+                table.Rows[_routeSelected]["Navn"].ToString() 
+                );
 
             table.Dispose();
 
@@ -1662,12 +1683,23 @@ namespace GiroZilla.Views
 
         private async void PrintMonthSheatButton_Click(object sender, RoutedEventArgs e)
         {
+            ResetCollumnsInput();
+
             _areaNum = 1;
+            AreaAmount = int.Parse(MonthPrintValue.Value.ToString());
 
             MonthsArea.Header = $"Område {_areaNum} / {AreaAmount}";
 
-            FinalPrintSheat.IsEnabled = false;
-            NextPrintSheat.IsEnabled = true;
+            if (!(AreaAmount <= 1))
+            {
+                FinalPrintSheat.IsEnabled = false;
+                NextPrintSheat.IsEnabled = true;
+            }
+            else
+            {
+                FinalPrintSheat.IsEnabled = true;
+                NextPrintSheat.IsEnabled = false;
+            }
 
             _monthPrintList.Clear();
 
@@ -1676,8 +1708,9 @@ namespace GiroZilla.Views
                 _monthPrintList.Add(GetMonthPrintValues().Result);
             }
 
-            PrintMonthDialog.IsOpen = true;
+            MonthSheatYear.Value = DateTime.Now.Year;
 
+            PrintMonthDialog.IsOpen = true;
             await Task.FromResult(true);
         }
 
@@ -1694,7 +1727,7 @@ namespace GiroZilla.Views
             {
                 DoNextMonthRow(true);
 
-                PrintHelper.SetupMonthsPrint(_monthPrintList, int.Parse(MonthSheatYear.Text));
+                PrintHelper.SetupMonthsPrint(_monthPrintList, int.Parse(MonthSheatYear.Value.ToString()));
 
                 PrintMonthDialog.IsOpen = false;
 

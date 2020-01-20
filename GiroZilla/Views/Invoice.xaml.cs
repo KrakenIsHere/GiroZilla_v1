@@ -241,6 +241,48 @@ namespace GiroZilla.Views
             }
         }
 
+        private async void InsertInvoiceCustomerInfo(DataRowView rowView)
+        {
+            try
+            {
+                CustomerInfoAddress.Text = "";
+                CustomerInfoFirstname.Text = "";
+                CustomerInfoLastname.Text = "";
+                CustomerInfoID.Text = "";
+                CustomerInfoNeededServices.Text = "";
+                CustomerInfoMail.Text = "";
+                CustomerInfoMobile.Text = "";
+                CustomerInfoHome.Text = "";
+                CustomerInfoServicesGotten.Text = "";
+
+                var query = $"SELECT * FROM `all_customers` WHERE `ID` = {rowView.Row.ItemArray[1].ToString()}";
+
+                var data = await AsyncMySqlHelper.GetDataFromDatabase(query, "ConnString");
+
+                foreach (DataRow row in data)
+                {
+                    CustomerInfoAddress.Text = row["Adresse"].ToString(); // 1
+                    CustomerInfoFirstname.Text = row["Fornavn"].ToString(); // 2
+                    CustomerInfoLastname.Text = row["Efternavn"].ToString(); // 3
+                    CustomerInfoID.Text = row["ID"].ToString(); // 4
+                    CustomerInfoNeededServices.Text = row["Fejninger"].ToString(); // 5
+                    CustomerInfoMail.Text = row["EMail"].ToString(); // 6
+                    CustomerInfoMobile.Text = row["Mobil"].ToString(); // 7
+                    CustomerInfoHome.Text = row["Hjemme"].ToString(); // 8
+                }
+
+                query = $"SELECT * FROM `user_services` WHERE `Kunde ID` = {rowView.Row.ItemArray[1].ToString()} AND `Aar` = {DateTime.Now.Year}";
+
+                data = await AsyncMySqlHelper.GetDataFromDatabase(query, "ConnString");
+
+                CustomerInfoServicesGotten.Text = data.Length.ToString();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected Error");
+            }
+        }
+
         /// <summary>Deletes the selected service from ServiceGrid.</summary>
         /// <param name="row">The row.</param>
         private async void DeleteSelectedService(DataRowView row)
@@ -441,7 +483,21 @@ namespace GiroZilla.Views
         /// <param name="e">The <see cref="SelectedCellsChangedEventArgs"/> instance containing the event data.</param>
         private async void ServiceGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
-            SetProductsInGrid(ServiceGrid.SelectedItem as DataRowView);
+            try
+            {
+                SetProductsInGrid(ServiceGrid.SelectedItem as DataRowView);
+            }
+            catch (NullReferenceException NREx)
+            {
+                Log.Warning(NREx, "No products for invoice");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected Error");
+            }
+
+            UpdateServiceData();
+            InsertInvoiceCustomerInfo(ServiceGrid.SelectedItem as DataRowView);
             DisableCollumnsForDataGrid();
 
             await Task.FromResult(true);
