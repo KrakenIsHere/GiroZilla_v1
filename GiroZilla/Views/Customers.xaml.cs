@@ -988,13 +988,18 @@ namespace GiroZilla.Views
             {
                 var query = "" +
                     $"SELECT * FROM `products` " +
-                    $"WHERE Navn = '{ProductCombo.SelectedValue.ToString()}'";
+                    $"WHERE Product_NAME = '{ProductCombo.SelectedValue.ToString()}'";
 
                 var data = await AsyncMySqlHelper.GetDataFromDatabase<Product>(query, "ConnString");
 
                 foreach (Product row in data)
                 {
-                    ProductList.Items.Add(new ServiceProduct { ID = row.Product_ID.ToString(), Name = row.Product_NAME, Price = row.Product_PRICE.ToString().Replace('.', ','), Description = row.Product_DESCRIPTION.ToString() });
+                    if (string.IsNullOrWhiteSpace(row.Product_DESCRIPTION))
+                    {
+                        row.Product_DESCRIPTION = "";
+                    }
+
+                    ProductList.Items.Add(new ServiceProduct { ID = row.Product_ID.ToString(), Name = row.Product_NAME, Price = row.Product_PRICE.Replace('.', ','), Description = row.Product_DESCRIPTION.ToString() });
                 }
                 PrintHelper.CalculatePrice(ProductList, PriceTextBox);
             }
