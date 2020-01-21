@@ -9,8 +9,7 @@ using System.Windows.Controls;
 using PyroSquidUniLib.Database;
 using PyroSquidUniLib.Documents;
 using PyroSquidUniLib.Extensions;
-
-
+using PyroSquidUniLib.Models;
 
 namespace GiroZilla.Views
 {
@@ -255,27 +254,27 @@ namespace GiroZilla.Views
                 CustomerInfoHome.Text = "";
                 CustomerInfoServicesGotten.Text = "";
 
-                var query = $"SELECT * FROM `all_customers` WHERE `ID` = {rowView.Row.ItemArray[1].ToString()}";
+                var query = $"SELECT * FROM `customers` WHERE `Customer_ID` = {rowView.Row.ItemArray[1].ToString()}";
 
-                var data = await AsyncMySqlHelper.GetDataFromDatabase(query, "ConnString");
+                var userData = await AsyncMySqlHelper.GetDataFromDatabase<Customer>(query, "ConnString");
 
-                foreach (DataRow row in data)
+                foreach (Customer row in userData)
                 {
-                    CustomerInfoAddress.Text = row["Adresse"].ToString(); // 1
-                    CustomerInfoFirstname.Text = row["Fornavn"].ToString(); // 2
-                    CustomerInfoLastname.Text = row["Efternavn"].ToString(); // 3
-                    CustomerInfoID.Text = row["ID"].ToString(); // 4
-                    CustomerInfoNeededServices.Text = row["Fejninger"].ToString(); // 5
-                    CustomerInfoMail.Text = row["EMail"].ToString(); // 6
-                    CustomerInfoMobile.Text = row["Mobil"].ToString(); // 7
-                    CustomerInfoHome.Text = row["Hjemme"].ToString(); // 8
+                    CustomerInfoAddress.Text = row.Customer_ADDRESS; // 1
+                    CustomerInfoFirstname.Text = row.Customer_FIRSTNAME; // 2
+                    CustomerInfoLastname.Text = row.Customer_LASTNAME; // 3
+                    CustomerInfoID.Text = row.Customer_ID.ToString(); // 4
+                    CustomerInfoNeededServices.Text = row.Customer_SERVICES_NEEDED.ToString(); // 5
+                    CustomerInfoMail.Text = row.Customer_EMAIL; // 6
+                    CustomerInfoMobile.Text = row.Customer_PHONE_MOBILE; // 7
+                    CustomerInfoHome.Text = row.Customer_PHONE_HOME; // 8
                 }
 
-                query = $"SELECT * FROM `user_services` WHERE `Kunde ID` = {rowView.Row.ItemArray[1].ToString()} AND `Aar` = {DateTime.Now.Year}";
+                query = $"SELECT * FROM `services` WHERE `Customer_ID` = {rowView.Row.ItemArray[1].ToString()} AND `Service_YEAR` = {DateTime.Now.Year}";
 
-                data = await AsyncMySqlHelper.GetDataFromDatabase(query, "ConnString");
+                var serviceData = await AsyncMySqlHelper.GetDataFromDatabase<Service>(query, "ConnString");
 
-                CustomerInfoServicesGotten.Text = data.Length.ToString();
+                CustomerInfoServicesGotten.Text = serviceData.Count.ToString();
             }
             catch (Exception ex)
             {

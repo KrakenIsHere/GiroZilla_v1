@@ -12,8 +12,7 @@ using System.Threading.Tasks;
 using PyroSquidUniLib.Database;
 using PyroSquidUniLib.Documents;
 using PyroSquidUniLib.Extensions;
-
-
+using PyroSquidUniLib.Models;
 
 namespace GiroZilla.Views
 {
@@ -690,13 +689,13 @@ namespace GiroZilla.Views
 
                         query = $"SELECT * FROM `services`;";
 
-                        var TotalServiceRows = await AsyncMySqlHelper.GetDataFromDatabase(query, "ConnString");
+                        var TotalServiceRows = await AsyncMySqlHelper.GetDataFromDatabase<Service>(query, "ConnString");
 
                         int amountOfTotalServices = 1;
 
                         try
                         {
-                            amountOfTotalServices = int.Parse(TotalServiceRows.Last()["Service_ID"].ToString()) + 1;
+                            amountOfTotalServices = int.Parse(TotalServiceRows.Last().Service_ID.ToString()) + 1;
                         }
                         catch (Exception ex)
                         {
@@ -752,13 +751,13 @@ namespace GiroZilla.Views
                 {
                     var query = $"SELECT * FROM `cities`";
 
-                    var rows = AsyncMySqlHelper.GetDataFromDatabase(query, "ConnString");
+                    var rows = AsyncMySqlHelper.GetDataFromDatabase<City>(query, "ConnString");
 
                     var doesExist = false;
 
-                    foreach (DataRow row in rows.Result)
+                    foreach (City row in rows.Result)
                     {
-                        if(row["City_ZIP"].ToString() == NewCustomersZipCode.Text)
+                        if(row.City_ZIP.ToString() == NewCustomersZipCode.Text)
                         {
                             doesExist = true;
                         }
@@ -881,11 +880,11 @@ namespace GiroZilla.Views
             {
                 var query = "SELECT * FROM `cities`";
 
-                var data = AsyncMySqlHelper.GetDataFromDatabase(query, "ConnString");
+                var data = AsyncMySqlHelper.GetDataFromDatabase<City>(query, "ConnString");
 
-                foreach (DataRow row in data.Result)
+                foreach (City row in data.Result)
                 {
-                    CountySearch.Items.Add(row["city_ZIP"].ToString() + " " + row["city_NAME"].ToString());
+                    CountySearch.Items.Add(row.City_ZIP.ToString() + " " + row.City_NAME);
                 }
                 await Task.FromResult(true);
             }
@@ -953,15 +952,15 @@ namespace GiroZilla.Views
             {
                 var query = "SELECT * FROM `products`";
 
-                var data = AsyncMySqlHelper.GetDataFromDatabase(query, "ConnString");
+                var data = AsyncMySqlHelper.GetDataFromDatabase<Product>(query, "ConnString");
 
                 ProductCombo.Items.Clear();
 
                 if (ProductCombo.Items.Count <= 0)
                 {
-                    foreach (DataRow row in data.Result)
+                    foreach (Product row in data.Result)
                     {
-                        ProductCombo.Items.Add(row["Product_NAME"].ToString());
+                        ProductCombo.Items.Add(row.Product_NAME.ToString());
                     }
 
                     ProductCombo.SelectedIndex = 0;
@@ -988,14 +987,14 @@ namespace GiroZilla.Views
             try
             {
                 var query = "" +
-                    $"SELECT * FROM `all_products` " +
+                    $"SELECT * FROM `products` " +
                     $"WHERE Navn = '{ProductCombo.SelectedValue.ToString()}'";
 
-                var data = await AsyncMySqlHelper.GetDataFromDatabase(query, "ConnString");
+                var data = await AsyncMySqlHelper.GetDataFromDatabase<Product>(query, "ConnString");
 
-                foreach (DataRow row in data)
+                foreach (Product row in data)
                 {
-                    ProductList.Items.Add(new ServiceProduct { ID = row["ID"].ToString(), Name = row["Navn"].ToString(), Price = row["Pris"].ToString().Replace('.', ','), Description = row["Beskrivelse"].ToString() });
+                    ProductList.Items.Add(new ServiceProduct { ID = row.Product_ID.ToString(), Name = row.Product_NAME, Price = row.Product_PRICE.ToString().Replace('.', ','), Description = row.Product_DESCRIPTION.ToString() });
                 }
                 PrintHelper.CalculatePrice(ProductList, PriceTextBox);
             }

@@ -12,8 +12,7 @@ using PyroSquidUniLib.Database;
 using PyroSquidUniLib.Documents;
 using PyroSquidUniLib.Extensions;
 using PyroSquidUniLib.WPFControls;
-
-
+using PyroSquidUniLib.Models;
 
 namespace GiroZilla.Views
 {
@@ -257,10 +256,10 @@ namespace GiroZilla.Views
 
                 //Gets all saved routes from a database
                 query = "SELECT * FROM `routes`";
-                var routes = await AsyncMySqlHelper.GetDataFromDatabase(query, "ConnString");
+                var routes = await AsyncMySqlHelper.GetDataFromDatabase<Route>(query, "ConnString");
 
                 //Finds the last route that was just created and gets it's ID
-                var id = routes[routes.Count() - 1]["Route_ID"].ToString();
+                var id = routes[routes.Count() - 1].Route_ID.ToString();
 
                 var rows = CustomerList.Items;
 
