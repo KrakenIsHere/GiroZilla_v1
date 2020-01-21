@@ -277,7 +277,7 @@ namespace GiroZilla
             {
                 _connectionStatus = 2;
 
-                Log.Error(ex, "Something went wrong!");
+                Log.Error(ex, "Unexpected Error");
             }
         }
         #endregion

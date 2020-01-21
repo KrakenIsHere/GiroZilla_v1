@@ -245,8 +245,9 @@
                             HorizontalAlignment="Left"
                             Click="OverrideLicenseButton_Click"/>
                     </StackPanel>
+                    <TextBlock x:Name="NewLicenseError"/>
 
-                    
+
                     <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
                         
                     </StackPanel>

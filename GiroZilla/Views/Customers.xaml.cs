@@ -595,7 +595,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "Something went wrong!");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -633,7 +633,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "Something went wrong!");
+                Log.Error(ex, "Unexpected Error");
             }
 }
 
@@ -728,7 +728,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "Something went wrong!");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -846,7 +846,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "Something went wrong!");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -870,7 +870,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "Something went wrong!");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -892,7 +892,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "Something went wrong!");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -938,7 +938,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "Something went wrong!");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -971,7 +971,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(true);
-                Log.Error(ex, "Something went wrong!");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -1002,7 +1002,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "Something went wrong!");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
