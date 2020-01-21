@@ -71,60 +71,63 @@ namespace GiroZilla.Views
 
                 var query = "SELECT * FROM `all_customers` ";
 
-                if (!string.IsNullOrWhiteSpace(input))
+                switch (!string.IsNullOrWhiteSpace(input))
                 {
-                    query +=
-                        "WHERE " +
-                        "(" +
-                        "Fornavn  " +
-                        "LIKE " +
-                        $"'%{input}%'" +
-                        $") " +
+                    case true:
+                        {
+                            query +=
+                                "WHERE " +
+                                "(" +
+                                "Fornavn  " +
+                                "LIKE " +
+                                $"'%{input}%'" +
+                                $") " +
 
-                        $"UNION " +
+                                $"UNION " +
 
-                        "SELECT * FROM `all_customers` " +
-                        $"WHERE " +
-                        "(" +
-                        "Efternavn " +
-                        "LIKE " +
-                        $"'%{input}%'" +
-                        $") " +
+                                "SELECT * FROM `all_customers` " +
+                                $"WHERE " +
+                                "(" +
+                                "Efternavn " +
+                                "LIKE " +
+                                $"'%{input}%'" +
+                                $") " +
 
-                        $"UNION " +
+                                $"UNION " +
 
-                        "SELECT * FROM `all_customers` " +
-                        $"WHERE " +
-                        "(" +
-                        "ID " +
-                        "LIKE " +
-                        $"'%{input}%'" +
-                        $") " +
+                                "SELECT * FROM `all_customers` " +
+                                $"WHERE " +
+                                "(" +
+                                "ID " +
+                                "LIKE " +
+                                $"'%{input}%'" +
+                                $") " +
 
-                        $"UNION " +
+                                $"UNION " +
 
-                        "SELECT * FROM `all_customers` " +
-                        $"WHERE " +
-                        "(" +
-                        "Adresse " +
-                        "LIKE " +
-                        $"'%{input}%'" +
-                        $") " +
+                                "SELECT * FROM `all_customers` " +
+                                $"WHERE " +
+                                "(" +
+                                "Adresse " +
+                                "LIKE " +
+                                $"'%{input}%'" +
+                                $") " +
 
-                        $"UNION " +
+                                $"UNION " +
 
-                        "SELECT * FROM `all_customers` " +
-                        $"WHERE " +
-                        "(" +
-                        "Fejninger " +
-                        "LIKE " +
-                        $"'%{input}%'" +
-                        $") ";
+                                "SELECT * FROM `all_customers` " +
+                                $"WHERE " +
+                                "(" +
+                                "Fejninger " +
+                                "LIKE " +
+                                $"'%{input}%'" +
+                                $") ";
+                            break;
+                        }
                 }
+                    var data = await AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString");
 
-                var data = await AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString");
-
-                AddCustomerGrid.ItemsSource = data.Tables[0].DefaultView;
+                    AddCustomerGrid.ItemsSource = data.Tables[0].DefaultView;
             }
             catch (Exception ex)
             {
@@ -135,21 +138,30 @@ namespace GiroZilla.Views
 
         private async void FinalAddRoute_Click(object sender, RoutedEventArgs e)
         {
-            if (!string.IsNullOrWhiteSpace(RouteAreaTextBox.Text) &&
+            switch (!string.IsNullOrWhiteSpace(RouteAreaTextBox.Text) &&
                 CustomerList.Items.Count != 0 &&
                 CustomerList.Items.Count != -1)
             {
-                if (AddNewRouteData().Result)
-                {
-                    AddRouteDialog.IsOpen = false;
-                    SetRouteData();
-                }
-                await Task.FromResult(true);
-            }
-            else
-            {
-                await Task.FromResult(false);
-                MessageBox.Show("Data mangler");
+                case true:
+                    {
+                        switch (AddNewRouteData().Result)
+                        {
+                            case true:
+                                {
+                                    AddRouteDialog.IsOpen = false;
+                                    SetRouteData();
+                                    break;
+                                }
+                        }
+                        await Task.FromResult(true);
+                        break;
+                    }
+                default:
+                    {
+                        await Task.FromResult(false);
+                        MessageBox.Show("Data mangler");
+                        break;
+                    }
             }
         }
 
@@ -303,35 +315,39 @@ namespace GiroZilla.Views
                 var input = ClearTextSearch.Text;
                 var query = "SELECT * FROM `all_routes` ";
 
-                if (!string.IsNullOrWhiteSpace(input))
+                switch (!string.IsNullOrWhiteSpace(input))
                 {
-                    query +=
-                        "WHERE " +
-                        "(" +
-                        "ID  " +
-                        "LIKE " +
-                        $"'%{input}%'" +
-                        $") " +
+                    case true:
+                        {
+                            query +=
+                                "WHERE " +
+                                "(" +
+                                "ID  " +
+                                "LIKE " +
+                                $"'%{input}%'" +
+                                $") " +
 
-                        $"UNION " +
+                                $"UNION " +
 
-                        "SELECT * FROM `all_routes` " +
-                        $"WHERE " +
-                        "(" +
-                        "Navn " +
-                        "LIKE " +
-                        $"'%{input}%'" +
-                        $") " +
+                                "SELECT * FROM `all_routes` " +
+                                $"WHERE " +
+                                "(" +
+                                "Navn " +
+                                "LIKE " +
+                                $"'%{input}%'" +
+                                $") " +
 
-                        $"UNION " +
+                                $"UNION " +
 
-                        "SELECT * FROM `all_routes` " +
-                        $"WHERE " +
-                        "(" +
-                        "Beskrivelse " +
-                        "LIKE " +
-                        $"'%{input}%'" +
-                        $") ";
+                                "SELECT * FROM `all_routes` " +
+                                $"WHERE " +
+                                "(" +
+                                "Beskrivelse " +
+                                "LIKE " +
+                                $"'%{input}%'" +
+                                $") ";
+                            break;
+                        }
                 }
 
                 _routeData = await AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString");
@@ -437,21 +453,25 @@ namespace GiroZilla.Views
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private async void DeleteRouteButton_Click(object sender, RoutedEventArgs e)
         {
-            if (RouteGrid.SelectedIndex != -1)
+            switch (RouteGrid.SelectedIndex != -1)
             {
-                DeleteRoute(RouteGrid.SelectedItem as DataRowView);
+                case true:
+                    {
+                        DeleteRoute(RouteGrid.SelectedItem as DataRowView);
 
-                SetRouteData();
-                _customerData.Clear();
+                        SetRouteData();
+                        _customerData.Clear();
 
-                await Task.FromResult(true);
+                        await Task.FromResult(true);
+                        break;
+                    }
+                default:
+                    {
+                        await Task.FromResult(false);
+                        MessageBox.Show("Venligst vælg en rute");
+                        break;
+                    }
             }
-            else
-            {
-                await Task.FromResult(false);
-                MessageBox.Show("Venligst vælg en rute");
-            }
-
         }
 
         private async void ResetAddRouteDialog()
@@ -707,44 +727,71 @@ namespace GiroZilla.Views
             {
                 var table = _printRouteCustomerData;
 
-                if (table != null)
+                switch (table != null)
                 {
-                    var array = await DataInput();
-
-                    if (_didServiceDataChange)
-                    {
-                        if (_didServiceDataExist)
+                    case true:
                         {
-                            UpdateCustomerServiceData(array);
+                            var array = await DataInput();
+
+                            switch (_didServiceDataChange)
+                            {
+                                case true:
+                                    {
+                                        switch (_didServiceDataExist)
+                                        {
+                                            case true:
+                                                {
+                                                    UpdateCustomerServiceData(array);
+                                                    break;
+                                                }
+                                            default:
+                                                {
+                                                    AddCustomerServiceData(array);
+                                                    break;
+                                                }
+                                        }
+                                        break;
+                                    }
+                            }
+
+                            _customerDataList[_routeCustomerNum - 1] = array;
+
+                            switch (!isFinalPrint)
+                            {
+                                case true:
+                                    {
+                                        ResetPrintRouteDialog();
+
+                                        SetupPrintRouteDialog(table);
+                                        break;
+                                    }
+                            }
+
+                            switch (_routeCustomerNum >= _routeCustomerAmount)
+                            {
+                                case true:
+                                    {
+                                        NextPrintRoute.IsEnabled = false;
+                                        FinalPrintRoute.IsEnabled = true;
+                                        break;
+                                    }
+                            }
+
+                            switch (_routeCustomerNum > 1)
+                            {
+                                case true:
+                                    {
+                                        PrevPrintRoute.IsEnabled = true;
+                                        break;
+                                    }
+                            }
+                            break;
                         }
-                        else
+                    default:
                         {
-                            AddCustomerServiceData(array);
+                            CustomerIDTextBox.Focus();
+                            break;
                         }
-                    }
-
-                    _customerDataList[_routeCustomerNum - 1] = array;
-
-                    if (!isFinalPrint)
-                    {
-                        ResetPrintRouteDialog();
-
-                        SetupPrintRouteDialog(table);
-                    }
-
-                    if (_routeCustomerNum >= _routeCustomerAmount)
-                    {
-                        NextPrintRoute.IsEnabled = false;
-                        FinalPrintRoute.IsEnabled = true;
-                    }
-                    if (_routeCustomerNum > 1)
-                    {
-                        PrevPrintRoute.IsEnabled = true;
-                    }
-                }
-                else
-                {
-                    CustomerIDTextBox.Focus();
                 }
                 table.Dispose();
             }
@@ -760,46 +807,72 @@ namespace GiroZilla.Views
             {
                 var table = _printRouteCustomerData;
 
-                if (table != null)
+                switch (table != null)
                 {
-                    var array = await DataInput();
-
-                    if (_didServiceDataChange)
-                    {
-                        if (_didServiceDataExist)
+                    case true:
                         {
-                            UpdateCustomerServiceData(array);
+                            var array = await DataInput();
+
+                            switch (_didServiceDataChange)
+                            {
+                                case true:
+                                    {
+                                        switch (_didServiceDataExist)
+                                        {
+                                            case true:
+                                                {
+                                                    UpdateCustomerServiceData(array);
+                                                    break;
+                                                }
+                                            default:
+                                                {
+                                                    AddCustomerServiceData(array);
+                                                    break;
+                                                }
+                                        }
+                                        break;
+                                    }
+                            }
+
+                            switch (!isFirstPrint)
+                            {
+                                case true:
+                                    {
+                                        ResetPrintRouteDialog();
+
+                                        SetupPrintRouteDialog(table);
+                                        break;
+                                    }
+                            }
+
+                            _customerDataList[_routeCustomerNum - 1] = array;
+
+                            switch (_routeCustomerNum < _routeCustomerAmount)
+                            {
+                                case true:
+                                    {
+                                        NextPrintRoute.IsEnabled = true;
+                                        FinalPrintRoute.IsEnabled = false;
+                                        break;
+                                    }
+                            }
+
+                            switch (_routeCustomerNum <= 1)
+                            {
+                                case true:
+                                    {
+                                        NextPrintRoute.IsEnabled = true;
+                                        PrevPrintRoute.IsEnabled = false;
+                                        break;
+                                    }
+                            }
+                            break;
                         }
-                        else
+                    default:
                         {
-                            AddCustomerServiceData(array);
+                            CustomerIDTextBox.Focus();
+                            break;
                         }
-                    }
-
-                    if (!isFirstPrint)
-                    {
-                        ResetPrintRouteDialog();
-
-                        SetupPrintRouteDialog(table, false);
-                    }
-
-                    _customerDataList[_routeCustomerNum - 1] = array;
-
-                    if (_routeCustomerNum < _routeCustomerAmount)
-                    {
-                        NextPrintRoute.IsEnabled = true;
-                        FinalPrintRoute.IsEnabled = false;
-                    }
-
-                    if (_routeCustomerNum <= 1)
-                    {
-                        NextPrintRoute.IsEnabled = true;
-                        PrevPrintRoute.IsEnabled = false;
-                    }
-                }
-                else
-                {
-                    CustomerIDTextBox.Focus();
                 }
                 table.Dispose();
             }
@@ -851,46 +924,56 @@ namespace GiroZilla.Views
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private async void PrintRouteButton_Click(object sender, RoutedEventArgs e)
         {
-            if (RouteGrid.SelectedIndex != -1)
+            switch (RouteGrid.SelectedIndex != -1)
             {
-                _printRouteCustomerData = VariableManipulation.DataGridtoDataTable(CustomerGrid);
+                case true:
+                    {
+                        _printRouteCustomerData = VariableManipulation.DataGridtoDataTable(CustomerGrid);
 
-                _routeCustomerNum = 0;
-                _routeSelected = RouteGrid.SelectedIndex;
+                        _routeCustomerNum = 0;
+                        _routeSelected = RouteGrid.SelectedIndex;
 
-                DoNextCustomerRow();
+                        DoNextCustomerRow();
 
-                _routeCustomerNum = 0;
-                var table = VariableManipulation.DataGridtoDataTable(CustomerGrid);
+                        _routeCustomerNum = 0;
+                        var table = VariableManipulation.DataGridtoDataTable(CustomerGrid);
 
-                
-                for (int i = 0; i < table.Rows.Count; i++)
-                {
-                    _customerDataList.Add(new string[10]);
-                }
 
-                SetupPrintRouteDialog(table);
-                PrintRouteDialog.IsOpen = true;
+                        for (int i = 0; i < table.Rows.Count; i++)
+                        {
+                            _customerDataList.Add(new string[10]);
+                        }
 
-                table.Dispose();
+                        SetupPrintRouteDialog(table);
+                        PrintRouteDialog.IsOpen = true;
 
-                if (table.Rows.Count > 1)
-                {
-                    FinalPrintRoute.IsEnabled = false;
-                    NextPrintRoute.IsEnabled = true;
+                        table.Dispose();
 
-                }
-                else
-                {
-                    FinalPrintRoute.IsEnabled = true;
-                    NextPrintRoute.IsEnabled = false;
-                }
-                await Task.FromResult(true);
-            }
-            else
-            {
-                await Task.FromResult(false);
-                MessageBox.Show("Venligst vælg en rute");
+                        switch (table.Rows.Count > 1)
+                        {
+                            case true:
+                                {
+                                    FinalPrintRoute.IsEnabled = false;
+                                    NextPrintRoute.IsEnabled = true;
+                                    break;
+                                }
+                            default:
+                                {
+                                    FinalPrintRoute.IsEnabled = true;
+                                    NextPrintRoute.IsEnabled = false;
+                                    break;
+                                }
+
+                        }
+                        await Task.FromResult(true);
+                        break;
+                    }
+                default:
+                    {
+                        await Task.FromResult(false);
+                        MessageBox.Show("Venligst vælg en rute");
+                        break;
+                    }
             }
         }
 
@@ -937,20 +1020,25 @@ namespace GiroZilla.Views
 
         private async void EditRouteButton_Click(object sender, RoutedEventArgs e)
         {
-            if (RouteGrid.SelectedIndex != -1)
+            switch (RouteGrid.SelectedIndex != -1)
             {
-                ClearAddEditCustomerDialog();
+                case true:
+                    {
+                        ClearAddEditCustomerDialog();
 
-                AddEditCustomersToDataGrid();
+                        AddEditCustomersToDataGrid();
 
-                EditRouteDialog.IsOpen = true;
+                        EditRouteDialog.IsOpen = true;
 
-                await Task.FromResult(true);
-            }
-            else
-            {
-                await Task.FromResult(false);
-                MessageBox.Show("Venligst vælg en rute");
+                        await Task.FromResult(true);
+                        break;
+                    }
+                default:
+                    {
+                        await Task.FromResult(false);
+                        MessageBox.Show("Venligst vælg en rute");
+                        break;
+                    }
             }
         }
 
@@ -962,55 +1050,59 @@ namespace GiroZilla.Views
 
                 var query = "SELECT * FROM `all_customers`";
 
-                if (!string.IsNullOrWhiteSpace(input))
+                switch (!string.IsNullOrWhiteSpace(input))
                 {
-                    query +=
-                        "WHERE " +
-                        "(" +
-                        "Fornavn  " +
-                        "LIKE " +
-                        $"'%{input}%'" +
-                        $") " +
+                    case true:
+                        {
+                            query +=
+                                "WHERE " +
+                                "(" +
+                                "Fornavn  " +
+                                "LIKE " +
+                                $"'%{input}%'" +
+                                $") " +
 
-                        $"UNION " +
+                                $"UNION " +
 
-                        "SELECT * FROM `all_customers` " +
-                        $"WHERE " +
-                        "(" +
-                        "Efternavn " +
-                        "LIKE " +
-                        $"'%{input}%'" +
-                        $") " +
+                                "SELECT * FROM `all_customers` " +
+                                $"WHERE " +
+                                "(" +
+                                "Efternavn " +
+                                "LIKE " +
+                                $"'%{input}%'" +
+                                $") " +
 
-                        $"UNION " +
+                                $"UNION " +
 
-                        "SELECT * FROM `all_customers` " +
-                        $"WHERE " +
-                        "(" +
-                        "ID " +
-                        "LIKE " +
-                        $"'%{input}%'" +
-                        $") " +
+                                "SELECT * FROM `all_customers` " +
+                                $"WHERE " +
+                                "(" +
+                                "ID " +
+                                "LIKE " +
+                                $"'%{input}%'" +
+                                $") " +
 
-                        $"UNION " +
+                                $"UNION " +
 
-                        "SELECT * FROM `all_customers` " +
-                        $"WHERE " +
-                        "(" +
-                        "Adresse " +
-                        "LIKE " +
-                        $"'%{input}%'" +
-                        $") " +
+                                "SELECT * FROM `all_customers` " +
+                                $"WHERE " +
+                                "(" +
+                                "Adresse " +
+                                "LIKE " +
+                                $"'%{input}%'" +
+                                $") " +
 
-                        $"UNION " +
+                                $"UNION " +
 
-                        "SELECT * FROM `all_customers` " +
-                        $"WHERE " +
-                        "(" +
-                        "Fejninger " +
-                        "LIKE " +
-                        $"'%{input}%'" +
-                        $") ";
+                                "SELECT * FROM `all_customers` " +
+                                $"WHERE " +
+                                "(" +
+                                "Fejninger " +
+                                "LIKE " +
+                                $"'%{input}%'" +
+                                $") ";
+                            break;
+                        }
                 }
 
                 var data = AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString");
@@ -1076,18 +1168,23 @@ namespace GiroZilla.Views
         {
             try
             {
-                if (EditCustomerGrid.SelectedIndex != -1)
+                switch (EditCustomerGrid.SelectedIndex != -1)
                 {
-                    var row = EditCustomerGrid.SelectedItem as DataRowView;
+                    case true:
+                        {
+                            var row = EditCustomerGrid.SelectedItem as DataRowView;
 
-                    EditCustomerList.Items.Add(new RouteCustomer { ID = row?["ID"].ToString(), Name = $"{row?["Fornavn"]} {row?["Efternavn"]}", Address = row?["Adresse"].ToString(), ZipCode = row?["Postnr"].ToString(), City = row?["By"].ToString() });
+                            EditCustomerList.Items.Add(new RouteCustomer { ID = row?["ID"].ToString(), Name = $"{row?["Fornavn"]} {row?["Efternavn"]}", Address = row?["Adresse"].ToString(), ZipCode = row?["Postnr"].ToString(), City = row?["By"].ToString() });
 
-                    await Task.FromResult(true);
-                }
-                else
-                {
-                    await Task.FromResult(false);
-                    MessageBox.Show("Venligst vælg en kunde");
+                            await Task.FromResult(true);
+                            break;
+                        }
+                    default:
+                        {
+                            await Task.FromResult(false);
+                            MessageBox.Show("Venligst vælg en kunde");
+                            break;
+                        }
                 }
             }
             catch (Exception ex)
@@ -1158,20 +1255,29 @@ namespace GiroZilla.Views
 
         private async void FinalEditRoute_Click(object sender, RoutedEventArgs e)
         {
-            if (EditCustomerList.Items.Count != 0 &&
+            switch (EditCustomerList.Items.Count != 0 &&
                 EditCustomerList.Items.Count != -1)
             {
-                if (AddNewRouteCustomerData().Result)
-                {
-                    EditRouteDialog.IsOpen = false;
-                    SetCustomerData(RouteGrid.SelectedItem as DataRowView);
-                }
-                await Task.FromResult(true);
-            }
-            else
-            {
-                await Task.FromResult(false);
-                MessageBox.Show("Data mangler");
+                case true:
+                    {
+                        switch (AddNewRouteCustomerData().Result)
+                        {
+                            case true:
+                                {
+                                    EditRouteDialog.IsOpen = false;
+                                    SetCustomerData(RouteGrid.SelectedItem as DataRowView);
+                                    break;
+                                }
+                        }
+                        await Task.FromResult(true);
+                        break;
+                    }
+                default:
+                    {
+                        await Task.FromResult(false);
+                        MessageBox.Show("Data mangler");
+                        break;
+                    }
             }
         }
 
@@ -1184,16 +1290,21 @@ namespace GiroZilla.Views
 
         private async void DeleteRouteCustomerButton_Click(object sender, RoutedEventArgs e)
         {
-            if (CustomerGrid.SelectedIndex != -1)
+            switch (CustomerGrid.SelectedIndex != -1)
             {
-                DeleteRouteCustomer(CustomerGrid.SelectedItem as DataRowView);
+                case true:
+                    {
+                        DeleteRouteCustomer(CustomerGrid.SelectedItem as DataRowView);
 
-                await Task.FromResult(true);
-            }
-            else
-            {
-                await Task.FromResult(false);
-                MessageBox.Show("Venligst vælg en kunde");
+                        await Task.FromResult(true);
+                        break;
+                    }
+                default:
+                    {
+                        await Task.FromResult(false);
+                        MessageBox.Show("Venligst vælg en kunde");
+                        break;
+                    }
             }
         }
 
@@ -1311,24 +1422,27 @@ namespace GiroZilla.Views
         {
             try
             {
-                if (!string.IsNullOrWhiteSpace(NewCityZip.Text) &&
+                switch (!string.IsNullOrWhiteSpace(NewCityZip.Text) &&
                     !string.IsNullOrWhiteSpace(NewCityName.Text))
                 {
-                    var query = $"INSERT INTO `cities` " +
-                        $"(" +
-                        $"`City_ZIP`, " +
-                        $"`City_NAME` " +
-                        $") " +
-                        $"VALUES " +
-                        $"(" +
-                        $"{NewCityZip.Text}, " +
-                        $"'{NewCityName.Text}' " +
-                        $");";
+                    case true:
+                        {
+                            var query = $"INSERT INTO `cities` " +
+                                $"(" +
+                                $"`City_ZIP`, " +
+                                $"`City_NAME` " +
+                                $") " +
+                                $"VALUES " +
+                                $"(" +
+                                $"{NewCityZip.Text}, " +
+                                $"'{NewCityName.Text}' " +
+                                $");";
 
-                    AsyncMySqlHelper.SetDataToDatabase(query, "ConnString").Wait();
+                            AsyncMySqlHelper.SetDataToDatabase(query, "ConnString").Wait();
 
-                    await Task.FromResult(true);
-                    return true;
+                            await Task.FromResult(true);
+                            return true;
+                        }
                 }
 
                 MessageBox.Show("Data Mangler");
@@ -1391,13 +1505,18 @@ namespace GiroZilla.Views
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private async void FinalAddCounty_Click(object sender, RoutedEventArgs e)
         {
-            if (!AddNewCountyData().Result) return;
+            switch (AddNewCountyData().Result)
+            {
+                case true:
+                    {
+                        AddCountyDialog.IsOpen = false;
 
-            AddCountyDialog.IsOpen = false;
+                        SetCityData();
 
-            SetCityData();
-
-            await Task.FromResult(true);
+                        await Task.FromResult(true);
+                        break;
+                    }
+            }
         }
 
         /// <summary>
@@ -1410,19 +1529,24 @@ namespace GiroZilla.Views
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private async void DeleteCountyButton_Click(object sender, RoutedEventArgs e)
         {
-            if (CityGrid.SelectedIndex != -1)
+            switch (CityGrid.SelectedIndex != -1)
             {
-                DeleteCounty(CityGrid.SelectedItem as DataRowView);
-                AddCountyDialog.IsOpen = false;
+                case true:
+                    {
+                        DeleteCounty(CityGrid.SelectedItem as DataRowView);
+                        AddCountyDialog.IsOpen = false;
 
-                SetCityData();
+                        SetCityData();
 
-                await Task.FromResult(true);
-            }
-            else
-            {
-                await Task.FromResult(false);
-                MessageBox.Show("Venligst vælg et Område");
+                        await Task.FromResult(true);
+                        break;
+                    }
+                default:
+                    {
+                        await Task.FromResult(false);
+                        MessageBox.Show("Venligst vælg et Område");
+                        break;
+                    }
             }
         }
 

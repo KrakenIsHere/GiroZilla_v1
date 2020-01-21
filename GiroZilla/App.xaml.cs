@@ -13,9 +13,13 @@ namespace GiroZilla
     {
         private void OnApplicationStartup(object sender, StartupEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(PropertiesExtension.Get<string>("LogsPath")))
+            switch (string.IsNullOrWhiteSpace(PropertiesExtension.Get<string>("LogsPath")))
             {
-                PropertiesExtension.Set("LogsPath", $@"{DefaultDirectories.AppData}\GiroZilla\Logs");
+                case true:
+                    {
+                        PropertiesExtension.Set("LogsPath", $@"{DefaultDirectories.AppData}\GiroZilla\Logs");
+                        break;
+                    }
             }
 
             //Log formats

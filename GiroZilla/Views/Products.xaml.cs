@@ -34,50 +34,54 @@ namespace GiroZilla.Views
                 var input = ClearTextSearch.Text;
                 var query = "SELECT * FROM `all_products`";
 
-                if (!string.IsNullOrWhiteSpace(input))
+                switch (!string.IsNullOrWhiteSpace(input))
                 {
-                    query +=
-                        "WHERE " +
-                        "(" +
-                        "ID  " +
-                        "LIKE " +
-                        $"'%{input}%'" +
-                        $") " +
+                    case true:
+                        {
+                            query +=
+                                "WHERE " +
+                                "(" +
+                                "ID  " +
+                                "LIKE " +
+                                $"'%{input}%'" +
+                                $") " +
 
-                        $"UNION " +
+                                $"UNION " +
 
-                        "SELECT * FROM `all_products` " +
-                        $"WHERE " +
-                        "(" +
-                        "Navn " +
-                        "LIKE " +
-                        $"'%{input}%'" +
-                        $") " +
+                                "SELECT * FROM `all_products` " +
+                                $"WHERE " +
+                                "(" +
+                                "Navn " +
+                                "LIKE " +
+                                $"'%{input}%'" +
+                                $") " +
 
-                        $"UNION " +
+                                $"UNION " +
 
-                        "SELECT * FROM `all_products` " +
-                        $"WHERE " +
-                        "(" +
-                        "Pris " +
-                        "LIKE " +
-                        $"'%{input}%'" +
-                        $") " +
+                                "SELECT * FROM `all_products` " +
+                                $"WHERE " +
+                                "(" +
+                                "Pris " +
+                                "LIKE " +
+                                $"'%{input}%'" +
+                                $") " +
 
-                        $"UNION " +
+                                $"UNION " +
 
-                        "SELECT * FROM `all_products` " +
-                        $"WHERE " +
-                        "(" +
-                        "Beskrivelse " +
-                        "LIKE " +
-                        $"'%{input}%'" +
-                        $") ";
+                                "SELECT * FROM `all_products` " +
+                                $"WHERE " +
+                                "(" +
+                                "Beskrivelse " +
+                                "LIKE " +
+                                $"'%{input}%'" +
+                                $") ";
+                        }
+
+                        data = await AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString");
+
+                        ProductGrid.ItemsSource = data.Tables[0].DefaultView;
+                        break;
                 }
-
-                data = await AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString");
-
-                ProductGrid.ItemsSource = data.Tables[0].DefaultView;
             }
             catch (Exception ex)
             {
@@ -109,30 +113,35 @@ namespace GiroZilla.Views
         {
             try
             {
-                if (!string.IsNullOrWhiteSpace(ProductNameTextBox.Text) &&
+                switch (!string.IsNullOrWhiteSpace(ProductNameTextBox.Text) &&
                     !string.IsNullOrWhiteSpace(ProductPriceTextBox.Text))
                 {
-                    var query = $"INSERT INTO `products` " +
-                        $"(" +
-                        $"`Product_NAME`, " +
-                        $"`Product_PRICE`, " +
-                        $"`Product_DESCRIPTION` " +
-                        $") " +
-                        $"VALUES " +
-                        $"(" +
-                        $"'{ProductNameTextBox.Text}', " +
-                        $"'{ProductPriceTextBox.Text.Replace(",", ".")}', " +
-                        $"'{ProductDescriptionTextBox.Text}' " +
-                        $");";
+                    case true:
+                        {
+                            var query = $"INSERT INTO `products` " +
+                                        $"(" +
+                                        $"`Product_NAME`, " +
+                                        $"`Product_PRICE`, " +
+                                        $"`Product_DESCRIPTION` " +
+                                        $") " +
+                                        $"VALUES " +
+                                        $"(" +
+                                        $"'{ProductNameTextBox.Text}', " +
+                                        $"'{ProductPriceTextBox.Text.Replace(",", ".")}', " +
+                                        $"'{ProductDescriptionTextBox.Text}' " +
+                                        $");";
 
-                    AsyncMySqlHelper.SetDataToDatabase(query, "ConnString").Wait();
+                            AsyncMySqlHelper.SetDataToDatabase(query, "ConnString").Wait();
 
-                    await Task.FromResult(true);
-                    return true;
-                }
-                else
-                {
-                    MessageBox.Show("Data Mangler");
+                            await Task.FromResult(true);
+                            return true;
+                        }
+                    default:
+                        {
+                            MessageBox.Show("Data Mangler");
+                            break;
+                        }
+
                 }
             }
             catch (Exception ex)
@@ -159,13 +168,17 @@ namespace GiroZilla.Views
 
                 // Displays the MessageBox.
                 result = MessageBox.Show(message, caption, buttons);
-                if (result == System.Windows.MessageBoxResult.Yes)
+                switch (result == System.Windows.MessageBoxResult.Yes)
                 {
-                    var query = $"DELETE FROM `girozilla`.`products` WHERE `Product_ID` = {row.Row.ItemArray[0].ToString()}";
+                    case true:
+                        {
+                            var query = $"DELETE FROM `girozilla`.`products` WHERE `Product_ID` = {row.Row.ItemArray[0].ToString()}";
 
-                    AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
+                            AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
 
-                    MessageBox.Show($"Produktet nr:{row.Row.ItemArray[0].ToString()} er nu slettet");
+                            MessageBox.Show($"Produktet nr:{row.Row.ItemArray[0].ToString()} er nu slettet");
+                            break;
+                        }
                 }
                 await Task.FromResult(true);
             }
@@ -203,18 +216,23 @@ namespace GiroZilla.Views
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private async void DeleteProductButton_Click(object sender, RoutedEventArgs e)
         {
-            if (ProductGrid.SelectedIndex != -1)
+            switch (ProductGrid.SelectedIndex != -1)
             {
-                DeleteProduct(ProductGrid.SelectedItem as DataRowView);
+                case true:
+                    {
+                        DeleteProduct(ProductGrid.SelectedItem as DataRowView);
 
-                SetData();
+                        SetData();
 
-                await Task.FromResult(true);
-            }
-            else
-            {
-                await Task.FromResult(false);
-                MessageBox.Show("Venligst vælg et produkt");
+                        await Task.FromResult(true);
+                        break;
+                    }
+                default:
+                    {
+                        await Task.FromResult(false);
+                        MessageBox.Show("Venligst vælg et produkt");
+                        break;
+                    }
             }
         }
 
@@ -243,13 +261,17 @@ namespace GiroZilla.Views
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private async void FinalAddProduct_Click(object sender, RoutedEventArgs e)
         {
-            if (AddNewProductData().Result)
+            switch (AddNewProductData().Result)
             {
-                AddProductDialog.IsOpen = false;
+                case true:
+                    {
+                        AddProductDialog.IsOpen = false;
 
-                SetData();
+                        SetData();
 
-                await Task.FromResult(true);
+                        await Task.FromResult(true);
+                        break;
+                    }
             }
         }
 
