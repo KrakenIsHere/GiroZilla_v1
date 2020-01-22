@@ -184,6 +184,15 @@ namespace GiroZilla.Views
                                         break;
                                     }
                             }
+
+                            switch (ThisYearOnlyCheck.IsChecked == true)
+                            {
+                                case true:
+                                    {
+                                        query = query.Replace(") ", $" AND Aar = {DateTime.Now.Year}) ");
+                                        break;
+                                    }
+                            }
                             break;
                         }
                     default:
@@ -202,6 +211,27 @@ namespace GiroZilla.Views
                                             case true:
                                                 {
                                                     query += $"WHERE Betaling = '' ";
+
+                                                    switch (ThisYearOnlyCheck.IsChecked == true)
+                                                    {
+                                                        case true:
+                                                            {
+                                                                query += $"AND Aar = {DateTime.Now.Year} ";
+                                                                break;
+                                                            }
+                                                    }
+                                                    break;
+                                                }
+                                            default:
+                                                {
+                                                    switch (ThisYearOnlyCheck.IsChecked == true)
+                                                    {
+                                                        case true:
+                                                            {
+                                                                query += $"WHERE Aar = {DateTime.Now.Year} ";
+                                                                break;
+                                                            }
+                                                    }
                                                     break;
                                                 }
                                         }
@@ -370,6 +400,11 @@ namespace GiroZilla.Views
                 MessageBox.Show("En uventet fejl er sket", "FEJL");
                 Log.Error(ex, "Unexpected Error");
             }
+        }
+
+        private void ThisYearOnlyCheck_Checked(object sender, RoutedEventArgs e)
+        {
+            SetData();
         }
 
         /// <summary>

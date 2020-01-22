@@ -750,7 +750,6 @@
                                             Content="Indkludér&#10;kommentar" 
                                             IsEnabled="False"
                                             IsChecked="False"
-                                            ToolTip="Der er ingen kommentar for denne kunde" 
                                             Margin="0,10,0,0"/>
                                     </StackPanel>
                                 </GroupBox>

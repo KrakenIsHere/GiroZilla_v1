@@ -66,6 +66,15 @@
                         <ComboBoxItem Content="Ingen Valgt"/>
                     </ComboBox>
 
+                    <CheckBox 
+                        x:Name="ContainServicesToYearOnly"
+                        Content="Vis kun fejninger fra i år"
+                        Margin="90,-20,0,0"
+                        Width="180" 
+                        Checked="ContainServicesToYearOnly_Checked"
+                        Unchecked="ContainServicesToYearOnly_Checked"
+                        IsChecked="True"/>
+
                     <Button
                         Name="ReloadButton"
                         Click="ReloadButton_Click"

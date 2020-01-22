@@ -565,6 +565,15 @@ namespace GiroZilla.Views
             {
                 var query = $"SELECT * FROM `user_services` WHERE `Kunde ID` = {row.Row.ItemArray[0].ToString()}";
 
+                switch (ContainServicesToYearOnly.IsChecked == true)
+                {
+                    case true:
+                        {
+                            query += $" AND `Aar` = {DateTime.Now.Year}";
+                            break;
+                        }
+                }
+
                 Servicedata = AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString").Result;
 
                 ServiceGrid.ItemsSource = Servicedata.Tables[0].DefaultView;
@@ -575,6 +584,18 @@ namespace GiroZilla.Views
             {
                 await Task.FromResult(false);
                 Log.Error(ex, "Something went wrong setting the ServiceGrid data!");
+            }
+        }
+
+        private void ContainServicesToYearOnly_Checked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                SetServiceData(CustomerGrid.SelectedItem as DataRowView);
+            }
+            catch (Exception)
+            {
+                //Do Nothing
             }
         }
 

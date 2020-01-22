@@ -504,7 +504,7 @@ namespace GiroZilla.Views
                 routeCustomerData[8] = CustomerLengthTextBox.Text;
                 routeCustomerData[9] = CustomerTypeTextBox.Text;
                 routeCustomerData[10] = CustomerCommentTextBox.Text;
-                routeCustomerData[11] = ContainCommentCheck.IsChecked.ToString();
+                routeCustomerData[11] = ContainCommentCheck.IsChecked.ToString();         
 
                 await Task.FromResult(true);
                 return routeCustomerData;
@@ -559,24 +559,34 @@ namespace GiroZilla.Views
 
         private async void SetupPrintRouteDialog(DataTable table, bool isNext = true)
         {
-            if (isNext)
+            switch (isNext)
             {
-                _routeCustomerNum++;
-            }
-            else
-            {
-                _routeCustomerNum--;
+                case true:
+                    {
+                        _routeCustomerNum++;
+                        break;
+                    }
+                case false:
+                    {
+                        _routeCustomerNum--;
+                        break;
+                    }
             }
 
             int year;
 
-            if (DateTime.Now.Month == 12 && DateTime.Now.Day > 15)
+            switch (DateTime.Now.Month == 12 && DateTime.Now.Day > 15)
             {
-                year = DateTime.Now.Year + 1;
-            }
-            else
-            {
-                year = DateTime.Now.Year;
+                case true:
+                    {
+                        year = DateTime.Now.Year + 1;
+                        break;
+                    }
+                default:
+                    {
+                        year = DateTime.Now.Year;
+                        break;
+                    }
             }
 
             var query = $"SELECT * FROM `user_services` " +
@@ -609,12 +619,37 @@ namespace GiroZilla.Views
             CustomerCountyTextBox.Text = table.Rows[_routeCustomerNum - 1]["By"].ToString();
             CustomerServicesTextBox.Text = serviceNeeded;
             CustomerServiceNumTextBox.Text = (serviceNum + 1).ToString();
-
-            if (!string.IsNullOrWhiteSpace(comment))
+            try
             {
-                CustomerCommentTextBox.Text = comment;
-                CustomerCommentTextBox.IsEnabled = true;
-                ContainCommentCheck.IsEnabled = true;
+                switch (!string.IsNullOrWhiteSpace(comment))
+                {
+                    case true:
+                        {
+                            CustomerCommentTextBox.Text = comment;
+                            CustomerCommentTextBox.IsEnabled = true;
+                            ContainCommentCheck.IsEnabled = true;
+
+                            switch (_customerDataList[_routeCustomerNum - 1][11] == "True")
+                            {
+                                case true:
+                                    {
+                                        ContainCommentCheck.IsChecked = true;
+                                        break;
+                                    }
+                            }
+                            break;
+                        }
+                }
+
+                //Prints the list to console for debugging
+                //for (int i = 0; i < _customerDataList.Count - 1; i++)
+                //{
+                //    Console.WriteLine($"{i}/{_routeCustomerNum - 1} : " + String.Join(", ", _customerDataList[i]));
+                //}
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected Error");
             }
 
             var customerId = table.Rows[_routeCustomerNum - 1]["Kunde ID"].ToString();
@@ -834,18 +869,18 @@ namespace GiroZilla.Views
                                     }
                             }
 
+                            _customerDataList[_routeCustomerNum - 1] = array;
+
                             switch (!isFirstPrint)
                             {
                                 case true:
                                     {
                                         ResetPrintRouteDialog();
 
-                                        SetupPrintRouteDialog(table);
+                                        SetupPrintRouteDialog(table, false);
                                         break;
                                     }
                             }
-
-                            _customerDataList[_routeCustomerNum - 1] = array;
 
                             switch (_routeCustomerNum < _routeCustomerAmount)
                             {
@@ -936,20 +971,18 @@ namespace GiroZilla.Views
                         DoNextCustomerRow();
 
                         _routeCustomerNum = 0;
-                        var table = VariableManipulation.DataGridtoDataTable(CustomerGrid);
 
+                        _customerDataList.Clear();
 
-                        for (int i = 0; i < table.Rows.Count; i++)
+                        for (int i = 0; i < _printRouteCustomerData.Rows.Count; i++)
                         {
-                            _customerDataList.Add(new string[10]);
+                            _customerDataList.Add(new string[12]);
                         }
 
-                        SetupPrintRouteDialog(table);
+                        SetupPrintRouteDialog(_printRouteCustomerData);
                         PrintRouteDialog.IsOpen = true;
 
-                        table.Dispose();
-
-                        switch (table.Rows.Count > 1)
+                        switch (_printRouteCustomerData.Rows.Count > 1)
                         {
                             case true:
                                 {
@@ -1706,30 +1739,47 @@ namespace GiroZilla.Views
             {
                 _monthPrintList[_areaNum - 1] = await GetMonthPrintValues();
 
-                if (!isFinalMonth)
+                switch (!isFinalMonth)
                 {
-                    _areaNum++;
+                    case true:
+                        {
+                            _areaNum++;
 
-                    if (_isNewPage)
-                    {
-                        ResetCollumnsInput();
-                    }
-                    else
-                    {
-                        SetCollumnsInput();
-                    }
+                            switch (_isNewPage)
+                            {
+                                case true:
+                                    {
+                                        ResetCollumnsInput();
+                                        break;
+                                    }
+                                default:
+                                    {
+                                        SetCollumnsInput();
+                                        break;
+                                    }
+                            }
 
-                    MonthsArea.Header = $"Område {_areaNum} / {AreaAmount}";
+                            MonthsArea.Header = $"Område {_areaNum} / {AreaAmount}";
+                            break;
+                        }
                 }
 
-                if (_areaNum >= AreaAmount)
+                switch (_areaNum >= AreaAmount)
                 {
-                    NextPrintSheat.IsEnabled = false;
-                    FinalPrintSheat.IsEnabled = true;
+                    case true:
+                        {
+                            NextPrintSheat.IsEnabled = false;
+                            FinalPrintSheat.IsEnabled = true;
+                            break;
+                        }
                 }
-                if (_areaNum > 1)
+                switch (_areaNum > 1)
                 {
-                    PrevPrintSheat.IsEnabled = true;
+                    case true:
+                        {
+                            PrevPrintSheat.IsEnabled = true;
+                            break;
+                        }
                 }
                 await Task.FromResult(true);
             }
@@ -1746,28 +1796,40 @@ namespace GiroZilla.Views
             {
                 _monthPrintList[_areaNum - 1] = await GetMonthPrintValues();
 
-                if (!isFirstMonth)
+                switch (!isFirstMonth)
                 {
-                    _areaNum--;
+                    case true:
+                        {
+                            _areaNum--;
 
-                    SetCollumnsInput();
+                            SetCollumnsInput();
 
-                    _isNewPage = false;
+                            _isNewPage = false;
 
-                    MonthsArea.Header = $"Område {_areaNum} / {AreaAmount}";
+                            MonthsArea.Header = $"Område {_areaNum} / {AreaAmount}";
+                            break;
+                        }
                 }
 
-                if (_areaNum < AreaAmount)
+                switch (_areaNum < AreaAmount)
                 {
-                    NextPrintSheat.IsEnabled = true;
-                    FinalPrintSheat.IsEnabled = false;
+                    case true:
+                        {
+                            NextPrintSheat.IsEnabled = true;
+                            FinalPrintSheat.IsEnabled = false;
+                            break;
+                        }
                 }
 
-                if (_areaNum > 1) return;
-
-                NextPrintSheat.IsEnabled = true;
-                PrevPrintSheat.IsEnabled = false;
-
+                switch (_areaNum <= 1)
+                {
+                    case true:
+                        {
+                            NextPrintSheat.IsEnabled = true;
+                            PrevPrintSheat.IsEnabled = false;
+                            break;
+                        }
+                }
                 await Task.FromResult(true);
             }
             catch (Exception ex)
@@ -1813,15 +1875,20 @@ namespace GiroZilla.Views
 
             MonthsArea.Header = $"Område {_areaNum} / {AreaAmount}";
 
-            if (!(AreaAmount <= 1))
+            switch (!(AreaAmount <= 1))
             {
-                FinalPrintSheat.IsEnabled = false;
-                NextPrintSheat.IsEnabled = true;
-            }
-            else
-            {
-                FinalPrintSheat.IsEnabled = true;
-                NextPrintSheat.IsEnabled = false;
+                case true:
+                    {
+                        FinalPrintSheat.IsEnabled = false;
+                        NextPrintSheat.IsEnabled = true;
+                        break;
+                    }
+                default:
+                    {
+                        FinalPrintSheat.IsEnabled = true;
+                        NextPrintSheat.IsEnabled = false;
+                        break;
+                    }
             }
 
             _monthPrintList.Clear();
@@ -1883,10 +1950,13 @@ namespace GiroZilla.Views
             {
                 var textBox = sender as TextBox;
 
-                if (textBox?.Text.Length > 0)
+                switch (textBox?.Text.Length > 0)
                 {
-                    TextBoxExtrasHelper.FixedLineLength(20, textBox);
-                    //TextBoxExtrasHelper.FixedLineAmount(3, textBox); Doesn't work
+                    case true:
+                        {
+                            TextBoxExtrasHelper.FixedLineLength(20, textBox);
+                            break;
+                        }
                 }
                 await Task.FromResult(true);
             }
@@ -1896,6 +1966,6 @@ namespace GiroZilla.Views
                 Log.Error(ex, "Area Month TextBox Error");
             }
         }
-        #endregion        
+        #endregion
     }
 }
