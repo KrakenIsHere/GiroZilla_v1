@@ -130,8 +130,13 @@ namespace GiroZilla
             {
                 var verified = PyroSquidUniLib.Verification.VerifyLicense.Verify(LicenseTextBox.Text, ErrorText);
 
-                if (!verified)
-                    return;
+                switch (!verified)
+                {
+                    case true:
+                        {
+                            return;
+                        }
+                }
                 DialogHost.CloseDialogCommand.Execute(null, null);
                 Menu.IsEnabled = true;
             }
@@ -185,92 +190,114 @@ namespace GiroZilla
                     var localLicense = RegHelper.Readvalue(@"Software\", "GiroZilla", "License");
 #endif
 
-                if (!string.IsNullOrWhiteSpace(localLicense))
+                switch (!string.IsNullOrWhiteSpace(localLicense))
                 {
-                    var count = 1;
-
-                    foreach (var s in licenses)
-                    {
-                        if (!IsLicenseVerified)
+                    case true:
                         {
-                            _isCorrect = Hashing.Confirm(s, localLicense);
+                            var count = 1;
 
-                            switch (_isCorrect)
+                            foreach (var s in licenses)
                             {
-                                case true:
-                                    var searchLicenseId = $"SELECT `License_VALUE` FROM `licenses` WHERE `License_ID`='{count}'";
+                                switch (!IsLicenseVerified)
+                                {
+                                    case true:
+                                        {
+                                            _isCorrect = Hashing.Confirm(s, localLicense);
 
-                                    var license = AsyncMySqlHelper.GetString(searchLicenseId, "LicenseConnString").Result;
-                                    var query = $"SELECT * FROM `licenses` WHERE `License_VALUE`='{license}' AND `License_USED` > 0";
-                                    var canConnect = AsyncMySqlHelper.CheckDataFromDatabase(query, "LicenseConnString").Result;
-
-                                    switch (canConnect)
-                                    {
-                                        case true:
-                                            _connectionStatus = 1;
-                                            break;
-
-                                        case false:
-                                            _connectionStatus = 0;
-                                            break;
-                                    }
-
-                                    switch (_connectionStatus)
-                                    {
-                                        case 1:
-                                            IsDialogOpen = false;
-                                            IsLicenseVerified = true;
-                                            Log.Information(@"GiroZilla v" + FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion + " loaded");
-                                            break;
-
-                                        case 0:
-                                            IsDialogOpen = true;
-                                            IsLicenseVerified = false;
-
-                                            if (!string.IsNullOrWhiteSpace(localLicense))
+                                            switch (_isCorrect)
                                             {
-                                                Log.Information("This license is invalid and wil be reset!");
+                                                case true:
+                                                    var searchLicenseId = $"SELECT `License_VALUE` FROM `licenses` WHERE `License_ID`='{count}'";
 
-                                                ErrorText.Text = "Din nuværende licens er ugyldig & vil blive nulstillet";
+                                                    var license = AsyncMySqlHelper.GetString(searchLicenseId, "LicenseConnString").Result;
+                                                    var query = $"SELECT * FROM `licenses` WHERE `License_VALUE`='{license}' AND `License_USED` > 0";
+                                                    var canConnect = AsyncMySqlHelper.CheckDataFromDatabase(query, "LicenseConnString").Result;
+
+                                                    switch (canConnect)
+                                                    {
+                                                        case true:
+                                                            {
+                                                                _connectionStatus = 1;
+                                                                break;
+                                                            }
+                                                        case false:
+                                                            {
+                                                                _connectionStatus = 0;
+                                                                break;
+                                                            }
+                                                    }
+
+                                                    switch (_connectionStatus)
+                                                    {
+                                                        case 1:
+                                                            IsDialogOpen = false;
+                                                            IsLicenseVerified = true;
+                                                            Log.Information(@"GiroZilla v" + FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion + " loaded");
+                                                            break;
+
+                                                        case 0:
+                                                            IsDialogOpen = true;
+                                                            IsLicenseVerified = false;
+
+                                                            switch (!string.IsNullOrWhiteSpace(localLicense))
+                                                            {
+                                                                case true:
+                                                                    {
+                                                                        Log.Information("This license is invalid and wil be reset!");
+
+                                                                        ErrorText.Text = "Din nuværende licens er ugyldig & vil blive nulstillet";
 
 #if DEBUG
-                                                PropertiesExtension.Set("License", "");
+                                                                        PropertiesExtension.Set("License", "");
 #else
-                                                RegHelper.SetRegValue(@"Software\GiroZilla", "License", "", RegistryValueKind.String);
+                                                                        RegHelper.SetRegValue(@"Software\GiroZilla", "License", "", RegistryValueKind.String);
 #endif
+                                                                        break;
+                                                                    }
+                                                            }
+
+                                                            break;
+
+                                                        default:
+                                                            {
+                                                                IsDialogOpen = true;
+                                                                IsLicenseVerified = false;
+
+                                                                switch (!string.IsNullOrWhiteSpace(localLicense))
+                                                                {
+                                                                    case true:
+                                                                        {
+                                                                            Log.Information("Something went wrong validating this license, try again later!");
+
+                                                                            ErrorText.Text = "Kunne ikke validere din licens prøv igen senere";
+                                                                            break;
+                                                                        }
+                                                                }
+                                                                break;
+                                                            }
+                                                    }
+                                                    break;
+
+                                                case false:
+                                                    count++;
+                                                    break;
                                             }
-
                                             break;
-
-                                        default:
-                                            IsDialogOpen = true;
-                                            IsLicenseVerified = false;
-
-                                            if (!string.IsNullOrWhiteSpace(localLicense))
-                                            {
-                                                Log.Information("Something went wrong validating this license, try again later!");
-
-                                                ErrorText.Text = "Kunne ikke validere din licens prøv igen senere";
-                                            }
-                                            break;
-                                    }
-                                    break;
-
-                                case false:
-                                    count++;
-                                    break;
+                                        }
+                                }
                             }
+                            break;
                         }
-                    }
-                }
-                else
-                {
-                    IsDialogOpen = true;
-                    IsLicenseVerified = false;
+                    default:
+                        {
+                            IsDialogOpen = true;
+                            IsLicenseVerified = false;
 
-                    Log.Error("The license was not found!");
+                            Log.Error("The license was not found!");
 
-                    ErrorText.Text = "Licensen blev ikke fundet!";
+                            ErrorText.Text = "Licensen blev ikke fundet!";
+                            break;
+                        }
                 }
             }
             catch (Exception ex)
@@ -295,8 +322,10 @@ namespace GiroZilla
             switch (e.Key)
             {
                 case Key.Enter when LicenseTextBox.IsFocused:
-                    VerifyBtn.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
-                    break;
+                    {
+                        VerifyBtn.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+                        break;
+                    }
             }
         }
 
@@ -347,7 +376,7 @@ namespace GiroZilla
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Some error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
     }

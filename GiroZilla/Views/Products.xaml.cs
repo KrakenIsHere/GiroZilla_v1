@@ -75,13 +75,13 @@ namespace GiroZilla.Views
                                 "LIKE " +
                                 $"'%{input}%'" +
                                 $") ";
+                            break;
                         }
-
-                        data = await AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString");
-
-                        ProductGrid.ItemsSource = data.Tables[0].DefaultView;
-                        break;
                 }
+
+                data = await AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString");
+
+                ProductGrid.ItemsSource = data.Tables[0].DefaultView;
             }
             catch (Exception ex)
             {

@@ -125,9 +125,13 @@ namespace GiroZilla.Views
                             break;
                         }
                 }
-                    var data = await AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString");
+                var data = await AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString");
 
-                    AddCustomerGrid.ItemsSource = data.Tables[0].DefaultView;
+                var listData = VariableManipulation.GetIntegerValuesInColumnFromListView(CustomerList, "ID");
+
+                VariableManipulation.RemoveRowsFromDataTableWhereIntValueIsSingleRow(data.Tables[0], "ID", listData);
+
+                AddCustomerGrid.ItemsSource = data.Tables[0].DefaultView;
             }
             catch (Exception ex)
             {
@@ -203,6 +207,8 @@ namespace GiroZilla.Views
                 var row = AddCustomerGrid.SelectedItem as DataRowView;
                 
                 CustomerList.Items.Add(new RouteCustomer { ID = row?["ID"].ToString(), Name = $"{row?["Fornavn"]} {row?["Efternavn"]}", Address = row?["Adresse"].ToString(), ZipCode = row?["Postnr"].ToString(), City = row?["By"].ToString() });
+
+                AddCustomersToDataGrid();
                 await Task.FromResult(true);
             }
             catch (Exception ex)
@@ -226,6 +232,8 @@ namespace GiroZilla.Views
             try
             {
                 CustomerList.Items.RemoveAt(CustomerList.SelectedIndex);
+
+                AddCustomersToDataGrid();
                 await Task.FromResult(true);
             }
             catch (Exception ex)
@@ -1138,13 +1146,17 @@ namespace GiroZilla.Views
                         }
                 }
 
-                var data = AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString");
+                var data = AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString").Result;
 
-                var ids = await GetCustermerIdsFormRouteCustomersList();
+                var listData = VariableManipulation.GetIntegerValuesInColumnFromListView(EditCustomerList, "ID");
 
-                VariableManipulation.RemoveRowsFromDataTableWhereValueIsSingleRow(data.Result.Tables[0], "ID", ids);
+                VariableManipulation.RemoveRowsFromDataTableWhereIntValueIsSingleRow(data.Tables[0], "ID", listData);
 
-                EditCustomerGrid.ItemsSource = data.Result.Tables[0].DefaultView;
+                var ids = await GetCustermerIdsFormRouteCustomersList(VariableManipulation.DataGridtoDataTable(CustomerGrid));
+
+                VariableManipulation.RemoveRowsFromDataTableWhereIntValueIsSingleRow(data.Tables[0], "ID", ids);
+
+                EditCustomerGrid.ItemsSource = data.Tables[0].DefaultView;
 
                 await Task.FromResult(true);
             }
@@ -1155,13 +1167,11 @@ namespace GiroZilla.Views
             }
         }
 
-        private async Task<int[]> GetCustermerIdsFormRouteCustomersList()
+        private async Task<int[]> GetCustermerIdsFormRouteCustomersList(DataTable data)
         {
             try
             {
                 List<int> list = new List<int>();
-
-                var data = VariableManipulation.DataGridtoDataTable(CustomerGrid);
 
                 foreach (DataRow row in data.Rows)
                 {
@@ -1209,6 +1219,7 @@ namespace GiroZilla.Views
 
                             EditCustomerList.Items.Add(new RouteCustomer { ID = row?["ID"].ToString(), Name = $"{row?["Fornavn"]} {row?["Efternavn"]}", Address = row?["Adresse"].ToString(), ZipCode = row?["Postnr"].ToString(), City = row?["By"].ToString() });
 
+                            AddEditCustomersToDataGrid();
                             await Task.FromResult(true);
                             break;
                         }
@@ -1233,6 +1244,7 @@ namespace GiroZilla.Views
             {
                 EditCustomerList.Items.RemoveAt(EditCustomerList.SelectedIndex);
 
+                AddEditCustomersToDataGrid();
                 await Task.FromResult(true);
             }
             catch (Exception ex)

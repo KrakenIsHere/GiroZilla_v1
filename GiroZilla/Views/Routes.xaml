@@ -656,21 +656,24 @@
                                 <GroupBox Header="Antal" Margin="0,0,0,0">
                                     <StackPanel Orientation="Vertical">
                                         <TextBox 
-                                            Name="CustomerChimneysTextBox" 
+                                            Name="CustomerChimneysTextBox"
+                                            TabIndex="0"
                                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                                             TextChanged="CustomerServiceDataTextBox_TextChanged"
                                             materialDesign:HintAssist.Hint=" Skorsten" 
                                             MaxLength="4"
                                             Width="97"/>
                                         <TextBox 
-                                            Name="CustomerPipesTextBox" 
+                                            Name="CustomerPipesTextBox"
+                                            TabIndex="1"
                                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                                             TextChanged="CustomerServiceDataTextBox_TextChanged"
                                             materialDesign:HintAssist.Hint=" Rør" 
                                             MaxLength="4"
                                             Width="97"/>
                                         <TextBox 
-                                            Name="CustomerKWTextBox" 
+                                            Name="CustomerKWTextBox"
+                                            TabIndex="2"
                                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                                             TextChanged="CustomerServiceDataTextBox_TextChanged"
                                             materialDesign:HintAssist.Hint=" KW"
@@ -683,7 +686,8 @@
                                     <StackPanel Orientation="Vertical">
 
                                         <TextBox 
-                                            Name="CustomerLightingTextBox" 
+                                            Name="CustomerLightingTextBox"
+                                            TabIndex="3"
                                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                                             TextChanged="CustomerServiceDataTextBox_TextChanged"
                                             materialDesign:HintAssist.Hint=" Lysning"
@@ -693,7 +697,8 @@
                                             Width="97"
                                             Height="75"/>
                                         <TextBox 
-                                            Name="CustomerHeightTextBox" 
+                                            Name="CustomerHeightTextBox"
+                                            TabIndex="4"
                                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                                             TextChanged="CustomerServiceDataTextBox_TextChanged"
                                             materialDesign:HintAssist.Hint=" Højde" 
@@ -704,14 +709,16 @@
                                 <GroupBox Header="Rør">
                                     <StackPanel Orientation="Vertical">
                                         <TextBox 
-                                            Name="CustomerDiaTextBox" 
+                                            Name="CustomerDiaTextBox"
+                                            TabIndex="4"
                                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                                             TextChanged="CustomerServiceDataTextBox_TextChanged"
                                             materialDesign:HintAssist.Hint=" Dia"
                                             MaxLength="4"
                                             Width="97"/>
                                         <TextBox 
-                                            Name="CustomerLengthTextBox" 
+                                            Name="CustomerLengthTextBox"
+                                            TabIndex="5"
                                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                                             TextChanged="CustomerServiceDataTextBox_TextChanged"
                                             materialDesign:HintAssist.Hint=" Længde" 
@@ -727,6 +734,7 @@
                                     <StackPanel Orientation="Vertical">
                                         <TextBox 
                                             Name="CustomerTypeTextBox" 
+                                            TabIndex="6"
                                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                                             TextChanged="CustomerServiceDataTextBox_TextChanged"
                                             materialDesign:HintAssist.Hint=" Fyrart"
@@ -738,6 +746,7 @@
 
                                         <TextBox
                                             x:Name="CustomerCommentTextBox"
+                                            TabIndex="7"
                                             IsEnabled="False"
                                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                                             materialDesign:HintAssist.Hint=" Kommentar"
@@ -747,6 +756,7 @@
                                             Height="75"/>
                                         <CheckBox 
                                             x:Name="ContainCommentCheck"
+                                            TabIndex="8"
                                             Content="Indkludér&#10;kommentar" 
                                             IsEnabled="False"
                                             IsChecked="False"
@@ -831,7 +841,7 @@
                             <GroupBox Name="MonthsArea" Header="Område" Margin="5,90,0,60">
                                 <StackPanel Name="MonthsAreaPanel" Orientation="Vertical">
                                     <TextBox 
-                                        Name="Area1TextBox" 
+                                        Name="Area1TextBox"
                                         TabIndex="0"
                                         HorizontalAlignment="Center"
                                         Margin="0,0,0,0"

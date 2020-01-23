@@ -200,7 +200,8 @@
 
                                 <StackPanel Orientation="Vertical" Margin="10,10,0,0">
                                     <TextBox 
-                                        Name="NewCustomersFirstname" 
+                                        Name="NewCustomersFirstname"
+                                        TabIndex="0"
                                         HorizontalAlignment="Center" 
                                         Height="37" 
                                         TextWrapping="Wrap" 
@@ -209,7 +210,8 @@
                                         VerticalAlignment="Top" 
                                         Width="166"/>
                                     <TextBox 
-                                        Name="NewCustomersLastname" 
+                                        Name="NewCustomersLastname"
+                                        TabIndex="1"
                                         HorizontalAlignment="Center" 
                                         Height="37" 
                                         TextWrapping="Wrap" 
@@ -219,6 +221,7 @@
                                         Width="166"/>
                                     <TextBox 
                                         Name="NewCustomersAdress" 
+                                        TabIndex="2"
                                         HorizontalAlignment="Center" 
                                         Height="37" 
                                         TextWrapping="Wrap" 
@@ -228,6 +231,7 @@
                                         Width="166"/>
                                     <TextBox 
                                         Name="NewCustomersZipCode" 
+                                        TabIndex="3"
                                         LostFocus="AddCounty_LostFocus" 
                                         PreviewTextInput="NumbersOnly_PreviewTextInput" 
                                         MaxLength="6" 
@@ -240,6 +244,7 @@
                                         Width="166"/>
                                     <TextBox 
                                         Name="NewCustomersCity" 
+                                        TabIndex="4"
                                         LostFocus="AddCounty_LostFocus" 
                                         HorizontalAlignment="Center" 
                                         Height="37" 
@@ -250,6 +255,7 @@
                                         Width="166"/>
                                     <TextBox 
                                         Name="NewCustomersMail" 
+                                        TabIndex="5"
                                         HorizontalAlignment="Center" 
                                         Height="37" 
                                         TextWrapping="Wrap" 
@@ -261,7 +267,8 @@
 
                                 <StackPanel Orientation="Vertical" Margin="10,10,0,0">
                                     <TextBox 
-                                        Name="NewCustomersMobile" 
+                                        Name="NewCustomersMobile"
+                                        TabIndex="6"
                                         HorizontalAlignment="Center" 
                                         Height="37" 
                                         TextWrapping="Wrap" 
@@ -271,6 +278,7 @@
                                         Width="166"/>
                                     <TextBox 
                                         Name="NewCustomersHome" 
+                                        TabIndex="7"
                                         HorizontalAlignment="Center" 
                                         Height="37" 
                                         TextWrapping="Wrap" 
@@ -280,6 +288,7 @@
                                         Width="166"/>
                                     <TextBox 
                                         Name="NewCustomersServices" 
+                                        TabIndex="8"
                                         MaxLength="2" 
                                         PreviewTextInput="NumbersOnly_PreviewTextInput" 
                                         HorizontalAlignment="Center" 
@@ -291,6 +300,7 @@
                                         Width="166"/>
                                     <TextBox 
                                         Name="NewCustomersComment" 
+                                        TabIndex="9"
                                         HorizontalAlignment="Center" 
                                         Height="100" 
                                         VerticalScrollBarVisibility="Auto" 
@@ -306,6 +316,7 @@
                                 <StackPanel Orientation="Vertical" Margin="10,10,0,0">
                                     <ComboBox 
                                         Name="NewCustomersMonth1" 
+                                        TabIndex="10"
                                         HorizontalAlignment="Center" 
                                         Height="37" 
                                         materialDesign:HintAssist.Hint="1. Måned (Valgfri)" 
@@ -319,6 +330,7 @@
                                     
                                     <ComboBox 
                                         Name="NewCustomersMonth2" 
+                                        TabIndex="11"
                                         HorizontalAlignment="Center" 
                                         Height="37" 
                                         materialDesign:HintAssist.Hint="2. Måned (Valgfri)" 
@@ -332,6 +344,7 @@
                                 
                                     <ComboBox 
                                         Name="NewCustomersMonth3" 
+                                        TabIndex="12"
                                         HorizontalAlignment="Center" 
                                         Height="37" 
                                         materialDesign:HintAssist.Hint="3. Måned (Valgfri)" 
@@ -345,6 +358,7 @@
                             
                                     <ComboBox 
                                         Name="NewCustomersMonth4" 
+                                        TabIndex="13"
                                         HorizontalAlignment="Center" 
                                         Height="37" 
                                         materialDesign:HintAssist.Hint="4. Måned (Valgfri)" 
@@ -358,6 +372,7 @@
                                     
                                     <ComboBox 
                                         Name="NewCustomersMonth5" 
+                                        TabIndex="14"
                                         HorizontalAlignment="Center" 
                                         Height="37" 
                                         materialDesign:HintAssist.Hint="5. Måned (Valgfri)" 
@@ -371,6 +386,7 @@
                                     
                                     <ComboBox 
                                         Name="NewCustomersMonth6" 
+                                        TabIndex="15"
                                         HorizontalAlignment="Center" 
                                         Height="37"
                                         materialDesign:HintAssist.Hint="6. Måned (Valgfri)" 

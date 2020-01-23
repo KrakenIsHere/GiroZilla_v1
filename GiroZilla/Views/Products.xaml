@@ -84,7 +84,17 @@
             <DataGrid Name="ProductGrid" CanUserResizeRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserAddRows="False" CurrentCellChanged="ProductGrid_CurrentCellChanged" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="3" />
         </GroupBox>
 
-        <materialDesign:DialogHost Name="AddProductDialog" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsOpen="False" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="3" DialogTheme="Dark" Margin="0,0,0,-14">
+        <materialDesign:DialogHost 
+            Name="AddProductDialog" 
+            HorizontalAlignment="Stretch" 
+            VerticalAlignment="Stretch" 
+            IsOpen="False" 
+            Grid.Column="0" 
+            Grid.Row="0" 
+            Grid.ColumnSpan="3" 
+            Grid.RowSpan="3" 
+            DialogTheme="Dark" 
+            Margin="0,0,0,-14">
             <materialDesign:DialogHost.DialogContent>
                 <StackPanel Width="250" Height="350">
                     <Grid Width="250" Height="350">
@@ -106,7 +116,8 @@
                         <GroupBox Header="Produkt" Grid.Column="0" Grid.Row="0" Grid.RowSpan="3" Grid.ColumnSpan="3" Margin="10,80,10,50">
                             <StackPanel Orientation="Vertical" Margin="0,20,0,0">
                                 <TextBox 
-                                    Name="ProductNameTextBox" 
+                                    Name="ProductNameTextBox"
+                                    TabIndex="0"
                                     HorizontalAlignment="Center" 
                                     Height="36" 
                                     TextWrapping="Wrap" 
@@ -116,6 +127,7 @@
                                     Width="166"/>
                                 <TextBox 
                                     Name="ProductPriceTextBox"
+                                    TabIndex="1"
                                     HorizontalAlignment="Center" 
                                     Height="36"
                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
@@ -126,7 +138,8 @@
                                     VerticalAlignment="Top"
                                     Width="166"/>
                                 <TextBox
-                                    Name="ProductDescriptionTextBox" 
+                                    Name="ProductDescriptionTextBox"
+                                    TabIndex="2"
                                     HorizontalAlignment="Center"
                                     Height="36"
                                     TextWrapping="Wrap"

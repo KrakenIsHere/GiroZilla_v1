@@ -23,6 +23,7 @@ namespace GiroZilla.Views
         public Invoice()
         {
             InitializeComponent();
+            InvoiceSearchYearValue.Value = DateTime.Now.Year;
             AddObjectsToPaymentCombo();
             PrintHelper.FillInvoiceDesignCombo(InvoiceDesignCombo);
             SetData();
@@ -189,7 +190,7 @@ namespace GiroZilla.Views
                             {
                                 case true:
                                     {
-                                        query = query.Replace(") ", $" AND Aar = {DateTime.Now.Year}) ");
+                                        query = query.Replace(") ", $" AND Aar = {InvoiceSearchYearValue.Value.ToString()}) ");
                                         break;
                                     }
                             }
@@ -216,7 +217,7 @@ namespace GiroZilla.Views
                                                     {
                                                         case true:
                                                             {
-                                                                query += $"AND Aar = {DateTime.Now.Year} ";
+                                                                query += $"AND Aar = {InvoiceSearchYearValue.Value.ToString()} ";
                                                                 break;
                                                             }
                                                     }
@@ -228,7 +229,7 @@ namespace GiroZilla.Views
                                                     {
                                                         case true:
                                                             {
-                                                                query += $"WHERE Aar = {DateTime.Now.Year} ";
+                                                                query += $"WHERE Aar = {InvoiceSearchYearValue.Value.ToString()} ";
                                                                 break;
                                                             }
                                                     }
@@ -770,5 +771,10 @@ namespace GiroZilla.Views
         }
 
         #endregion
+
+        private void InvoiceSearchYearValue_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double?> e)
+        {
+            SetData();
+        }
     }
 }
