@@ -64,6 +64,10 @@ namespace GiroZilla.Views
                 DateSelect.Text = ServiceRow.Row["Dato"].ToString();
                 InvoiceNum.Text = number;
 
+                var date = DateTime.Now.Date;
+                date = date.AddMonths(1);
+                PayDateSelect.Text = date.ToString("dd-MMM-yy");
+
                 InvoiceMethod.Items.Add(giro);
                 InvoiceMethod.SelectedIndex = InvoiceMethod.Items.Count - 1;
 
