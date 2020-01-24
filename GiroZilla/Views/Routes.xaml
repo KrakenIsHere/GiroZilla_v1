@@ -184,7 +184,7 @@
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Grid.ColumnSpan="3" Margin="10,143,394,260" Grid.RowSpan="3">
+        <GroupBox Grid.ColumnSpan="3" Margin="10,143,394,370" Grid.RowSpan="3">
             <DataGrid 
                 Name="RouteGrid"
                 CanUserDeleteRows="False"
@@ -197,7 +197,7 @@
                 Grid.RowSpan="2" />
         </GroupBox>
 
-        <GroupBox Grid.Column="2" Margin="0,143,10,260" Grid.RowSpan="3" HorizontalAlignment="Right" Width="379">
+        <GroupBox Grid.Column="2" Margin="0,143,10,370" Grid.RowSpan="3" HorizontalAlignment="Right" Width="379">
             <DataGrid 
                 Name="CityGrid" 
                 CanUserDeleteRows="False" 
@@ -208,7 +208,7 @@
                 Grid.Column="2" />
         </GroupBox>
 
-        <GroupBox Grid.ColumnSpan="3" Margin="10,45,10,10" Grid.Row="2">
+        <GroupBox Grid.ColumnSpan="3" Margin="10,-70,10,10" Grid.Row="2">
             <DataGrid 
                 Name="CustomerGrid" 
                 CanUserDeleteRows="False" 
