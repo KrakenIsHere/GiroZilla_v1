@@ -32,19 +32,23 @@ namespace GiroZilla.Views
 
         private async void ExpandFirstTreeViewItemAtLaunch(bool isLaunch)
         {
-            if (isLaunch)
+            switch (isLaunch)
             {
-                var isFirst = false;
-                foreach (CustomTreeViewItemParent item in ManualTreeView.Items)
-                {
-                    if (!isFirst && ManualTreeView.ItemContainerGenerator.ContainerFromItem(item) is TreeViewItem tvi)
+                case true:
                     {
-                        tvi.IsSelected = true;
-                        tvi.IsExpanded = true;
-                        tvi.UpdateLayout();
-                        isFirst = true;
+                        var isFirst = false;
+                        foreach (CustomTreeViewItemParent item in ManualTreeView.Items)
+                        {
+                            if (!isFirst && ManualTreeView.ItemContainerGenerator.ContainerFromItem(item) is TreeViewItem tvi)
+                            {
+                                tvi.IsSelected = true;
+                                tvi.IsExpanded = true;
+                                tvi.UpdateLayout();
+                                isFirst = true;
+                            }
+                        }
+                        break;
                     }
-                }
             }
             _isLaunch = false;
             await Task.FromResult(true);
@@ -123,27 +127,31 @@ namespace GiroZilla.Views
 
         private async void ManualTreeView_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            if (!_isSelectedByCode)
+            switch (!_isSelectedByCode)
             {
-                _isManualSelect = true;
+                case true:
+                    {
+                        _isManualSelect = true;
 
-                var tree = sender as TreeView;
+                        var tree = sender as TreeView;
 
-                switch (tree?.SelectedItem)
-                {
-                    case CustomTreeViewItemParent parent:
+                        switch (tree?.SelectedItem)
                         {
-                            _page = parent.Page;
-                            break;
+                            case CustomTreeViewItemParent parent:
+                                {
+                                    _page = parent.Page;
+                                    break;
+                                }
+                            case CustomTreeViewItemChild child:
+                                {
+                                    _page = child.Page;
+                                    break;
+                                }
                         }
-                    case CustomTreeViewItemChild child:
-                        {
-                            _page = child.Page;
-                            break;
-                        }
-                }
 
-                ViewerPDF.PDFScrollViewer.ScrollToVerticalOffset(Offset * (_page - 1));
+                        ViewerPDF.PDFScrollViewer.ScrollToVerticalOffset(Offset * (_page - 1));
+                        break;
+                    }
             }
             _isSelectedByCode = false;
 
@@ -155,60 +163,100 @@ namespace GiroZilla.Views
         {
             ExpandFirstTreeViewItemAtLaunch(_isLaunch);
 
-            if (!_isManualSelect)
+            switch (!_isManualSelect)
             {
-                var tree = ManualTreeView;
-
-                if (ViewerPDF.PDFScrollViewer.VerticalOffset > Offset * _page)
-                {
-                    _page++;
-                    _isNewPage = true;
-                }
-                else if (ViewerPDF.PDFScrollViewer.VerticalOffset < Offset * (_page - 1))
-                {
-                    _page--;
-                    _isNewPage = true;
-                    _isSelectedByCode = true;
-                }
-
-                if (_isNewPage)
-                {
-                    foreach (CustomTreeViewItemParent item in tree.Items)
+                case true:
                     {
-                        var tvi = tree.ItemContainerGenerator.ContainerFromItem(item) as TreeViewItem;
+                        var tree = ManualTreeView;
 
-                        if (item.Page == _page)
+                        switch (ViewerPDF.PDFScrollViewer.VerticalOffset > Offset * _page)
                         {
-                            if (tvi != null)
-                            {
-                                tvi.IsExpanded = true;
-                                tvi.IsSelected = true;
-                                tvi.UpdateLayout();
-                            }
+                            case true:
+                                {
+                                    _page++;
+                                    _isNewPage = true;
+                                    break;
+                                }
+                            default:
+                                {
+                                    switch (ViewerPDF.PDFScrollViewer.VerticalOffset < Offset * (_page - 1))
+                                    {
+                                        case true:
+                                            {
+                                                _page--;
+                                                _isNewPage = true;
+                                                _isSelectedByCode = true;
+                                                break;
+                                            }
+                                    }
+                                    break;
+                                }
                         }
 
-                        if (item.Page > _page)
+                        switch (_isNewPage)
                         {
-                            if (tvi != null)
-                            {
-                                tvi.IsExpanded = false;
-                                tvi.UpdateLayout();
-                            }
-                        }
+                            case true:
+                                {
+                                    foreach (CustomTreeViewItemParent item in tree.Items)
+                                    {
+                                        var tvi = tree.ItemContainerGenerator.ContainerFromItem(item) as TreeViewItem;
 
-                        if (item.Page < _page)
-                        {
-                            var foundItem = false;
-                            foreach (CustomTreeViewItemChild subItem in tvi.Items)
-                            {
-                                if (!(tvi.ItemContainerGenerator.ContainerFromItem(subItem) is TreeViewItem tvi2) || subItem.Page != _page || foundItem) continue;
+                                        switch (item.Page == _page)
+                                        {
+                                            case true:
+                                                {
+                                                    switch (tvi != null)
+                                                    {
+                                                        case true:
+                                                            {
+                                                                tvi.IsExpanded = true;
+                                                                tvi.IsSelected = true;
+                                                                tvi.UpdateLayout();
+                                                                break;
+                                                            }
+                                                    }
+                                                    break;
+                                                }
+                                        }
 
-                                tvi2.IsSelected = true;
-                                foundItem = true;
-                            }
+                                        switch (item.Page > _page)
+                                        {
+                                            case true:
+                                                {
+                                                    switch (tvi != null)
+                                                    {
+                                                        case true:
+                                                            {
+                                                                tvi.IsExpanded = false;
+                                                                tvi.UpdateLayout();
+                                                                break;
+                                                            }
+                                                    }
+                                                    break;
+                                                }
+                                        }
+
+                                        switch (item.Page < _page)
+                                        {
+                                            case true:
+                                                {
+                                                    var foundItem = false;
+                                                    foreach (CustomTreeViewItemChild subItem in tvi.Items)
+                                                    {
+                                                        if (!(tvi.ItemContainerGenerator.ContainerFromItem(subItem) is TreeViewItem tvi2) || subItem.Page != _page || foundItem) continue;
+
+                                                        tvi2.IsSelected = true;
+                                                        foundItem = true;
+                                                    }
+                                                    break;
+                                                }
+                                        }
+                                    }
+                                    break;
+                                }
                         }
+                        break;
                     }
-                }
             }
             _isManualSelect = false;
 
@@ -227,9 +275,13 @@ namespace GiroZilla.Views
                 FileName = "GiroZilla Manual (DA-DK).pdf"
             };
 
-            if (sfd.ShowDialog() == true)
+            switch (sfd.ShowDialog() == true)
             {
-                File.Copy(filePath, sfd.FileName);
+                case true:
+                    {
+                        File.Copy(filePath, sfd.FileName);
+                        break;
+                    }
             }
             await Task.FromResult(true);
         }

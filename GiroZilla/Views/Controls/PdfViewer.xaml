@@ -13,10 +13,12 @@
              TextElement.FontSize="14"
              FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto">
 
+    <!--Old Background="LightGray" -->
+    
     <ScrollViewer 
         x:Name="PDFScrollViewer" 
         PanningMode="Both" 
-        Background="LightGray" 
+        Background="#303030"
         VerticalScrollBarVisibility="Auto" 
         CanContentScroll="True">
         <ItemsControl x:Name="PagesContainer">

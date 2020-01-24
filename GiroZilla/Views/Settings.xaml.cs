@@ -54,7 +54,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Something went wrong!");
+                Log.Error(ex, "Unexpected Error");
             }
 
             return output;
@@ -97,7 +97,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "Something went wrong!");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -119,7 +119,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "Something went wrong!");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -203,7 +203,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "Something went wrong!");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -224,8 +224,11 @@ namespace GiroZilla.Views
 
         private async void OverrideLicenseButton_Click(object sender, RoutedEventArgs e)
         {
+            VerifyLicense.Verify(NewLicenseTextBox.Text, NewLicenseError);
+
             await Task.FromResult(true);
         }
+
         #endregion
 
         #region Giro & Invoice Settings

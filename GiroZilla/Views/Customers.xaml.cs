@@ -12,8 +12,7 @@ using System.Threading.Tasks;
 using PyroSquidUniLib.Database;
 using PyroSquidUniLib.Documents;
 using PyroSquidUniLib.Extensions;
-
-
+using PyroSquidUniLib.Models;
 
 namespace GiroZilla.Views
 {
@@ -46,80 +45,110 @@ namespace GiroZilla.Views
                 var input = ClearTextSearch.Text;
                 var query = "SELECT * FROM `all_customers` ";
 
-                if (!string.IsNullOrWhiteSpace(input))
+                switch (!string.IsNullOrWhiteSpace(input))
                 {
-                    query +=
-                        "WHERE " +
-                        "(" +
-                        "Fornavn  " +
-                        "LIKE " +
-                        $"'%{input}%'" +
-                        $") " +
-
-                        $"UNION " +
-
-                        "SELECT * FROM `all_customers` " +
-                        $"WHERE " +
-                        "(" +
-                        "Efternavn " +
-                        "LIKE " +
-                        $"'%{input}%'" +
-                        $") " +
-
-                        $"UNION " +
-
-                        "SELECT * FROM `all_customers` " +
-                        $"WHERE " +
-                        "(" +
-                        "ID " +
-                        "LIKE " +
-                        $"'%{input}%'" +
-                        $") " +
-
-                        $"UNION " +
-
-                        "SELECT * FROM `all_customers` " +
-                        $"WHERE " +
-                        "(" +
-                        "Adresse " +
-                        "LIKE " +
-                        $"'%{input}%'" +
-                        $") " +
-
-                        $"UNION " +
-
-                        "SELECT * FROM `all_customers` " +
-                        $"WHERE " +
-                        "(" +
-                        "Fejninger " +
-                        "LIKE " +
-                        $"'%{input}%'" +
-                        $") ";
-
-                    if (CountySearch.SelectedIndex != 0 && CountySearch.SelectedIndex != -1)
-                    {
-                        query = query.Replace(") ", $" AND Postnr = {CountySearch.SelectedItem.ToString().Split(' ')[0]}) ");
-                    }
-                    if (MonthSearch.SelectedIndex != 0 && MonthSearch.SelectedIndex != -1)
-                    {
-                        query = query.Replace(") ", $" AND Måned = '{MonthSearch.SelectedItem.ToString().Split(' ')[0]}') ");
-                    }
-                }
-                else
-                {
-                    if (CountySearch.SelectedIndex != 0 && CountySearch.SelectedIndex != -1)
-                    {
-                        query += $"WHERE (Postnr = {CountySearch.SelectedItem.ToString().Split(' ')[0]}) ";
-
-                        if (MonthSearch.SelectedIndex != 0 && MonthSearch.SelectedIndex != -1)
+                    case true:
                         {
-                            query = query.Replace(") ", $" AND Måned = '{MonthSearch.SelectedItem.ToString().Split(' ')[0]}') ");
+                            query +=
+                                "WHERE " +
+                                "(" +
+                                "Fornavn  " +
+                                "LIKE " +
+                                $"'%{input}%'" +
+                                $") " +
+
+                                $"UNION " +
+
+                                "SELECT * FROM `all_customers` " +
+                                $"WHERE " +
+                                "(" +
+                                "Efternavn " +
+                                "LIKE " +
+                                $"'%{input}%'" +
+                                $") " +
+
+                                $"UNION " +
+
+                                "SELECT * FROM `all_customers` " +
+                                $"WHERE " +
+                                "(" +
+                                "ID " +
+                                "LIKE " +
+                                $"'%{input}%'" +
+                                $") " +
+
+                                $"UNION " +
+
+                                "SELECT * FROM `all_customers` " +
+                                $"WHERE " +
+                                "(" +
+                                "Adresse " +
+                                "LIKE " +
+                                $"'%{input}%'" +
+                                $") " +
+
+                                $"UNION " +
+
+                                "SELECT * FROM `all_customers` " +
+                                $"WHERE " +
+                                "(" +
+                                "Fejninger " +
+                                "LIKE " +
+                                $"'%{input}%'" +
+                                $") ";
+
+                            switch (CountySearch.SelectedIndex != 0 && CountySearch.SelectedIndex != -1)
+                            {
+                                case true:
+                                    {
+                                        query = query.Replace(") ", $" AND Postnr = {CountySearch.SelectedItem.ToString().Split(' ')[0]}) ");
+                                        break;
+                                    }
+                            }
+                            switch (MonthSearch.SelectedIndex != 0 && MonthSearch.SelectedIndex != -1)
+                            {
+                                case true:
+                                    {
+                                        query = query.Replace(") ", $" AND Måned = '{MonthSearch.SelectedItem.ToString().Split(' ')[0]}') ");
+                                        break;
+                                    }
+                            }
+                            break;
                         }
-                    }
-                    else if (MonthSearch.SelectedIndex != 0 && MonthSearch.SelectedIndex != -1)
-                    {
-                        query += $"WHERE (Måned = '{MonthSearch.SelectedItem.ToString().Split(' ')[0]}') ";
-                    }
+                    default:
+                        {
+                            switch (CountySearch.SelectedIndex != 0 && CountySearch.SelectedIndex != -1)
+                            {
+                                case true:
+                                    {
+                                        query += $"WHERE (Postnr = {CountySearch.SelectedItem.ToString().Split(' ')[0]}) ";
+
+                                        switch (MonthSearch.SelectedIndex != 0 && MonthSearch.SelectedIndex != -1)
+                                        {
+                                            case true:
+                                                {
+                                                    query = query.Replace(") ", $" AND Måned = '{MonthSearch.SelectedItem.ToString().Split(' ')[0]}') ");
+                                                    break;
+                                                }
+                                        }
+                                        break;
+                                    }
+                                default:
+                                    {
+                                        switch (MonthSearch.SelectedIndex != 0 && MonthSearch.SelectedIndex != -1)
+                                        {
+                                            case true:
+                                                {
+                                                    query += $"WHERE (Måned = '{MonthSearch.SelectedItem.ToString().Split(' ')[0]}') ";
+                                                    break;
+                                                }
+                                        }
+                                        break;
+                                    }
+                            }
+                            
+                            break;
+                        }
                 }
 
                 data = await AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString");
@@ -162,17 +191,21 @@ namespace GiroZilla.Views
 
                 // Displays the MessageBox.
                 result = MessageBox.Show(message, caption, buttons);
-                if (result == System.Windows.MessageBoxResult.Yes)
+                switch (result == System.Windows.MessageBoxResult.Yes)
                 {
-                    var query = $"DELETE FROM `girozilla`.`customers` WHERE `Customer_ID` = {row.Row.ItemArray[0].ToString()}";
+                    case true:
+                        {
+                            var query = $"DELETE FROM `girozilla`.`customers` WHERE `Customer_ID` = {row.Row.ItemArray[0].ToString()}";
 
-                    AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
+                            AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
 
-                    query = $"DELETE FROM `girozilla`.`route-customers` WHERE `Route-Customer_CUSTOMERID` = {row.Row.ItemArray[0].ToString()}";
+                            query = $"DELETE FROM `girozilla`.`route-customers` WHERE `Route-Customer_CUSTOMERID` = {row.Row.ItemArray[0].ToString()}";
 
-                    AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
+                            AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
 
-                    MessageBox.Show($"Kunde nr:{row.Row.ItemArray[0].ToString()} er nu slettet");
+                            MessageBox.Show($"Kunde nr:{row.Row.ItemArray[0].ToString()} er nu slettet");
+                            break;
+                        }
                 }
                 await Task.FromResult(true);
             }
@@ -213,77 +246,89 @@ namespace GiroZilla.Views
         {
             try
             {
-                if (!string.IsNullOrWhiteSpace(NewCustomersAdress.Text) &&
-                    !string.IsNullOrWhiteSpace(NewCustomersZipCode.Text) &&
-                    !string.IsNullOrWhiteSpace(NewCustomersCity.Text))
+                switch (!string.IsNullOrWhiteSpace(NewCustomersAdress.Text) &&
+                        !string.IsNullOrWhiteSpace(NewCustomersZipCode.Text) &&
+                        !string.IsNullOrWhiteSpace(NewCustomersCity.Text))
                 {
-                    string[] months = new string[] {
-                        NewCustomersMonth1.SelectedValue.ToString(),
-                        NewCustomersMonth2.SelectedValue.ToString(),
-                        NewCustomersMonth3.SelectedValue.ToString(),
-                        NewCustomersMonth4.SelectedValue.ToString(),
-                        NewCustomersMonth5.SelectedValue.ToString(),
-                        NewCustomersMonth6.SelectedValue.ToString()
-                    };
-
-                    var monthResult = "";
-
-                    foreach (string str in months)
-                    {
-                        if (!string.IsNullOrWhiteSpace(str) && str != "System.Windows.Controls.ComboBoxItem: Ingen Valgt")
+                    case true:
                         {
-                            monthResult += $"{str}, ";
+                            string[] months = new string[] {
+                                NewCustomersMonth1.SelectedValue.ToString(),
+                                NewCustomersMonth2.SelectedValue.ToString(),
+                                NewCustomersMonth3.SelectedValue.ToString(),
+                                NewCustomersMonth4.SelectedValue.ToString(),
+                                NewCustomersMonth5.SelectedValue.ToString(),
+                                NewCustomersMonth6.SelectedValue.ToString()
+                            };
+
+                            var monthResult = "";
+
+                            foreach (string str in months)
+                            {
+                                switch (!string.IsNullOrWhiteSpace(str) && str != "System.Windows.Controls.ComboBoxItem: Ingen Valgt")
+                                {
+                                    case true:
+                                        {
+                                            monthResult += $"{str}, ";
+                                            break;
+                                        }
+                                }
+                            }
+
+                            monthResult = monthResult.Remove((monthResult.Length - 2), 2);
+
+                            var NewServiceNum = NewCustomersServices.Text;
+
+                            switch (string.IsNullOrWhiteSpace(NewServiceNum))
+                            {
+                                case true:
+                                    {
+                                        NewServiceNum = "0";
+                                        break;
+                                    }
+                            }
+
+                            var query = $"INSERT INTO `customers` " +
+                                $"(" +
+                                $"`Customer_FIRSTNAME`, " +
+                                $"`Customer_LASTNAME`, " +
+                                $"`Customer_ADDRESS`, " +
+                                $"`Customer_ZIPCODE`, " +
+                                $"`Customer_CITY`, " +
+                                $"`Customer_SERVICES_NEEDED`, " +
+                                $"`Customer_COMMENT`, " +
+                                $"`Customer_PHONE_MOBILE`, " +
+                                $"`Customer_PHONE_HOME`, " +
+                                $"`Customer_EMAIL`, " +
+                                $"`Customer_MONTH` " +
+                                $") " +
+                                $"VALUES " +
+                                $"(" +
+                                $"'{NewCustomersFirstname.Text}', " +
+                                $"'{NewCustomersLastname.Text}', " +
+                                $"'{NewCustomersAdress.Text}', " +
+                                $"'{NewCustomersZipCode.Text}', " +
+                                $"'{NewCustomersCity.Text}', " +
+                                $"'{NewServiceNum}', " +
+                                $"'{NewCustomersComment.Text}', " +
+                                $"'{NewCustomersMobile.Text}', " +
+                                $"'{NewCustomersHome.Text}', " +
+                                $"'{NewCustomersMail.Text}', " +
+                                $"'{monthResult}'" +
+                                $");";
+
+                            AsyncMySqlHelper.SetDataToDatabase(query, "ConnString").Wait();
+
+                            Log.Error(query, "Added a new customer!");
+
+                            await Task.FromResult(true);
+                            return true;
                         }
-                    }
-
-                    monthResult = monthResult.Remove((monthResult.Length - 2), 2);
-
-                    var NewServiceNum = NewCustomersServices.Text;
-
-                    if (string.IsNullOrWhiteSpace(NewServiceNum))
-                    {
-                        NewServiceNum = "0";
-                    }
-
-                    var query = $"INSERT INTO `customers` " +
-                        $"(" +
-                        $"`Customer_FIRSTNAME`, " +
-                        $"`Customer_LASTNAME`, " +
-                        $"`Customer_ADDRESS`, " +
-                        $"`Customer_ZIPCODE`, " +
-                        $"`Customer_CITY`, " +
-                        $"`Customer_SERVICES_NEEDED`, " +
-                        $"`Customer_COMMENT`, " +
-                        $"`Customer_PHONE_MOBILE`, " +
-                        $"`Customer_PHONE_HOME`, " +
-                        $"`Customer_EMAIL`, " +
-                        $"`Customer_MONTH` " +
-                        $") " +
-                        $"VALUES " +
-                        $"(" +
-                        $"'{NewCustomersFirstname.Text}', " +
-                        $"'{NewCustomersLastname.Text}', " +
-                        $"'{NewCustomersAdress.Text}', " +
-                        $"'{NewCustomersZipCode.Text}', " +
-                        $"'{NewCustomersCity.Text}', " +
-                        $"'{NewServiceNum}', " +
-                        $"'{NewCustomersComment.Text}', " +
-                        $"'{NewCustomersMobile.Text}', " +
-                        $"'{NewCustomersHome.Text}', " +
-                        $"'{NewCustomersMail.Text}', " +
-                        $"'{monthResult}'" +
-                        $");";
-
-                    AsyncMySqlHelper.SetDataToDatabase(query, "ConnString").Wait();
-
-                    Log.Error(query, "Added a new customer!");
-
-                    await Task.FromResult(true);
-                    return true;
-                }
-                else
-                {
-                    MessageBox.Show("Data Mangler");
+                    default:
+                        {
+                            MessageBox.Show("Data Mangler");
+                            break;
+                        }
                 }
                 await Task.FromResult(true);
             }
@@ -338,15 +383,20 @@ namespace GiroZilla.Views
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private async void DeleteCustomerButton_Click(object sender, RoutedEventArgs e)
         {
-            if (CustomerGrid.SelectedIndex != -1)
+            switch (CustomerGrid.SelectedIndex != -1)
             {
-                DeleteCustomer(CustomerGrid.SelectedItem as DataRowView);
+                case true:
+                    {
+                        DeleteCustomer(CustomerGrid.SelectedItem as DataRowView);
 
-                SetData();
-            }
-            else
-            {
-                MessageBox.Show("Venligst vælg en kunde");
+                        SetData();
+                        break;
+                    }
+                default:
+                    {
+                        MessageBox.Show("Venligst vælg en kunde");
+                        break;
+                    }
             }
             await Task.FromResult(true);
         }
@@ -393,9 +443,13 @@ namespace GiroZilla.Views
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private async void FinalAddCustomer_Click(object sender, RoutedEventArgs e)
         {
-            if (AddNewCustomerData().Result)
+            switch (AddNewCustomerData().Result)
             {
-                AddCustomerDialog.IsOpen = false;
+                case true:
+                    {
+                        AddCustomerDialog.IsOpen = false;
+                        break;
+                    }
             }
 
             SetData();
@@ -414,20 +468,29 @@ namespace GiroZilla.Views
             {
                 var year = 0;
 
-                if (DateTime.Now.Month == 12 && DateTime.Now.Day > 26)
+                switch (DateTime.Now.Month == 12 && DateTime.Now.Day > 26)
                 {
-                    year = DateTime.Now.Year + 1;
-                }
-                else
-                {
-                    year = DateTime.Now.Year;
+                    case true:
+                        {
+                            year = DateTime.Now.Year + 1;
+                            break;
+                        }
+                    default:
+                        {
+                            year = DateTime.Now.Year;
+                            break;
+                        }
                 }
 
                 var payment = "";
 
-                if (PaymentMethod.SelectedIndex != 0 && PaymentMethod.SelectedIndex != -1)
+                switch (PaymentMethod.SelectedIndex != 0 && PaymentMethod.SelectedIndex != -1)
                 {
-                    payment = PaymentMethod.SelectedValue.ToString();
+                    case true:
+                        {
+                            payment = PaymentMethod.SelectedValue.ToString();
+                            break;
+                        }
                 }
 
                 var query = $"INSERT INTO `services` " +
@@ -451,9 +514,12 @@ namespace GiroZilla.Views
                     $"'{Times.Text}'" +
                     $");";
 
-                if (!AsyncMySqlHelper.SetDataToDatabase(query, "ConnString").Result)
+                switch (!AsyncMySqlHelper.SetDataToDatabase(query, "ConnString").Result)
                 {
-                    throw new Exception("Unable to post new Service to database under at AddNewServiceData() Customers.xaml.cs");
+                    case true:
+                        {
+                            throw new Exception("Unable to post new Service to database under at AddNewServiceData() Customers.xaml.cs");
+                        }
                 }
 
                 foreach (ServiceProduct obj in ProductList.Items)
@@ -499,6 +565,15 @@ namespace GiroZilla.Views
             {
                 var query = $"SELECT * FROM `user_services` WHERE `Kunde ID` = {row.Row.ItemArray[0].ToString()}";
 
+                switch (ContainServicesToYearOnly.IsChecked == true)
+                {
+                    case true:
+                        {
+                            query += $" AND `Aar` = {DateTime.Now.Year}";
+                            break;
+                        }
+                }
+
                 Servicedata = AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString").Result;
 
                 ServiceGrid.ItemsSource = Servicedata.Tables[0].DefaultView;
@@ -509,6 +584,18 @@ namespace GiroZilla.Views
             {
                 await Task.FromResult(false);
                 Log.Error(ex, "Something went wrong setting the ServiceGrid data!");
+            }
+        }
+
+        private void ContainServicesToYearOnly_Checked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                SetServiceData(CustomerGrid.SelectedItem as DataRowView);
+            }
+            catch (Exception)
+            {
+                //Do Nothing
             }
         }
 
@@ -537,10 +624,14 @@ namespace GiroZilla.Views
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private async void FinalAddService_Click(object sender, RoutedEventArgs e)
         {
-            if (AddNewServiceData().Result)
+            switch (AddNewServiceData().Result)
             {
-                AddServiceDialog.IsOpen = false;
-                SetServiceData(CustomerGrid.SelectedItem as DataRowView);
+                case true:
+                    {
+                        AddServiceDialog.IsOpen = false;
+                        SetServiceData(CustomerGrid.SelectedItem as DataRowView);
+                        break;
+                    }
             }
             await Task.FromResult(true);
         }
@@ -557,45 +648,59 @@ namespace GiroZilla.Views
         {
             try
             {
-                if (InvoiceDesignCombo.SelectedIndex != 0 && InvoiceDesignCombo.SelectedIndex != -1)
+                switch (InvoiceDesignCombo.SelectedIndex != 0 && InvoiceDesignCombo.SelectedIndex != -1)
                 {
-                    if (!string.IsNullOrWhiteSpace(PayDateSelect.Text) && !string.IsNullOrWhiteSpace(PriceTextBox.Text))
-                    {
-                        if (AddNewServiceData().Result)
+                    case true:
                         {
+                            switch (!string.IsNullOrWhiteSpace(PayDateSelect.Text) && !string.IsNullOrWhiteSpace(PriceTextBox.Text))
+                            {
+                                case true:
+                                    {
+                                        switch (AddNewServiceData().Result)
+                                        {
+                                            case true:
+                                                {
+                                                    PrintHelper.SetupStandardInvoicePrint(
+                                                        InvoiceDesignCombo.SelectedValue.ToString(),
+                                                        PriceTextBox.Text,
+                                                        PayDateSelect.Text,
+                                                        long.Parse(InvoiceNum.Text),
+                                                        ContainPayDateCheckBox,
+                                                        ContainPriceCheckBox,
+                                                        TaxWithPriceCheckBox,
+                                                        DateSelect.Text,
+                                                        InvoiceNum.Text,
+                                                        int.Parse(CustomerID.Text),
+                                                        ProductList,
+                                                        IncludeProductsCheckBox
+                                                        );
 
-                            PrintHelper.SetupStandardInvoicePrint(
-                                InvoiceDesignCombo.SelectedValue.ToString(),
-                                PriceTextBox.Text,
-                                PayDateSelect.Text,
-                                long.Parse(InvoiceNum.Text),
-                                ContainPriceCheckBox,
-                                TaxWithPriceCheckBox,
-                                DateSelect.Text,
-                                InvoiceNum.Text,
-                                int.Parse(CustomerID.Text),
-                                ProductList,
-                                IncludeProductsCheckBox
-                                );
-
-                            AddServiceDialog.IsOpen = false;
+                                                    AddServiceDialog.IsOpen = false;
+                                                    break;
+                                                }
+                                        }
+                                        break;
+                                    }
+                                default:
+                                    {
+                                        MessageBox.Show("Data mangler");
+                                        break;
+                                    }
+                            }
+                            break;
                         }
-                    }
-                    else
-                    {
-                        MessageBox.Show("Data mangler");
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Venligst vælg et design");
+                    default:
+                        {
+                            MessageBox.Show("Venligst vælg et design");
+                            break;
+                        }
                 }
                 await Task.FromResult(true);
             }
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "Something went wrong!");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -612,28 +717,32 @@ namespace GiroZilla.Views
         {
             try
             { 
-                if (AddNewServiceData().Result)
+                switch (AddNewServiceData().Result)
                 {
-                    PrintHelper.SetupGiroPrint(
-                        PriceTextBox.Text,
-                        PayDateSelect.Text,
-                        long.Parse(InvoiceNum.Text),
-                        int.Parse(CustomerID.Text),
-                        ContainPriceCheckBox,
-                        ContainPayDateCheckBox,
-                        TaxWithPriceCheckBox,
-                        ProductList,
-                        IncludeProductsCheckBox
-                    );
+                    case true:
+                        {
+                            PrintHelper.SetupGiroPrint(
+                            PriceTextBox.Text,
+                            PayDateSelect.Text,
+                            long.Parse(InvoiceNum.Text),
+                            int.Parse(CustomerID.Text),
+                            ContainPriceCheckBox,
+                            ContainPayDateCheckBox,
+                            TaxWithPriceCheckBox,
+                            ProductList,
+                            IncludeProductsCheckBox
+                            );
 
-                    AddServiceDialog.IsOpen = false;
+                            AddServiceDialog.IsOpen = false;
+                            break;
+                        }
                 }
                 await Task.FromResult(true);
             }
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "Something went wrong!");
+                Log.Error(ex, "Unexpected Error");
             }
 }
 
@@ -649,86 +758,99 @@ namespace GiroZilla.Views
         {
             try
             {
-                if (CustomerGrid.SelectedIndex != -1)
+                switch (CustomerGrid.SelectedIndex != -1)
                 {
-                    var row = CustomerGrid.SelectedItem as DataRowView;
-
-                    var CID = row["ID"].ToString();
-                    int ServicesNeeded;
-                    try
-                    {
-                        ServicesNeeded = int.Parse(row["Fejninger"].ToString());
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Warning(ex, "No service amount");
-                        ServicesNeeded = 0;
-                    }
-
-                    CustomerID.Text = CID;
-
-                    var query = $"SELECT * FROM `services` WHERE Service_YEAR = {DateTime.Now.Year} AND Customer_ID = {CID};";
-
-                    var amountOfRows = await AsyncMySqlHelper.CheckDataRowsFromDatabase(query, "ConnString");
-
-                    Times.Text = (amountOfRows + 1).ToString();
-
-                    string message = "Denne kunde har allerede alle deres fejninger\nVil du fortsætte?";
-                    string caption = "Advarsel";
-                    System.Windows.MessageBoxButton buttons = System.Windows.MessageBoxButton.YesNo;
-                    System.Windows.MessageBoxResult result = System.Windows.MessageBoxResult.Yes;
-
-                    if (amountOfRows >= ServicesNeeded)
-                    {
-                        // Displays the MessageBox.
-                        result = MessageBox.Show(message, caption, buttons);
-                    }
-
-                    if (result == System.Windows.MessageBoxResult.Yes)
-                    {
-                        var date = DateTime.Now.Date;
-
-                        query = $"SELECT * FROM `services`;";
-
-                        var TotalServiceRows = await AsyncMySqlHelper.GetDataFromDatabase(query, "ConnString");
-
-                        int amountOfTotalServices = 1;
-
-                        try
+                    case true:
                         {
-                            amountOfTotalServices = int.Parse(TotalServiceRows.Last()["Service_ID"].ToString()) + 1;
+                            var row = CustomerGrid.SelectedItem as DataRowView;
+
+                            var CID = row["ID"].ToString();
+                            int ServicesNeeded;
+                            try
+                            {
+                                ServicesNeeded = int.Parse(row["Fejninger"].ToString());
+                            }
+                            catch (Exception ex)
+                            {
+                                Log.Warning(ex, "No service amount");
+                                ServicesNeeded = 0;
+                            }
+
+                            CustomerID.Text = CID;
+
+                            var query = $"SELECT * FROM `services` WHERE Service_YEAR = {DateTime.Now.Year} AND Customer_ID = {CID};";
+
+                            var amountOfRows = await AsyncMySqlHelper.CheckDataRowsFromDatabase(query, "ConnString");
+
+                            Times.Text = (amountOfRows + 1).ToString();
+
+                            string message = "Denne kunde har allerede alle deres fejninger\nVil du fortsætte?";
+                            string caption = "Advarsel";
+                            System.Windows.MessageBoxButton buttons = System.Windows.MessageBoxButton.YesNo;
+                            System.Windows.MessageBoxResult result = System.Windows.MessageBoxResult.Yes;
+
+                            switch (amountOfRows >= ServicesNeeded)
+                            {
+                                case true:
+                                    {
+                                        // Displays the MessageBox.
+                                        result = MessageBox.Show(message, caption, buttons);
+                                        break;
+                                    }
+                            }
+
+                            switch (result == System.Windows.MessageBoxResult.Yes)
+                            {
+                                case true:
+                                    {
+                                        var date = DateTime.Now.Date;
+
+                                        query = $"SELECT * FROM `services`;";
+
+                                        var TotalServiceRows = await AsyncMySqlHelper.GetDataFromDatabase<Service>(query, "ConnString");
+
+                                        int amountOfTotalServices = 1;
+
+                                        try
+                                        {
+                                            amountOfTotalServices = int.Parse(TotalServiceRows.Last().Service_ID.ToString()) + 1;
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            Log.Error(ex, "Unable to get any Service Data!");
+                                        }
+
+                                        NewServiceID.Text = amountOfTotalServices.ToString();
+
+                                        DateSelect.Text = date.ToString("dd-MMM-yy");
+                                        date = date.AddMonths(1);
+                                        PayDateSelect.Text = date.ToString("dd-MMM-yy");
+
+                                        //This number can be 16 digits long!!
+                                        var newInvoiceNumber = long.Parse(PropertiesExtension.Get<string>("LastInvoiceNum")) + 1;
+
+                                        InvoiceNum.Text = newInvoiceNumber.ToString();
+                                        ProductList.Items.Clear();
+                                        AddProductsToCombo();
+
+                                        AddServiceDialog.IsOpen = true;
+                                        break;
+                                    }
+                            }
+                            break;
                         }
-                        catch (Exception ex)
+                    default:
                         {
-                            Log.Error(ex, "Unable to get any Service Data!");
+                            System.Windows.MessageBox.Show("Venligst vælg en kunde");
+                            break;
                         }
-
-                        NewServiceID.Text = amountOfTotalServices.ToString();
-
-                        DateSelect.Text = date.ToString("dd-MMM-yy");
-                        date = date.AddMonths(1);
-                        PayDateSelect.Text = date.ToString("dd-MMM-yy");
-
-                        //This number can be 16 digits long!!
-                        var newInvoiceNumber = long.Parse(PropertiesExtension.Get<string>("LastInvoiceNum")) + 1;
-
-                        InvoiceNum.Text = newInvoiceNumber.ToString();
-                        ProductList.Items.Clear();
-                        AddProductsToCombo();
-
-                        AddServiceDialog.IsOpen = true;
-                    }
-                }
-                else
-                {
-                    System.Windows.MessageBox.Show("Venligst vælg en kunde");
                 }
                 await Task.FromResult(true);
             }
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "Something went wrong!");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -747,52 +869,67 @@ namespace GiroZilla.Views
         {
             try
             {
-                if (!string.IsNullOrWhiteSpace(NewCustomersZipCode.Text) &&
-                    !string.IsNullOrWhiteSpace(NewCustomersCity.Text))
+                switch (!string.IsNullOrWhiteSpace(NewCustomersZipCode.Text) &&
+                        !string.IsNullOrWhiteSpace(NewCustomersCity.Text))
                 {
-                    var query = $"SELECT * FROM `cities`";
-
-                    var rows = AsyncMySqlHelper.GetDataFromDatabase(query, "ConnString");
-
-                    var doesExist = false;
-
-                    foreach (DataRow row in rows.Result)
-                    {
-                        if(row["City_ZIP"].ToString() == NewCustomersZipCode.Text)
+                    case true:
                         {
-                            doesExist = true;
+                            var query = $"SELECT * FROM `cities`";
+
+                            var rows = AsyncMySqlHelper.GetDataFromDatabase<City>(query, "ConnString");
+
+                            var doesExist = false;
+
+                            foreach (City row in rows.Result)
+                            {
+                                switch (row.City_ZIP.ToString() == NewCustomersZipCode.Text)
+                                {
+                                    case true:
+                                        {
+                                            doesExist = true;
+                                            break;
+                                        }
+                                }
+                            }
+
+                            switch (!doesExist)
+                            {
+                                case true:
+                                    {
+                                        string message = "Dette Område existere ikke i databasen, vil du tilføje den?";
+                                        string caption = "Tilføj Område";
+                                        System.Windows.MessageBoxButton buttons = System.Windows.MessageBoxButton.YesNo;
+                                        System.Windows.MessageBoxResult result = System.Windows.MessageBoxResult.Yes;
+
+                                        // Displays the MessageBox.
+                                        result = MessageBox.Show(message, caption, buttons);
+
+                                        switch (result == System.Windows.MessageBoxResult.Yes)
+                                        {
+                                            case true:
+                                                {
+                                                    query = $"INSERT INTO `cities` " +
+                                                    $"(" +
+                                                    $"`City_ZIP`, " +
+                                                    $"`City_NAME` " +
+                                                    $") " +
+                                                    $"VALUES " +
+                                                    $"(" +
+                                                    $"{NewCustomersZipCode.Text}, " +
+                                                    $"'{NewCustomersCity.Text}' " +
+                                                    $");";
+
+                                                    AsyncMySqlHelper.SetDataToDatabase(query, "ConnString").Wait();
+
+                                                    await Task.FromResult(true);
+                                                    return true;
+                                                }
+                                        }
+                                        break;
+                                    }
+                            }
+                            break;
                         }
-                    }
-
-                    if (!doesExist)
-                    {
-                        string message = "Dette Område existere ikke i databasen, vil du tilføje den?";
-                        string caption = "Tilføj Område";
-                        System.Windows.MessageBoxButton buttons = System.Windows.MessageBoxButton.YesNo;
-                        System.Windows.MessageBoxResult result = System.Windows.MessageBoxResult.Yes;
-
-                        // Displays the MessageBox.
-                        result = MessageBox.Show(message, caption, buttons);
-
-                        if (result == System.Windows.MessageBoxResult.Yes)
-                        {
-                            query = $"INSERT INTO `cities` " +
-                            $"(" +
-                            $"`City_ZIP`, " +
-                            $"`City_NAME` " +
-                            $") " +
-                            $"VALUES " +
-                            $"(" +
-                            $"{NewCustomersZipCode.Text}, " +
-                            $"'{NewCustomersCity.Text}' " +
-                            $");";
-
-                            AsyncMySqlHelper.SetDataToDatabase(query, "ConnString").Wait();
-
-                            await Task.FromResult(true);
-                            return true;
-                        }
-                    }
                 }
             }
             catch (Exception ex)
@@ -814,9 +951,13 @@ namespace GiroZilla.Views
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private async void AddCounty_LostFocus(object sender, RoutedEventArgs e)
         {
-            if (AddNewCountyData().Result)
+            switch (AddNewCountyData().Result)
             {
-                MessageBox.Show("Det nye Område er nu tilføjet");
+                case true:
+                    {
+                        MessageBox.Show("Det nye Område er nu tilføjet");
+                        break;
+                    }
             }
             await Task.FromResult(true);
         }
@@ -846,7 +987,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "Something went wrong!");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -870,7 +1011,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "Something went wrong!");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -881,18 +1022,18 @@ namespace GiroZilla.Views
             {
                 var query = "SELECT * FROM `cities`";
 
-                var data = AsyncMySqlHelper.GetDataFromDatabase(query, "ConnString");
+                var data = AsyncMySqlHelper.GetDataFromDatabase<City>(query, "ConnString");
 
-                foreach (DataRow row in data.Result)
+                foreach (City row in data.Result)
                 {
-                    CountySearch.Items.Add(row["city_ZIP"].ToString() + " " + row["city_NAME"].ToString());
+                    CountySearch.Items.Add(row.City_ZIP.ToString() + " " + row.City_NAME);
                 }
                 await Task.FromResult(true);
             }
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "Something went wrong!");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -938,7 +1079,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "Something went wrong!");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -953,25 +1094,29 @@ namespace GiroZilla.Views
             {
                 var query = "SELECT * FROM `products`";
 
-                var data = AsyncMySqlHelper.GetDataFromDatabase(query, "ConnString");
+                var data = AsyncMySqlHelper.GetDataFromDatabase<Product>(query, "ConnString");
 
                 ProductCombo.Items.Clear();
 
-                if (ProductCombo.Items.Count <= 0)
+                switch (ProductCombo.Items.Count <= 0)
                 {
-                    foreach (DataRow row in data.Result)
-                    {
-                        ProductCombo.Items.Add(row["Product_NAME"].ToString());
-                    }
+                    case true:
+                        {
+                            foreach (Product row in data.Result)
+                            {
+                                ProductCombo.Items.Add(row.Product_NAME.ToString());
+                            }
 
-                    ProductCombo.SelectedIndex = 0;
+                            ProductCombo.SelectedIndex = 0;
+                            break;
+                        }
                 }
                 await Task.FromResult(true);
             }
             catch (Exception ex)
             {
                 await Task.FromResult(true);
-                Log.Error(ex, "Something went wrong!");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -988,21 +1133,30 @@ namespace GiroZilla.Views
             try
             {
                 var query = "" +
-                    $"SELECT * FROM `all_products` " +
-                    $"WHERE Navn = '{ProductCombo.SelectedValue.ToString()}'";
+                    $"SELECT * FROM `products` " +
+                    $"WHERE Product_NAME = '{ProductCombo.SelectedValue.ToString()}'";
 
-                var data = await AsyncMySqlHelper.GetDataFromDatabase(query, "ConnString");
+                var data = await AsyncMySqlHelper.GetDataFromDatabase<Product>(query, "ConnString");
 
-                foreach (DataRow row in data)
+                foreach (Product row in data)
                 {
-                    ProductList.Items.Add(new ServiceProduct { ID = row["ID"].ToString(), Name = row["Navn"].ToString(), Price = row["Pris"].ToString().Replace('.', ','), Description = row["Beskrivelse"].ToString() });
+                    switch (string.IsNullOrWhiteSpace(row.Product_DESCRIPTION))
+                    {
+                        case true:
+                        {
+                            row.Product_DESCRIPTION = "";
+                            break;
+                        }
+                    }
+
+                    ProductList.Items.Add(new ServiceProduct { ID = row.Product_ID.ToString(), Name = row.Product_NAME, Price = row.Product_PRICE.Replace('.', ','), Description = row.Product_DESCRIPTION.ToString() });
                 }
                 PrintHelper.CalculatePrice(ProductList, PriceTextBox);
             }
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "Something went wrong!");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -1028,7 +1182,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "Somthing went wrong!");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 

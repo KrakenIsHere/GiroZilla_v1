@@ -9,8 +9,7 @@ using System.Windows.Controls;
 using PyroSquidUniLib.Database;
 using PyroSquidUniLib.Documents;
 using PyroSquidUniLib.Extensions;
-
-
+using PyroSquidUniLib.Models;
 
 namespace GiroZilla.Views
 {
@@ -20,10 +19,12 @@ namespace GiroZilla.Views
 
         DataSet data = new DataSet();
         DataSet productData = new DataSet();
+        bool customerExists;
 
         public Invoice()
         {
             InitializeComponent();
+            InvoiceSearchYearValue.Value = DateTime.Now.Year;
             AddObjectsToPaymentCombo();
             PrintHelper.FillInvoiceDesignCombo(InvoiceDesignCombo);
             SetData();
@@ -49,9 +50,13 @@ namespace GiroZilla.Views
                 var giro = ServiceRow.Row["Nummer"].ToString().Replace(" ", "").Split('.')[0];
                 var number = "";
 
-                if (ServiceRow.Row["Nummer"].ToString().Replace(" ", "").Split('.')[1] != null)
+                switch (ServiceRow.Row["Nummer"].ToString().Replace(" ", "").Split('.')[1] != null)
                 {
-                    number = ServiceRow.Row["Nummer"].ToString().Replace(" ", "").Split('.')[1];
+                    case true:
+                        {
+                            number = ServiceRow.Row["Nummer"].ToString().Replace(" ", "").Split('.')[1];
+                            break;
+                        }
                 }
 
                 ServiceID.Text = ServiceRow.Row["ID"].ToString();
@@ -60,29 +65,41 @@ namespace GiroZilla.Views
                 DateSelect.Text = ServiceRow.Row["Dato"].ToString();
                 InvoiceNum.Text = number;
 
+                var date = DateTime.Now.Date;
+                date = date.AddMonths(1);
+                PayDateSelect.Text = date.ToString("dd-MMM-yy");
+
                 InvoiceMethod.Items.Add(giro);
                 InvoiceMethod.SelectedIndex = InvoiceMethod.Items.Count - 1;
 
-                if (!string.IsNullOrWhiteSpace(ServiceRow.Row["Betaling"].ToString()))
+                switch (!string.IsNullOrWhiteSpace(ServiceRow.Row["Betaling"].ToString()))
                 {
-                    PaymentMethodText.Items.Add(ServiceRow.Row["Betaling"].ToString());
-                    PaymentMethodText.SelectedIndex = PaymentMethodText.Items.Count - 1;
+                    case true:
+                        {
+                            PaymentMethodText.Items.Add(ServiceRow.Row["Betaling"].ToString());
+                            PaymentMethodText.SelectedIndex = PaymentMethodText.Items.Count - 1;
+                            break;
+                        }
                 }
 
                 ProductList.Items.Clear();
 
-                if (ProductTable != null)
+                switch (ProductTable != null)
                 {
-                    foreach (DataRow row in ProductTable.Rows)
-                    {
-                        ProductList.Items.Add(new ServiceProduct
+                    case true:
                         {
-                            ID = row["Produkt ID"].ToString(),
-                            Name = row["Produkt Navn"].ToString(),
-                            Price = row["Pris"].ToString(),
-                            Description = row["Beskrivelse"].ToString()
-                        });
-                    }
+                            foreach (DataRow row in ProductTable.Rows)
+                            {
+                                ProductList.Items.Add(new ServiceProduct
+                                {
+                                    ID = row["Produkt ID"].ToString(),
+                                    Name = row["Produkt Navn"].ToString(),
+                                    Price = row["Pris"].ToString(),
+                                    Description = row["Beskrivelse"].ToString()
+                                });
+                            }
+                            break;
+                        }
                 }
 
                 PrintHelper.CalculatePrice(ProductList, PriceTextBox);
@@ -118,58 +135,117 @@ namespace GiroZilla.Views
                 var input = ClearTextSearch.Text;
                 var query = "SELECT * FROM `user_services` ";
 
-                if (!string.IsNullOrWhiteSpace(input))
+                switch (!string.IsNullOrWhiteSpace(input))
                 {
-                    query +=
-                        $"WHERE " +
-                        "(" +
-                        "`ID` " +
-                        "LIKE " +
-                        $"'%{input}%'" +
-                        $") " +
+                    case true:
+                        {
+                            query +=
+                                $"WHERE " +
+                                "(" +
+                                "`ID` " +
+                                "LIKE " +
+                                $"'%{input}%'" +
+                                $") " +
 
-                        $"UNION " +
+                                $"UNION " +
 
-                        "SELECT * FROM `user_services` " +
-                        $"WHERE " +
-                        "(" +
-                        "`Kunde ID` " +
-                        "LIKE " +
-                        $"'%{input}%'" +
-                        $") " +
+                                "SELECT * FROM `user_services` " +
+                                $"WHERE " +
+                                "(" +
+                                "`Kunde ID` " +
+                                "LIKE " +
+                                $"'%{input}%'" +
+                                $") " +
 
-                        $"UNION " +
+                                $"UNION " +
 
-                        "SELECT * FROM `user_services` " +
-                        "WHERE " +
-                        "(" +
-                        "`Nummer` " +
-                        "LIKE " +
-                        $"'%{input}%'" +
-                        $") ";
+                                "SELECT * FROM `user_services` " +
+                                "WHERE " +
+                                "(" +
+                                "`Nummer` " +
+                                "LIKE " +
+                                $"'%{input}%'" +
+                                $") ";
 
-                    UnpayedOnlyCheck.IsEnabled = true;
-                    if (PaySearch.SelectedIndex != 0 && PaySearch.SelectedIndex != -1)
-                    {
-                        UnpayedOnlyCheck.IsEnabled = false;
-                        UnpayedOnlyCheck.IsChecked = false;
-                        query = query.Replace(") ", $" AND Betaling = '{PaySearch.SelectedItem.ToString()}') ");
-                    }
-                    else if (UnpayedOnlyCheck.IsChecked == true)
-                    {
-                        query = query.Replace(") ", $" AND Betaling = '') ");
-                    }
-                }
-                else
-                {
-                    if (PaySearch.SelectedIndex != 0 && PaySearch.SelectedIndex != -1)
-                    {
-                        query += $"WHERE Betaling = '{PaySearch.SelectedItem.ToString()}'";
-                    }
-                    else if (UnpayedOnlyCheck.IsChecked == true)
-                    {
-                        query += $"WHERE Betaling = '' ";
-                    }
+                            UnpayedOnlyCheck.IsEnabled = true;
+                            switch (PaySearch.SelectedIndex != 0 && PaySearch.SelectedIndex != -1)
+                            {
+                                case true:
+                                    {
+                                        UnpayedOnlyCheck.IsEnabled = false;
+                                        UnpayedOnlyCheck.IsChecked = false;
+                                        query = query.Replace(") ", $" AND Betaling = '{PaySearch.SelectedItem.ToString()}') ");
+                                        break;
+                                    }
+                                default:
+                                    {
+                                        switch (UnpayedOnlyCheck.IsChecked == true)
+                                        {
+                                            case true:
+                                                {
+                                                    query = query.Replace(") ", $" AND Betaling = '') ");
+                                                    break;
+                                                }
+                                        }
+                                        break;
+                                    }
+                            }
+
+                            switch (ThisYearOnlyCheck.IsChecked == true)
+                            {
+                                case true:
+                                    {
+                                        query = query.Replace(") ", $" AND Aar = {InvoiceSearchYearValue.Value.ToString()}) ");
+                                        break;
+                                    }
+                            }
+                            break;
+                        }
+                    default:
+                        {
+                            switch (PaySearch.SelectedIndex != 0 && PaySearch.SelectedIndex != -1)
+                            {
+                                case true:
+                                    {
+                                        query += $"WHERE Betaling = '{PaySearch.SelectedItem.ToString()}'";
+                                        break;
+                                    }
+                                default:
+                                    {
+                                        switch (UnpayedOnlyCheck.IsChecked == true)
+                                        {
+                                            case true:
+                                                {
+                                                    query += $"WHERE Betaling = '' ";
+
+                                                    switch (ThisYearOnlyCheck.IsChecked == true)
+                                                    {
+                                                        case true:
+                                                            {
+                                                                query += $"AND Aar = {InvoiceSearchYearValue.Value.ToString()} ";
+                                                                break;
+                                                            }
+                                                    }
+                                                    break;
+                                                }
+                                            default:
+                                                {
+                                                    switch (ThisYearOnlyCheck.IsChecked == true)
+                                                    {
+                                                        case true:
+                                                            {
+                                                                query += $"WHERE Aar = {InvoiceSearchYearValue.Value.ToString()} ";
+                                                                break;
+                                                            }
+                                                    }
+                                                    break;
+                                                }
+                                        }
+                                        break;
+                                    }
+                            }
+                            break;
+                        }
                 }
 
                 data = await AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString");
@@ -205,31 +281,41 @@ namespace GiroZilla.Views
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(row["Betaling"].ToString()))
+                switch (string.IsNullOrWhiteSpace(row["Betaling"].ToString()))
                 {
-                    var id = row["ID"].ToString();
-                    var paymentFormIndex = PaymentMethod.SelectedIndex;
+                    case true:
+                        {
+                            var id = row["ID"].ToString();
+                            var paymentFormIndex = PaymentMethod.SelectedIndex;
 
-                    if (paymentFormIndex != 0 && paymentFormIndex != -1)
-                    {
-                        var paymentForm = PaymentMethod.SelectedValue;
+                            switch (paymentFormIndex != 0 && paymentFormIndex != -1)
+                            {
+                                case true:
+                                    {
+                                        var paymentForm = PaymentMethod.SelectedValue;
 
-                        var query = $"UPDATE `GiroZilla`.`services` SET `service_PAYMENTFORM` = '{paymentForm}' WHERE (`service_ID` = '{id}');";
+                                        var query = $"UPDATE `GiroZilla`.`services` SET `service_PAYMENTFORM` = '{paymentForm}' WHERE (`service_ID` = '{id}');";
 
-                        AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
+                                        AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
 
-                        UpdateServiceData();
+                                        UpdateServiceData();
 
-                        MessageBox.Show($"Betaling til fejning nr:{id} er nu opdateret");
-                    }
-                    else
-                    {
-                        MessageBox.Show($"Venligst vælg en betalingsform");
-                    }
-                }
-                else
-                {
-                    MessageBox.Show($"Denne Fejning allerede står som betalt");
+                                        MessageBox.Show($"Betaling til fejning nr:{id} er nu opdateret");
+                                        break;
+                                    }
+                                default:
+                                    {
+                                        MessageBox.Show($"Venligst vælg en betalingsform");
+                                        break;
+                                    }
+                            }
+                            break;
+                        }
+                    default:
+                        {
+                            MessageBox.Show($"Denne Fejning allerede står som betalt");
+                            break;
+                        }
                 }
                 await Task.FromResult(true);
             }
@@ -255,27 +341,28 @@ namespace GiroZilla.Views
                 CustomerInfoHome.Text = "";
                 CustomerInfoServicesGotten.Text = "";
 
-                var query = $"SELECT * FROM `all_customers` WHERE `ID` = {rowView.Row.ItemArray[1].ToString()}";
+                var query = $"SELECT * FROM `customers` WHERE `Customer_ID` = {rowView.Row.ItemArray[1].ToString()}";
 
-                var data = await AsyncMySqlHelper.GetDataFromDatabase(query, "ConnString");
+                customerExists = await AsyncMySqlHelper.CheckDataFromDatabase(query, "ConnString");
+                var userData = await AsyncMySqlHelper.GetDataFromDatabase<Customer>(query, "ConnString");
 
-                foreach (DataRow row in data)
+                foreach (Customer row in userData)
                 {
-                    CustomerInfoAddress.Text = row["Adresse"].ToString(); // 1
-                    CustomerInfoFirstname.Text = row["Fornavn"].ToString(); // 2
-                    CustomerInfoLastname.Text = row["Efternavn"].ToString(); // 3
-                    CustomerInfoID.Text = row["ID"].ToString(); // 4
-                    CustomerInfoNeededServices.Text = row["Fejninger"].ToString(); // 5
-                    CustomerInfoMail.Text = row["EMail"].ToString(); // 6
-                    CustomerInfoMobile.Text = row["Mobil"].ToString(); // 7
-                    CustomerInfoHome.Text = row["Hjemme"].ToString(); // 8
+                    CustomerInfoAddress.Text = row.Customer_ADDRESS; // 1
+                    CustomerInfoFirstname.Text = row.Customer_FIRSTNAME; // 2
+                    CustomerInfoLastname.Text = row.Customer_LASTNAME; // 3
+                    CustomerInfoID.Text = row.Customer_ID.ToString(); // 4
+                    CustomerInfoNeededServices.Text = row.Customer_SERVICES_NEEDED.ToString(); // 5
+                    CustomerInfoMail.Text = row.Customer_EMAIL; // 6
+                    CustomerInfoMobile.Text = row.Customer_PHONE_MOBILE; // 7
+                    CustomerInfoHome.Text = row.Customer_PHONE_HOME; // 8
                 }
 
-                query = $"SELECT * FROM `user_services` WHERE `Kunde ID` = {rowView.Row.ItemArray[1].ToString()} AND `Aar` = {DateTime.Now.Year}";
+                query = $"SELECT * FROM `services` WHERE `Customer_ID` = {rowView.Row.ItemArray[1].ToString()} AND `Service_YEAR` = {DateTime.Now.Year}";
 
-                data = await AsyncMySqlHelper.GetDataFromDatabase(query, "ConnString");
+                var serviceData = await AsyncMySqlHelper.GetDataFromDatabase<Service>(query, "ConnString");
 
-                CustomerInfoServicesGotten.Text = data.Length.ToString();
+                CustomerInfoServicesGotten.Text = serviceData.Count.ToString();
             }
             catch (Exception ex)
             {
@@ -296,17 +383,21 @@ namespace GiroZilla.Views
 
                 // Displays the MessageBox.
                 result = MessageBox.Show(message, caption, buttons);
-                if (result == System.Windows.MessageBoxResult.Yes)
+                switch (result == System.Windows.MessageBoxResult.Yes)
                 {
-                    var query = $"DELETE FROM `girozilla`.`service-products` WHERE `Service-Product_SERVICEID` = {row.Row.ItemArray[0].ToString()}";
+                    case true:
+                        {
+                            var query = $"DELETE FROM `girozilla`.`service-products` WHERE `Service-Product_SERVICEID` = {row.Row.ItemArray[0].ToString()}";
 
-                    AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
+                            AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
 
-                    query = $"DELETE FROM `girozilla`.`services` WHERE `Service_ID` = {row.Row.ItemArray[0].ToString()}";
+                            query = $"DELETE FROM `girozilla`.`services` WHERE `Service_ID` = {row.Row.ItemArray[0].ToString()}";
 
-                    AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
+                            AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
 
-                    MessageBox.Show($"Fejning nr:{row.Row.ItemArray[0].ToString()} er nu slettet");
+                            MessageBox.Show($"Fejning nr:{row.Row.ItemArray[0].ToString()} er nu slettet");
+                            break;
+                        }
                 }
                 await Task.FromResult(true);
             }
@@ -314,8 +405,13 @@ namespace GiroZilla.Views
             {
                 await Task.FromResult(false);
                 MessageBox.Show("En uventet fejl er sket", "FEJL");
-                Log.Error(ex, "Something went wrong!");
+                Log.Error(ex, "Unexpected Error");
             }
+        }
+
+        private void ThisYearOnlyCheck_Checked(object sender, RoutedEventArgs e)
+        {
+            SetData();
         }
 
         /// <summary>
@@ -328,24 +424,45 @@ namespace GiroZilla.Views
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private async void InvoicePrintButton_Click(object sender, RoutedEventArgs e)
         {
-            if (ServiceGrid.SelectedIndex != -1)
+            switch (customerExists)
             {
-                PrintServiceDialog.IsOpen = true;
+                case true:
+                    {
+                        switch (ServiceGrid.SelectedIndex != -1)
+                        {
+                            case true:
+                                {
+                                    PrintServiceDialog.IsOpen = true;
 
-                var table = VariableManipulation.DataGridtoDataTable(ProductGrid);
+                                    var table = VariableManipulation.DataGridtoDataTable(ProductGrid);
 
-                SetupPrintServiceDialog(ServiceGrid.SelectedItem as DataRowView, table);
+                                    SetupPrintServiceDialog(ServiceGrid.SelectedItem as DataRowView, table);
 
-                if (table != null)
-                {
-                    table.Dispose();
-                }
-                await Task.FromResult(true);
-            }
-            else
-            {
-                await Task.FromResult(false);
-                MessageBox.Show("Venligst vælg en fejning");
+                                    switch (table != null)
+                                    {
+                                        case true:
+                                            {
+                                                table.Dispose();
+                                                break;
+                                            }
+                                    }
+                                    await Task.FromResult(true);
+                                    break;
+                                }
+                            default:
+                                {
+                                    await Task.FromResult(false);
+                                    MessageBox.Show("Venligst vælg en fejning");
+                                    break;
+                                }
+                        }
+                        break;
+                    }
+                default:
+                    {
+                        MessageBox.Show("Kunden for denne fejning er blevet slettet");
+                        break;
+                    }
             }
         }
 
@@ -361,41 +478,52 @@ namespace GiroZilla.Views
         {
             try
             {
-                if (InvoiceDesignCombo.SelectedIndex != 0 && InvoiceDesignCombo.SelectedIndex != -1)
+                switch (InvoiceDesignCombo.SelectedIndex != 0 && InvoiceDesignCombo.SelectedIndex != -1)
                 {
-                    if (!string.IsNullOrWhiteSpace(PayDateSelect.Text) && !string.IsNullOrWhiteSpace(PriceTextBox.Text))
-                    {
-                        PrintHelper.SetupStandardInvoicePrint(
-                            InvoiceDesignCombo.SelectedValue.ToString(),
-                            PriceTextBox.Text,
-                            PayDateSelect.Text,
-                            long.Parse(InvoiceNum.Text),
-                            ContainPriceCheckBox,
-                            TaxWithPriceCheckBox,
-                            DateSelect.Text,
-                            InvoiceNum.Text,
-                            int.Parse(CustomerID.Text),
-                            ProductList,
-                            IncludeProductsCheckBox
-                            );
+                    case true:
+                        {
+                            switch (!string.IsNullOrWhiteSpace(PayDateSelect.Text) && !string.IsNullOrWhiteSpace(PriceTextBox.Text))
+                            {
+                                case true:
+                                    {
+                                        PrintHelper.SetupStandardInvoicePrint(
+                                        InvoiceDesignCombo.SelectedValue.ToString(),
+                                        PriceTextBox.Text,
+                                        PayDateSelect.Text,
+                                        long.Parse(InvoiceNum.Text),
+                                        ContainPayDateCheckBox,
+                                        ContainPriceCheckBox,
+                                        TaxWithPriceCheckBox,
+                                        DateSelect.Text,
+                                        InvoiceNum.Text,
+                                        int.Parse(CustomerID.Text),
+                                        ProductList,
+                                        IncludeProductsCheckBox
+                                        );
 
-                        PrintServiceDialog.IsOpen = false;
-                    }
-                    else
-                    {
-                        MessageBox.Show("Data mangler");
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Venligst vælg et design");
+                                        PrintServiceDialog.IsOpen = false;
+                                        break;
+                                    }
+                                default:
+                                    {
+                                        MessageBox.Show("Data mangler");
+                                        break;
+                                    }
+                            }
+                            break;
+                        }
+                    default:
+                        {
+                            MessageBox.Show("Venligst vælg et design");
+                            break;
+                        }
                 }
                 await Task.FromResult(true);
             }
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "Something went wrong!");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -431,7 +559,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "Something went wrong!");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -459,17 +587,22 @@ namespace GiroZilla.Views
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private async void InvoiceDeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            if (ServiceGrid.SelectedIndex != -1)
+            switch (ServiceGrid.SelectedIndex != -1)
             {
-                DeleteSelectedService(ServiceGrid.SelectedItem as DataRowView);
+                case true:
+                    {
+                        DeleteSelectedService(ServiceGrid.SelectedItem as DataRowView);
 
-                SetData();
-                await Task.FromResult(true);
-            }
-            else
-            {
-                await Task.FromResult(false);
-                MessageBox.Show("Venligst vælg en fejning");
+                        SetData();
+                        await Task.FromResult(true);
+                        break;
+                    }
+                default:
+                    {
+                        await Task.FromResult(false);
+                        MessageBox.Show("Venligst vælg en fejning");
+                        break;
+                    }
             }
         }
 
@@ -524,7 +657,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "Something went wrong!");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -554,7 +687,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "Something went wrong!");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -657,5 +790,10 @@ namespace GiroZilla.Views
         }
 
         #endregion
+
+        private void InvoiceSearchYearValue_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double?> e)
+        {
+            SetData();
+        }
     }
 }
