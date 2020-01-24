@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -20,8 +21,7 @@ using ButtonBase = System.Windows.Controls.Primitives.ButtonBase;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using PyroSquidUniLib.Extensions;
 using PyroSquidUniLib.Verification;
-
-
+using Button = System.Windows.Controls.Button;
 
 namespace GiroZilla
 {
@@ -30,6 +30,10 @@ namespace GiroZilla
         private static readonly ILogger Log = Serilog.Log.ForContext<MainWindow>();
 
         public bool IsDialogOpen { get; set; }
+
+        public bool IsUpdateDialogOpen { get; set; } = true;
+
+        private bool _buttonClicked;
 
         public bool IsLicenseVerified { get; set; } = true;
 
@@ -290,65 +294,176 @@ namespace GiroZilla
         }
         #endregion
 
+        #region Update
+
+        private void ResultBtn_Click (object sender, EventArgs e)
+        {
+            switch ((sender as Button)?.Name)
+            {
+                case "ResultYes":
+                    PropertiesExtension.Set("ShowUpdatePromptOnStart", "Yes");
+                    _buttonClicked = true;
+                    break;
+
+                case "ResultNo":
+                    PropertiesExtension.Set("ShowUpdatePromptOnStart", "No");
+                    _buttonClicked = true;
+                    break;
+
+                case "ResultDontRemind":
+                    PropertiesExtension.Set("ShowUpdatePromptOnStart", "DontRemindMe");
+                    _buttonClicked = true;
+                    break;
+            }
+
+            _buttonClicked = false;
+        }
+
+        private async void UpdateDialogParameters()
+        {
+            
+            void InnerMethod()
+            {
+                UpdatedialogTitle.Text = "Tilgængelige opdateringer";
+                UpdatedialogContent.Text = "Der er en opdatering tilgængelig." + "\n" + "Vil du installere den nu?";
+            }
+            
+            var task = new Task(InnerMethod);
+            task.Start();
+            await task;
+        }
+
+        private async void CheckForUpdates(bool check)
+        {
+            if (!check) return;
+
+            Console.WriteLine(@"Start result ShowUpdatePromptOnStart: " + PropertiesExtension.Get<string>("ShowUpdatePromptOnStart"));
+
+            try
+            {
+                using (var mgr = await UpdateManager.GitHubUpdateManager("https://github.com/TheWickedKraken/GiroZilla_V1"))
+                {
+                    Log.Information("Checking for updates");
+                    Console.WriteLine($@"Update dialog is open: {IsUpdateDialogOpen}");
+
+                    var updates = mgr.CheckForUpdate();
+                    await updates;
+
+                    switch (updates.Result.ReleasesToApply.Any())
+                    {
+                        case true:
+                            var latestVersion = updates.Result.ReleasesToApply.OrderBy(x => x.Version).Last();
+                            Log.Information("Version {0} is available, the current version is {1}", latestVersion.Version.ToString(), mgr.CurrentlyInstalledVersion());
+
+                            UpdateDialogParameters();
+                            IsUpdateDialogOpen = true;
+
+                            var result = PropertiesExtension.Get<string>("ShowUpdatePromptOnStart");
+
+                            while (!_buttonClicked)
+                            {
+                                switch (result)
+                                {
+                                    case "Yes":
+                                        PropertiesExtension.Set("ShowUpdatePromptOnStart", "");
+
+                                        Log.Information("Update accepted by the user.");
+
+                                        try
+                                        {
+                                            Log.Information("Downloading updates.");
+                                            await mgr.DownloadReleases(updates.Result.ReleasesToApply);
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            Log.Error(ex, "Error downloading the release!");
+                                            // Notify user of the error
+                                        }
+
+                                        try
+                                        {
+                                            Log.Information("Applying updates.");
+                                            await mgr.ApplyReleases(updates.Result);
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            Log.Error(ex, "Error while applying updates!");
+                                            // Notify user of the error
+                                        }
+
+                                        try
+                                        {
+                                            await mgr.CreateUninstallerRegistryEntry();
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            Log.Error(ex, "Error while trying to create uninstaller registry entry!");
+                                            // Notify user of the error
+                                        }
+
+                                        var latestExe = Path.Combine(mgr.RootAppDirectory, string.Concat("app-", latestVersion.Version.Version.Major, ".", latestVersion.Version.Version.Minor, ".", latestVersion.Version.Version.Build), "GiroZilla.exe");
+                                        Log.Information("Updates applied successfully.");
+
+                                        UpdateManager.RestartApp(latestExe);
+                                        break;
+
+                                    case "No":
+                                        PropertiesExtension.Set("ShowUpdatePromptOnStart", "");
+                                        Log.Information("Updates declined by the user.");
+                                        break;
+
+                                    case "DontRemindMe":
+                                        PropertiesExtension.Set("ShowUpdatePromptOnStart", "Disabled");
+                                        Log.Information("Update check on start was disabled by the user.");
+                                        break;
+
+                                    case "Disabled":
+                                        Log.Information("Update check is disabled.");
+                                        break;
+                                    
+                                }
+                            }
+                            break;
+
+                        case false:
+                            Console.WriteLine($@"Update dialog is open: {IsUpdateDialogOpen}");
+                            Log.Information("No updates detected.");
+                            break;
+                    }
+
+                    Console.WriteLine(@"End result ShowUpdatePromptOnStart: " + PropertiesExtension.Get<string>("ShowUpdatePromptOnStart"));
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Something went wrong getting the repository. Check for trailing slashes or if the repository is hosted on an enterprise server!");
+            }
+        }
+
+        #endregion
+
+        #region MainWindows Events
+
         private void MainWindow_OnKeyDown(object sender, KeyEventArgs e)
         {
             switch (e.Key)
             {
+                case Key.NumPad0:
+                    IsUpdateDialogOpen = !IsUpdateDialogOpen;
+                    Console.WriteLine($@"Update dialog is open: {IsUpdateDialogOpen}");
+                    break;
+
                 case Key.Enter when LicenseTextBox.IsFocused:
                     VerifyBtn.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
                     break;
             }
         }
 
-        private async void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
+        private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                using (var mgr = await UpdateManager.GitHubUpdateManager("https://github.com/MinikLambrecht/GiroZilla"))
-                {
-                    Log.Information("Checking for updates");
-
-                    try
-                    {
-                        var updateInfo = await mgr.CheckForUpdate();
-
-                        if (updateInfo.ReleasesToApply.Any())
-                        {
-                            var versionCount = updateInfo.ReleasesToApply.Count;
-                            Log.Information($"{versionCount} update(s) found.");
-
-                            var versionWord = versionCount > 1 ? "versions" : "version";
-                            var message = new StringBuilder().AppendLine($"App is {versionCount} {versionWord} behind.")
-                                .AppendLine("If you choose to update, changes wont take affect until App is restarted.")
-                                .AppendLine("Would you like to download and install them?").ToString();
-
-                            var result = MessageBox.Show(message, "App Update", MessageBoxButton.YesNo);
-                            if (result != MessageBoxResult.Yes)
-                            {
-                                Log.Information("update declined by user.");
-                                return;
-                            }
-
-                            Log.Information("Downloading updates");
-                            var updateResult = await mgr.UpdateApp();
-                            Log.Information(
-                                $"Download complete. Version {updateResult.Version} will take effect when App is restarted.");
-                        }
-                        else
-                        {
-                            Log.Information("No updates detected.");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Warning($"There was an issue during the update process! {ex.Message}");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Some error");
-            }
+            CheckForUpdates(true);
         }
+
+        #endregion
     }
 }

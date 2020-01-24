@@ -167,7 +167,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "An error occured while fetching the license from te database!");
+                Log.Error(ex, "An error occured while fetching the license from the database!");
                 return null;
             }
         }

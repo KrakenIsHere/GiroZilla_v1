@@ -64,6 +64,7 @@
             </DataTemplate>
         </Grid.Resources>
 
+        <!-- License Dialog -->
         <materialDesign:DialogHost Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsOpen="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=IsDialogOpen}" DialogTheme="Dark">
             <materialDesign:DialogHost.DialogContent>
                 <StackPanel Width="500" Height="300">
@@ -126,6 +127,65 @@
                                 Width="77"
                                 Click="CancelLicense"
                                 Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" />
+                    </Grid>
+                </StackPanel>
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
+
+        <!-- Update Dialog -->
+        <materialDesign:DialogHost Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsOpen="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=IsUpdateDialogOpen}" DialogTheme="Dark">
+            <materialDesign:DialogHost.DialogContent>
+                <StackPanel Width="500" Height="200">
+                    <Grid Height="200" Width="500">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="50" />
+                        </Grid.RowDefinitions>
+
+                        <!-- Title -->
+                        <Border Grid.Column="0" Grid.Row="0" BorderBrush="{DynamicResource MaterialDesignDivider}" BorderThickness="0, 0, 0, 2">
+                            <Viewbox Margin="0, 5">
+                                <TextBlock x:Name="UpdatedialogTitle"
+                                           Style="{StaticResource MaterialDesignHeadlineTextBlock}"
+                                           Text="GiroZilla Opdateringer" />
+                            </Viewbox>
+                        </Border>
+
+                        <!-- Content -->
+                        <Border Grid.Column="0" Grid.Row="1" Background="{DynamicResource MaterialDesignDarkBackground}">
+                            <Viewbox Margin="0, 25">
+                                <TextBlock x:Name="UpdatedialogContent"
+                                           Style="{StaticResource MaterialDesignBody1TextBlock}" />
+                            </Viewbox>
+                        </Border>
+
+                        <!-- Buttons -->
+                        <Border Grid.Column="0" Grid.Row="2" BorderBrush="{DynamicResource MaterialDesignDivider}" BorderThickness="0, 2, 0, 0">
+                            <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft">
+                                <Button x:Name="ResultYes" 
+                                        Content="Ja" 
+                                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                                        Margin="10, 0, 5, 0"
+                                        Click="ResultBtn_Click" />
+
+                                <Button x:Name="ResultNo" 
+                                        Content="Nej" 
+                                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                                        Margin="5, 0, 5, 0" 
+                                        Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
+                                        Click="ResultBtn_Click" />
+
+                                <Button x:Name="ResultDontRemind"
+                                        Content="Påmind mig ikke igen" 
+                                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                                        Margin="5, 0, 5, 0" 
+                                        Click="ResultBtn_Click" />
+                            </StackPanel>
+                        </Border>
                     </Grid>
                 </StackPanel>
             </materialDesign:DialogHost.DialogContent>
