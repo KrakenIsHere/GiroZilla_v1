@@ -311,17 +311,20 @@
                                     materialDesign:HintAssist.Hint="Beløb (Fx: 149,95)" 
                                     VerticalAlignment="Top" 
                                     Width="166"/>
+                                
                                 <CheckBox 
                                     Name="ContainPriceCheckBox" 
                                     Checked="ContainPriceCheckBox_Checked" 
                                     Unchecked="ContainPriceCheckBox_Unchecked" 
                                     Content="Includér pris i print" 
                                     Margin="30,10,0,0"/>
+                                
                                 <CheckBox 
                                     Name="TaxWithPriceCheckBox" 
                                     Content="Pris er med moms" 
                                     Margin="30,-1,0,0" 
                                     IsEnabled="False"/>
+                                
                                 <DatePicker 
                                     Name="PayDateSelect" 
                                     materialDesign:HintAssist.Hint="Betalings Dato" 
@@ -331,6 +334,7 @@
                                     Height="36" 
                                     Width="166" 
                                     FirstDayOfWeek="Monday"/>
+                                
                                 <CheckBox 
                                     Name="ContainPayDateCheckBox" 
                                     Content="Includér dato i print" 

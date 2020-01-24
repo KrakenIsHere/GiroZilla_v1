@@ -127,7 +127,7 @@ namespace GiroZilla.Views
                 }
                 var data = await AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString");
 
-                var listData = VariableManipulation.GetIntegerValuesInColumnFromListView(CustomerList, "ID");
+                var listData = VariableManipulation.GetIntegerValuesInColumnFromListView(CustomerList);
 
                 VariableManipulation.RemoveRowsFromDataTableWhereIntValueIsSingleRow(data.Tables[0], "ID", listData);
 
@@ -1148,7 +1148,7 @@ namespace GiroZilla.Views
 
                 var data = AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString").Result;
 
-                var listData = VariableManipulation.GetIntegerValuesInColumnFromListView(EditCustomerList, "ID");
+                var listData = VariableManipulation.GetIntegerValuesInColumnFromListView(EditCustomerList);
 
                 VariableManipulation.RemoveRowsFromDataTableWhereIntValueIsSingleRow(data.Tables[0], "ID", listData);
 

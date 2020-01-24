@@ -19,6 +19,7 @@ namespace GiroZilla.Views
 
         DataSet data = new DataSet();
         DataSet productData = new DataSet();
+        bool customerExists;
 
         public Invoice()
         {
@@ -342,6 +343,7 @@ namespace GiroZilla.Views
 
                 var query = $"SELECT * FROM `customers` WHERE `Customer_ID` = {rowView.Row.ItemArray[1].ToString()}";
 
+                customerExists = await AsyncMySqlHelper.CheckDataFromDatabase(query, "ConnString");
                 var userData = await AsyncMySqlHelper.GetDataFromDatabase<Customer>(query, "ConnString");
 
                 foreach (Customer row in userData)
@@ -422,31 +424,43 @@ namespace GiroZilla.Views
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private async void InvoicePrintButton_Click(object sender, RoutedEventArgs e)
         {
-            switch (ServiceGrid.SelectedIndex != -1)
+            switch (customerExists)
             {
                 case true:
                     {
-                        PrintServiceDialog.IsOpen = true;
-
-                        var table = VariableManipulation.DataGridtoDataTable(ProductGrid);
-
-                        SetupPrintServiceDialog(ServiceGrid.SelectedItem as DataRowView, table);
-
-                        switch (table != null)
+                        switch (ServiceGrid.SelectedIndex != -1)
                         {
                             case true:
                                 {
-                                    table.Dispose();
+                                    PrintServiceDialog.IsOpen = true;
+
+                                    var table = VariableManipulation.DataGridtoDataTable(ProductGrid);
+
+                                    SetupPrintServiceDialog(ServiceGrid.SelectedItem as DataRowView, table);
+
+                                    switch (table != null)
+                                    {
+                                        case true:
+                                            {
+                                                table.Dispose();
+                                                break;
+                                            }
+                                    }
+                                    await Task.FromResult(true);
+                                    break;
+                                }
+                            default:
+                                {
+                                    await Task.FromResult(false);
+                                    MessageBox.Show("Venligst vælg en fejning");
                                     break;
                                 }
                         }
-                        await Task.FromResult(true);
                         break;
                     }
                 default:
                     {
-                        await Task.FromResult(false);
-                        MessageBox.Show("Venligst vælg en fejning");
+                        MessageBox.Show("Kunden for denne fejning er blevet slettet");
                         break;
                     }
             }
@@ -477,6 +491,7 @@ namespace GiroZilla.Views
                                         PriceTextBox.Text,
                                         PayDateSelect.Text,
                                         long.Parse(InvoiceNum.Text),
+                                        ContainPayDateCheckBox,
                                         ContainPriceCheckBox,
                                         TaxWithPriceCheckBox,
                                         DateSelect.Text,

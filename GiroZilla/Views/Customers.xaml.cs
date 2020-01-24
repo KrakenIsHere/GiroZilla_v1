@@ -665,6 +665,7 @@ namespace GiroZilla.Views
                                                         PriceTextBox.Text,
                                                         PayDateSelect.Text,
                                                         long.Parse(InvoiceNum.Text),
+                                                        ContainPayDateCheckBox,
                                                         ContainPriceCheckBox,
                                                         TaxWithPriceCheckBox,
                                                         DateSelect.Text,
