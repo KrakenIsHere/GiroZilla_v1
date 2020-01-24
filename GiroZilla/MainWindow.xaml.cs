@@ -43,7 +43,7 @@ namespace GiroZilla
             InitializeComponent();
 
             VerifyLogsFolder();
-            //CheckLicense();
+            CheckLicense();
             SetTitle();
         }
 
@@ -333,7 +333,7 @@ namespace GiroZilla
         {
             try
             {
-                using (var mgr = await UpdateManager.GitHubUpdateManager("https://github.com/MinikLambrecht/GiroZilla"))
+                using (var mgr = await UpdateManager.GitHubUpdateManager("https://github.com/TheWickedKraken/GiroZilla_v1"))
                 {
                     Log.Information("Checking for updates");
 
