@@ -195,7 +195,7 @@ namespace GiroZilla.Views
                             {
                                 case true:
                                     {
-                                        query = query.Replace(") ", $" AND Aar = {InvoiceSearchYearValue.Value.ToString()}) ");
+                                        query = query.Replace(") ", $" AND Aar = '{InvoiceSearchYearValue.Value.ToString()}') ");
                                         break;
                                     }
                             }
@@ -222,7 +222,7 @@ namespace GiroZilla.Views
                                                     {
                                                         case true:
                                                             {
-                                                                query += $"AND Aar = {InvoiceSearchYearValue.Value.ToString()} ";
+                                                                query += $"AND Aar = '{InvoiceSearchYearValue.Value.ToString()}' ";
                                                                 break;
                                                             }
                                                     }
@@ -234,7 +234,14 @@ namespace GiroZilla.Views
                                                     {
                                                         case true:
                                                             {
-                                                                query += $"WHERE Aar = {InvoiceSearchYearValue.Value.ToString()} ";
+                                                                try
+                                                                {
+                                                                    query += $"WHERE Aar = '{InvoiceSearchYearValue.Value.ToString()}' ";
+                                                                }
+                                                                catch (NullReferenceException)
+                                                                {
+                                                                    //Do Nothing
+                                                                }
                                                                 break;
                                                             }
                                                     }
@@ -250,9 +257,15 @@ namespace GiroZilla.Views
 
                 data = await AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString");
 
-                ServiceGrid.ItemsSource = data.Tables[0].DefaultView;
-
-                ProductGrid.ItemsSource = null;
+                try
+                {
+                    ServiceGrid.ItemsSource = data.Tables[0].DefaultView;
+                    ProductGrid.ItemsSource = null;
+                }
+                catch (NullReferenceException)
+                {
+                    //Do Nothing
+                }
             }
             catch (Exception ex)
             {

@@ -457,7 +457,14 @@ namespace GiroZilla
 
         void MainWindow_Closing(object sender, CancelEventArgs e)
         {
-            mgr.Dispose();
+            try
+            {
+                mgr.Dispose();
+            }
+            catch (NullReferenceException)
+            {
+                //Do Nothing
+            }
             //Your code to handle the event
         }
 
