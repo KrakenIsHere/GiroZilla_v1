@@ -46,7 +46,13 @@ namespace GiroZilla
                 @"    </files>" + "\n" +
                 @"</package>";
 
-            // Create the ReleasePakcages directory if it's not present
+            // Create the Releases directory if it's not present
+            if (!Directory.Exists(releaseDir))
+            {
+                Directory.CreateDirectory(releaseDir);
+            }
+
+            // Create the ReleasePackages directory if it's not present
             if (!Directory.Exists(releasePackages))
             {
                 Directory.CreateDirectory(releasePackages);
@@ -75,7 +81,7 @@ namespace GiroZilla
             }
 
             // Run commands to pack & releasify the program
-            ExecuteCommand($@"nuget pack {root}\GiroZilla.nuspec -OutputDirectory {releasePackages} && squirrel --releasify {releasePackages}\GiroZilla.{info.FileVersion}.nupkg --releaseDir={releaseDir}");
+            ExecuteCommand($@"nuget pack {root}\GiroZilla.nuspec -OutputDirectory {releasePackages} && squirrel --releasify {releasePackages}\GiroZilla.{info.FileVersion}.nupkg --no-msi --releaseDir={releaseDir}");
         }
 
         private static void ExecuteCommand(string command)
