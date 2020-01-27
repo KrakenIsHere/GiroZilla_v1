@@ -133,7 +133,16 @@
         </materialDesign:DialogHost>
 
         <!-- Update Dialog -->
-        <materialDesign:DialogHost Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsOpen="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=IsUpdateDialogOpen}" DialogTheme="Dark">
+        <materialDesign:DialogHost 
+            x:Name="UpdateDialog"
+            Grid.Column="0" 
+            Grid.Row="0" 
+            Grid.ColumnSpan="3" 
+            Grid.RowSpan="3" 
+            HorizontalAlignment="Stretch" 
+            VerticalAlignment="Stretch" 
+            IsOpen="False" 
+            DialogTheme="Dark">
             <materialDesign:DialogHost.DialogContent>
                 <StackPanel Width="500" Height="200">
                     <Grid Height="200" Width="500">
@@ -151,7 +160,7 @@
                             <Viewbox Margin="0, 5">
                                 <TextBlock x:Name="UpdatedialogTitle"
                                            Style="{StaticResource MaterialDesignHeadlineTextBlock}"
-                                           Text="GiroZilla Opdateringer" />
+                                           Text="Tilgængelige opdateringer" />
                             </Viewbox>
                         </Border>
 
@@ -159,7 +168,8 @@
                         <Border Grid.Column="0" Grid.Row="1" Background="{DynamicResource MaterialDesignDarkBackground}">
                             <Viewbox Margin="0, 25">
                                 <TextBlock x:Name="UpdatedialogContent"
-                                           Style="{StaticResource MaterialDesignBody1TextBlock}" />
+                                           Style="{StaticResource MaterialDesignBody1TextBlock}"
+                                           Text="Der er en opdatering tilgængelig. &#10;Vil du installere den nu?"/>
                             </Viewbox>
                         </Border>
 

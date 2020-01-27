@@ -15,7 +15,7 @@ namespace GiroZilla.Views
 {
     public partial class Invoice
     {
-        private static readonly ILogger Log = Serilog.Log.ForContext<Customers>();
+        private static readonly ILogger Log = Serilog.Log.ForContext<Invoice>();
 
         DataSet data = new DataSet();
         DataSet productData = new DataSet();
