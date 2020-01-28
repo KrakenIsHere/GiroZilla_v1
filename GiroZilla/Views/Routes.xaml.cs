@@ -132,6 +132,8 @@ namespace GiroZilla.Views
                 VariableManipulation.RemoveRowsFromDataTableWhereIntValueIsSingleRow(data.Tables[0], "ID", listData);
 
                 AddCustomerGrid.ItemsSource = data.Tables[0].DefaultView;
+
+                Log.Information($"Successfully filled AddCustomerGrid ItemSource");
             }
             catch (Exception ex)
             {
@@ -303,7 +305,7 @@ namespace GiroZilla.Views
 
                     i++;
                 }
-
+                Log.Information($"Successfully created a new route: #{id} {RouteAreaTextBox.Text} with {i} customers");
                 return true;
             }
             catch (Exception ex)
@@ -363,6 +365,8 @@ namespace GiroZilla.Views
                 RouteGrid.ItemsSource = _routeData.Tables[0].DefaultView;
 
                 CustomerGrid.ItemsSource = null;
+
+                Log.Information($"Successfully filled RouteGrid ItemSource");
             }
             catch (Exception ex)
             {
@@ -378,6 +382,7 @@ namespace GiroZilla.Views
             {
                 AsyncMySqlHelper.UpdateSetToDatabase($"SELECT * FROM `all_routes`", _routeData.Tables[0].DataSet, "ConnString");
                 await Task.FromResult(true);
+                Log.Information($"Successfully updated route data");
             }
             catch (Exception ex)
             {
@@ -409,6 +414,8 @@ namespace GiroZilla.Views
                 AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
 
                 MessageBox.Show($"Rute nr:{row.Row.ItemArray[0]} er nu slettet");
+
+                Log.Information($"Successfully deleted route # {row.Row.ItemArray[0].ToString()}");
 
                 await Task.FromResult(true);
             }
@@ -1037,7 +1044,7 @@ namespace GiroZilla.Views
             UpdateRouteData();
 
             PrintRouteDialog.IsOpen = false;
-
+            Log.Information($"Successfully printed route {table.Rows[_routeSelected]["Navn"].ToString()}");
             await Task.FromResult(true);
         }
 
@@ -1284,7 +1291,7 @@ namespace GiroZilla.Views
 
                     i++;
                 }
-
+                Log.Information($"Successfully added {i} new customers to existing route #{id}");
                 await Task.FromResult(true);
 
                 return true;
@@ -1378,7 +1385,7 @@ namespace GiroZilla.Views
                 MessageBox.Show($"Rute kunde nr:{row.Row["Kunde ID"]} fra rute nr:{row.Row["Rute ID"]} er nu slettet");
 
                 SetCustomerData(RouteGrid.SelectedItem as DataRowView);
-
+                Log.Information($"Successfully deleted customer {row.Row["Kunde ID"]} from route {row.Row["Rute ID"]}");
                 await Task.FromResult(true);
             }
             catch (Exception ex)
@@ -1405,6 +1412,8 @@ namespace GiroZilla.Views
                 _cityData = await AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString");
 
                 CityGrid.ItemsSource = _cityData.Tables[0].DefaultView;
+
+                Log.Information($"Successfully filled CityGrid ItemSource");
             }
             catch (Exception ex)
             {
@@ -1419,6 +1428,7 @@ namespace GiroZilla.Views
             {
                 AsyncMySqlHelper.UpdateSetToDatabase($"SELECT * FROM `all_cities`", _cityData.Tables[0].DataSet, "ConnString");
                 await Task.FromResult(true);
+                Log.Information($"Successfully updated city data");
             }
             catch (Exception ex)
             {
@@ -1449,6 +1459,8 @@ namespace GiroZilla.Views
                 AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
 
                 MessageBox.Show($"Byer med postnummer: {row.Row.ItemArray[0]} er nu slettet");
+
+                Log.Information($"Successfully deleted city #{row.Row.ItemArray[0].ToString()}");
                 await Task.FromResult(true);
             }
             catch (Exception ex)
@@ -1484,7 +1496,7 @@ namespace GiroZilla.Views
                                 $");";
 
                             AsyncMySqlHelper.SetDataToDatabase(query, "ConnString").Wait();
-
+                            Log.Information($"Successfully added a new city");
                             await Task.FromResult(true);
                             return true;
                         }
@@ -1629,6 +1641,7 @@ namespace GiroZilla.Views
                 CustomerGrid.ItemsSource = _customerData.Tables[0].DefaultView;
 
                 await Task.FromResult(true);
+                Log.Information($"Successfully filled CustomerGrid ItemSource");
             }
             catch (Exception ex)
             {
@@ -1934,6 +1947,7 @@ namespace GiroZilla.Views
                 PrintMonthDialog.IsOpen = false;
 
                 await Task.FromResult(true);
+                Log.Information($"Successfully printed month sheat");
             }
             catch (Exception ex)
             {

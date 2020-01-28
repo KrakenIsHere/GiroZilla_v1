@@ -8,11 +8,14 @@ using System.Windows.Controls;
 using GiroZilla;
 using PyroSquidUniLib.FileSystem;
 using Microsoft.Win32;
+using Serilog;
 
 namespace GiroZilla.Views
 {
     public partial class Help
     {
+        private static readonly ILogger Log = Serilog.Log.ForContext<Help>();
+
         private const double Offset = 1139d;
 
         private bool _isNewPage;
@@ -284,6 +287,7 @@ namespace GiroZilla.Views
                     }
             }
             await Task.FromResult(true);
+            Log.Information("Successfully downloaded manual PDF");
         }
     }
 

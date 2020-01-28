@@ -82,6 +82,8 @@ namespace GiroZilla.Views
                 data = await AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString");
 
                 ProductGrid.ItemsSource = data.Tables[0].DefaultView;
+
+                Log.Information($"Successfully filled ProductsGrid ItemSource");
             }
             catch (Exception ex)
             {
@@ -97,6 +99,7 @@ namespace GiroZilla.Views
             {
                 AsyncMySqlHelper.UpdateSetToDatabase("SELECT * FROM `all_products`", data.Tables[0].DataSet, "ConnString");
                 await Task.FromResult(true);
+                Log.Information($"Successfully updated product data");
             }
             catch (Exception ex)
             {
@@ -134,6 +137,7 @@ namespace GiroZilla.Views
                             AsyncMySqlHelper.SetDataToDatabase(query, "ConnString").Wait();
 
                             await Task.FromResult(true);
+                            Log.Information($"Successfully added a new product");
                             return true;
                         }
                     default:
@@ -177,6 +181,8 @@ namespace GiroZilla.Views
                             AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
 
                             MessageBox.Show($"Produktet nr:{row.Row.ItemArray[0].ToString()} er nu slettet");
+
+                            Log.Information($"Successfully deleted product #{row.Row.ItemArray[0].ToString()}");
                             break;
                         }
                 }

@@ -156,6 +156,8 @@ namespace GiroZilla.Views
                 CustomerGrid.ItemsSource = data.Tables[0].DefaultView;
 
                 ServiceGrid.ItemsSource = null;
+
+                Log.Information("Successfully filled CustomerGrid ItemSource");
             }
             catch (Exception ex)
             {
@@ -170,6 +172,7 @@ namespace GiroZilla.Views
             {
                 AsyncMySqlHelper.UpdateSetToDatabase($"SELECT * FROM `all_customers`", data.Tables[0].DataSet, "ConnString");
                 await Task.FromResult(true);
+                Log.Information("Successfully updated customer data");
             }
             catch (Exception ex)
             {
@@ -204,6 +207,7 @@ namespace GiroZilla.Views
                             AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
 
                             MessageBox.Show($"Kunde nr:{row.Row.ItemArray[0].ToString()} er nu slettet");
+                            Log.Information($"Successfully deleted a customer #{row.Row.ItemArray[0].ToString()}");
                             break;
                         }
                 }
@@ -322,6 +326,7 @@ namespace GiroZilla.Views
                             Log.Error(query, "Added a new customer!");
 
                             await Task.FromResult(true);
+                            Log.Information("Successfully Added a new customer");
                             return true;
                         }
                     default:
@@ -547,6 +552,7 @@ namespace GiroZilla.Views
                 PropertiesExtension.Set("LastInvoiceNum", InvoiceNum.Text);
 
                 await Task.FromResult(true);
+                Log.Information($"Successfully added a service to customer #{CustomerID.Text}");
                 return true;
             }
             catch (Exception ex)
@@ -579,6 +585,7 @@ namespace GiroZilla.Views
                 ServiceGrid.ItemsSource = Servicedata.Tables[0].DefaultView;
 
                 await Task.FromResult(true);
+                Log.Information("Successfully filled ServiceGrid ItemSource");
             }
             catch (Exception ex)
             {
@@ -676,6 +683,7 @@ namespace GiroZilla.Views
                                                         );
 
                                                     AddServiceDialog.IsOpen = false;
+                                                    Log.Information("Successfully printed standard invoice");
                                                     break;
                                                 }
                                         }
@@ -734,6 +742,7 @@ namespace GiroZilla.Views
                             );
 
                             AddServiceDialog.IsOpen = false;
+                            Log.Information("Successfully printed giro invoice");
                             break;
                         }
                 }
@@ -922,6 +931,7 @@ namespace GiroZilla.Views
                                                     AsyncMySqlHelper.SetDataToDatabase(query, "ConnString").Wait();
 
                                                     await Task.FromResult(true);
+                                                    Log.Information("Successfully added new city data");
                                                     return true;
                                                 }
                                         }

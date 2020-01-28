@@ -119,6 +119,7 @@ namespace GiroZilla.Views
             {
                 AsyncMySqlHelper.UpdateSetToDatabase($"SELECT * FROM `User_services`", data.Tables[0].DataSet, "ConnString");
                 await Task.FromResult(true);
+                Log.Information("Successfully updated service data");
             }
             catch (Exception ex)
             {
@@ -261,6 +262,7 @@ namespace GiroZilla.Views
                 {
                     ServiceGrid.ItemsSource = data.Tables[0].DefaultView;
                     ProductGrid.ItemsSource = null;
+                    Log.Information("Successfully filled ServiceGrid ItemSource");
                 }
                 catch (NullReferenceException)
                 {
@@ -314,6 +316,8 @@ namespace GiroZilla.Views
                                         UpdateServiceData();
 
                                         MessageBox.Show($"Betaling til fejning nr:{id} er nu opdateret");
+
+                                        Log.Information($"Successfully set service #{id} as payed with: {paymentForm}");
                                         break;
                                     }
                                 default:
@@ -409,6 +413,7 @@ namespace GiroZilla.Views
                             AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
 
                             MessageBox.Show($"Fejning nr:{row.Row.ItemArray[0].ToString()} er nu slettet");
+                            Log.Information($"Successfully deleted service #{row.Row.ItemArray[0]}");
                             break;
                         }
                 }
@@ -515,6 +520,7 @@ namespace GiroZilla.Views
                                         );
 
                                         PrintServiceDialog.IsOpen = false;
+                                        Log.Information($"Successfully printed standard invoice");
                                         break;
                                     }
                                 default:
@@ -566,7 +572,7 @@ namespace GiroZilla.Views
                     );
 
                 PrintServiceDialog.IsOpen = false;
-
+                Log.Information($"Successfully printed giro invoice");
                 await Task.FromResult(true);
             }
             catch (Exception ex)
@@ -666,6 +672,7 @@ namespace GiroZilla.Views
                 ProductGrid.ItemsSource = productData.Tables[0].DefaultView;
 
                 await Task.FromResult(true);
+                Log.Information($"Successfully filled ProductGrid ItemSource");
             }
             catch (Exception ex)
             {
