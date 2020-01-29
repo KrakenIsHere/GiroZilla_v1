@@ -34,9 +34,7 @@ namespace GiroZilla
         UpdateInfo updates;
         ReleaseEntry latestVersion;
 
-        public bool IsDialogOpen { get; set; }
-
-        public bool IsLicenseVerified { get; set; } = true;
+        public bool IsLicenseVerified { get; set; }
 
         private int _connectionStatus;
 
@@ -135,6 +133,8 @@ namespace GiroZilla
         {
             try
             {
+                Log.Information("Verifying License");
+
                 var verified = PyroSquidUniLib.Verification.VerifyLicense.Verify(LicenseTextBox.Text, ErrorText);
 
                 if (!verified)
@@ -183,6 +183,8 @@ namespace GiroZilla
         {
             try
             {
+                Log.Information("Checking License");
+
                 const string getList = "SELECT * FROM licenses";
                 var licenses = AsyncMySqlHelper.ReturnStringList(getList, "LicenseConnString").Result.ToList();
 
@@ -194,6 +196,8 @@ namespace GiroZilla
 
                 if (!string.IsNullOrWhiteSpace(localLicense))
                 {
+                    Log.Information("Local license found");
+
                     var count = 1;
 
                     foreach (var s in licenses)
@@ -225,13 +229,13 @@ namespace GiroZilla
                                     switch (_connectionStatus)
                                     {
                                         case 1:
-                                            IsDialogOpen = false;
+                                            LicenseDialog.IsOpen = false;
                                             IsLicenseVerified = true;
                                             Log.Information(@"GiroZilla v" + FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion + " loaded");
                                             break;
 
                                         case 0:
-                                            IsDialogOpen = true;
+                                            LicenseDialog.IsOpen = true;
                                             IsLicenseVerified = false;
 
                                             if (!string.IsNullOrWhiteSpace(localLicense))
@@ -250,7 +254,7 @@ namespace GiroZilla
                                             break;
 
                                         default:
-                                            IsDialogOpen = true;
+                                            LicenseDialog.IsOpen = true;
                                             IsLicenseVerified = false;
 
                                             if (!string.IsNullOrWhiteSpace(localLicense))
@@ -272,7 +276,7 @@ namespace GiroZilla
                 }
                 else
                 {
-                    IsDialogOpen = true;
+                    LicenseDialog.IsOpen = true;
                     IsLicenseVerified = false;
 
                     Log.Error("The license was not found!");
@@ -290,10 +294,19 @@ namespace GiroZilla
         #endregion
 
         #region WindowCommands
-        private void Update(object sender, RoutedEventArgs e)
+        private async void Update(object sender, RoutedEventArgs e)
         {
-            // Download installer and execute it.
-
+            try
+            {
+                Log.Information("Manual update requested");
+                CheckForUpdates(true, true);
+                mgr.Dispose();
+                await Task.FromResult(true);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Couldn't do a manual update");
+            }
         }
         #endregion
 
@@ -370,7 +383,56 @@ namespace GiroZilla
             UpdateManager.RestartApp(latestExe);
         }
 
-        private async void CheckForUpdates(bool check = false)
+        private async void DoCheck(bool manualUpdate = false)
+        {
+            try
+            {
+                try
+                {
+                    mgr = await UpdateManager.GitHubUpdateManager("https://github.com/TheWickedKraken/GiroZilla_V1");
+                    updates = await mgr.CheckForUpdate();
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Something went wrong getting the repository. Check for trailing slashes or if the repository is hosted on an enterprise server!");
+                }
+
+                Log.Information($"Updates available: {updates.ReleasesToApply.Any()} Current version: {mgr.CurrentlyInstalledVersion()}");
+
+                switch (updates.ReleasesToApply.Any())
+                {
+                    case true:
+                        {
+                            latestVersion = updates.ReleasesToApply.OrderBy(x => x.Version).Last();
+
+                            Log.Information("Version {0} is available", latestVersion.Version.ToString());
+                            UpdateDialog.IsOpen = true;
+                            break;
+                        }
+                    case false:
+                        {
+                            Log.Information("No updates detected.");
+                            switch (manualUpdate)
+                            {
+                                case true:
+                                    {
+                                        MessageBox.Show("Ingen opdateringer fundet");
+                                        break;
+                                    }
+                            }
+                            mgr.Dispose();
+                            UpdateDialog.IsOpen = false;
+                            break;
+                        }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Got error while checking for updates");
+            }
+        }
+
+        private async void CheckForUpdates(bool check = false, bool manualUpdate = false)
         {
             if (!check) return;
 
@@ -386,45 +448,36 @@ namespace GiroZilla
                             {
                                 case "Yes":
                                     {
-                                        mgr = await UpdateManager.GitHubUpdateManager("https://github.com/TheWickedKraken/GiroZilla_V1");
-                                        updates = await mgr.CheckForUpdate();
-
-                                        Log.Information($"Updates available: {updates.ReleasesToApply.Any()} Current version: {mgr.CurrentlyInstalledVersion()}");
-
-                                        switch (updates.ReleasesToApply.Any())
+                                        DoCheck(manualUpdate);
+                                        break;
+                                    }
+                                case "Disabled":
+                                    {
+                                        switch (manualUpdate)
                                         {
                                             case true:
                                                 {
-                                                    latestVersion = updates.ReleasesToApply.OrderBy(x => x.Version).Last();
-
-                                                    Log.Information("Version {0} is available", latestVersion.Version.ToString());
-                                                    UpdateDialog.IsOpen = true;
+                                                    DoCheck(manualUpdate);
                                                     break;
                                                 }
-                                            case false:
+                                            default:
                                                 {
-                                                    Log.Information("No updates detected.");
-                                                    mgr.Dispose();
+                                                    Log.Information("Update check is disabled.");
                                                     UpdateDialog.IsOpen = false;
                                                     break;
                                                 }
                                         }
                                         break;
                                     }
-                                case "Disabled":
-                                    {
-                                        Log.Information("Update check is disabled.");
-                                        UpdateDialog.IsOpen = false;
-                                        break;
-                                    }
                             }
                             break;
                         }
                 }
+                await Task.FromResult(true);
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Something went wrong getting the repository. Check for trailing slashes or if the repository is hosted on an enterprise server!");
+                Log.Error(ex, "Something went wrong while checking for updates");
                 UpdateDialog.IsOpen = false;
             }
         }

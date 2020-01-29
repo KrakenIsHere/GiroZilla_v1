@@ -65,7 +65,16 @@
         </Grid.Resources>
 
         <!-- License Dialog -->
-        <materialDesign:DialogHost Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsOpen="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=IsDialogOpen}" DialogTheme="Dark">
+        <materialDesign:DialogHost 
+            x:Name="LicenseDialog"
+            Grid.Column="0" 
+            Grid.Row="0" 
+            Grid.ColumnSpan="3" 
+            Grid.RowSpan="3" 
+            HorizontalAlignment="Stretch" 
+            VerticalAlignment="Stretch" 
+            IsOpen="False" 
+            DialogTheme="Dark">
             <materialDesign:DialogHost.DialogContent>
                 <StackPanel Width="500" Height="300">
                     <Grid Height="300" Width="500">
