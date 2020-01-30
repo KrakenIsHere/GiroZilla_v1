@@ -458,8 +458,8 @@
                                     Height="36" 
                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                                     TextWrapping="Wrap" 
-                                    Text="149,95" 
-                                    materialDesign:HintAssist.Hint="Beløb (Fx: 149,95)" 
+                                    Text="0.00" 
+                                    materialDesign:HintAssist.Hint="Beløb (Fx: 149.95)" 
                                     LostFocus="PriceTextBox_LostFocus" 
                                     VerticalAlignment="Top" 
                                     Width="166"/>
@@ -532,8 +532,14 @@
                                                     DisplayMemberBinding="{Binding Name}"
                                                     Header="Navn" Width="110"/>
                                                 <GridViewColumn
-                                                    DisplayMemberBinding="{Binding Price}"
-                                                    Header="Pris" />
+                                                    Header="Pris">
+
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <TextBox x:Name="ListViewPriceTextBox" Text="{Binding Price}" LostFocus="ListViewPriceTextBox_LostFocus"/>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
                                                 <GridViewColumn
                                                     DisplayMemberBinding="{Binding Description}"
                                                     Header="Beskrivelse" />

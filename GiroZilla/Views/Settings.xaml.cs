@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Forms;
 using PyroSquidUniLib.Database;
 using PyroSquidUniLib.Extensions;
+using PyroSquidUniLib.FileSystem;
 using PyroSquidUniLib.Verification;
 using Serilog;
 
@@ -355,5 +356,51 @@ namespace GiroZilla.Views
             await Task.FromResult(true);
         }
         #endregion
+
+        private void SetLogoButton_Click(object sender, RoutedEventArgs e)
+        {
+            SetNewLogo();
+        }
+
+        private void SetNewLogo()
+        {
+            var imageDialog = FileSystemHelper.imageFileDialog;
+
+            imageDialog.FileName = "Vælg en fil";
+            imageDialog.Filter = "Billed filer (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png";
+            imageDialog.Title = "Åben et billed";
+
+            switch (imageDialog.ShowDialog() == DialogResult.OK)
+            {
+                case true:
+                    {
+                        List<string> pathArray = new List<string>();
+                        pathArray.AddRange(imageDialog.FileName.Split((char)92)); //(char)92 = \
+                        var fileName = pathArray[pathArray.Count - 1];
+
+                        pathArray.RemoveAt(pathArray.Count - 1);
+
+                        var path = String.Join(@"\", pathArray.ToArray());
+                        var logo = FileSystemHelper.GetImageFile(path + @"\", fileName);
+
+                        switch(logo.Width > 1725 || logo.Height > 230)
+                        {
+                            case true:
+                                {
+                                    System.Windows.MessageBox.Show("Billed for stort\nMax H: 230 Pixels\nMax B: 1725 Pixels");
+                                    LogoErrorLabel.Content = "Størrelses fejl";
+                                    break;
+                                }
+                            default:
+                                {
+                                    FileSystemHelper.CreateImage($@"{Environment.CurrentDirectory}\Assets\Company\Logo.png", logo);
+                                    LogoErrorLabel.Content = "Logo tilføjet";
+                                    break;
+                                }
+                        }
+                        break;
+                    }
+            }
+        }
     }
 }

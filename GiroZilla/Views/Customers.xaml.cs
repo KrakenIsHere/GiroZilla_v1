@@ -1159,7 +1159,7 @@ namespace GiroZilla.Views
                         }
                     }
 
-                    ProductList.Items.Add(new ServiceProduct { ID = row.Product_ID.ToString(), Name = row.Product_NAME, Price = row.Product_PRICE.Replace('.', ','), Description = row.Product_DESCRIPTION.ToString() });
+                    ProductList.Items.Add(new ServiceProduct { ID = row.Product_ID.ToString(), Name = row.Product_NAME, Price = row.Product_PRICE.Replace(',', '.'), Description = row.Product_DESCRIPTION.ToString() });
                 }
                 PrintHelper.CalculatePrice(ProductList, PriceTextBox);
             }
@@ -1307,5 +1307,10 @@ namespace GiroZilla.Views
         }
 
         #endregion
+
+        private void ListViewPriceTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            PrintHelper.CalculatePrice(ProductList, PriceTextBox);
+        }
     }
 }

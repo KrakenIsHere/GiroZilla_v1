@@ -307,8 +307,8 @@
                                     Height="36" 
                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                                     TextWrapping="Wrap" 
-                                    Text="149,95" 
-                                    materialDesign:HintAssist.Hint="Beløb (Fx: 149,95)" 
+                                    Text="0.00" 
+                                    materialDesign:HintAssist.Hint="Beløb (Fx: 149.95)" 
                                     VerticalAlignment="Top" 
                                     Width="166"/>
                                 

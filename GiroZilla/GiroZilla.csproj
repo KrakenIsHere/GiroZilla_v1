@@ -344,6 +344,9 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Resource Include="Assets\Icon\Icon.png" />
+    <Content Include="Assets\Company\Logo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Manual\GiroZilla Manual %28DA-DK%29.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

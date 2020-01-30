@@ -347,7 +347,7 @@
                         x:Name="InvoiceMessageTextBox"
                         TextWrapping="NoWrap"
                         Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
-                        Margin="20,60,20,0"
+                        Margin="-150,60,20,0"
                         Height="100"
                         Width="280"
                         Text="Dette er en besked som vil stå på dine"
@@ -358,8 +358,27 @@
                         ToolTip="Lad ikke din tekst gå ud af siden på boksen.&#xA;Brug 'Enter' eller 'Retur' tasten til at lave en ny linje."/>
 
                     <Button 
+                        x:Name="SetLogoButton" 
+                        Margin="0,-100,10,35"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Right"
+                        Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                        Width="166" 
+                        Content="Set Logo"
+                        ToolTip="Max H: 230 Pixels&#xA;Max B: 1725 Pixels"
+                        Click="SetLogoButton_Click"/>
+
+                    <Label
+                        x:Name="LogoErrorLabel" 
+                        Margin="0,-50,15,0"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Right"
+                        Width="160" 
+                        Content=""/>
+
+                    <Button 
                         x:Name="SaveInvoiceSettingsButton" 
-                        Margin="0,30,15,0"
+                        Margin="0,30,10,0"
                         VerticalAlignment="Bottom"
                         HorizontalAlignment="Right"
                         Style="{StaticResource MaterialDesignRaisedDarkButton}"
