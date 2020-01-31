@@ -208,7 +208,7 @@
                 Grid.Column="2" />
         </GroupBox>
 
-        <GroupBox Grid.ColumnSpan="3" Margin="10,-70,10,10" Grid.Row="2">
+        <GroupBox x:Name="CustomerGridGroupBox" Header="Kunder i rute: " Grid.ColumnSpan="3" Margin="10,-70,10,10" Grid.Row="2">
             <DataGrid 
                 Name="CustomerGrid" 
                 CanUserDeleteRows="False" 

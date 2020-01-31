@@ -1640,6 +1640,8 @@ namespace GiroZilla.Views
 
                 _customerData = AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString").Result;
 
+                CustomerGridGroupBox.Header = "Kunder i rute: " + _customerData.Tables[0].Rows.Count;
+
                 CustomerGrid.ItemsSource = _customerData.Tables[0].DefaultView;
 
                 await Task.FromResult(true);
