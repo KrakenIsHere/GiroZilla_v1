@@ -1155,19 +1155,15 @@ namespace GiroZilla.Views
 
                 var data = AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString").Result;
 
-                //Remove existing customer ids
-                var listData = VariableManipulation.GetIntegerValuesInColumnFromListView(EditCustomerList);
-
-                //Get new customer ids
-                var ids = await GetCustermerIdsFormRouteCustomersList(VariableManipulation.DataGridtoDataTable(CustomerGrid));
-
-                List<int> listids = new List<int>();
-
-                listids.AddRange(listData);
-                listids.AddRange(ids);
+                //Get existing customer ids
+                var ids = VariableManipulation.GetIntegerValuesInColumnFromListView(EditCustomerList)
+                    .Union(
+                    //Get new customer ids
+                    await GetCustormerIdsFormRouteCustomersList(VariableManipulation.DataGridtoDataTable(CustomerGrid)))
+                    .ToArray();
 
                 //Remove customers from table
-                VariableManipulation.RemoveRowsFromDataTableWhereIntValueIsSingleRow(data.Tables[0], "ID", listids.ToArray());
+                VariableManipulation.RemoveRowsFromDataTableWhereIntValueIsSingleRow(data.Tables[0], "ID", ids);
 
                 EditCustomerGrid.ItemsSource = data.Tables[0].DefaultView;
 
@@ -1180,7 +1176,7 @@ namespace GiroZilla.Views
             }
         }
 
-        private async Task<int[]> GetCustermerIdsFormRouteCustomersList(DataTable data)
+        private async Task<int[]> GetCustormerIdsFormRouteCustomersList(DataTable data)
         {
             try
             {
