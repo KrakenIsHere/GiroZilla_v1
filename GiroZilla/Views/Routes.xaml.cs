@@ -1155,13 +1155,19 @@ namespace GiroZilla.Views
 
                 var data = AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString").Result;
 
+                //Remove existing customer ids
                 var listData = VariableManipulation.GetIntegerValuesInColumnFromListView(EditCustomerList);
 
-                VariableManipulation.RemoveRowsFromDataTableWhereIntValueIsSingleRow(data.Tables[0], "ID", listData);
-
+                //Get new customer ids
                 var ids = await GetCustermerIdsFormRouteCustomersList(VariableManipulation.DataGridtoDataTable(CustomerGrid));
 
-                VariableManipulation.RemoveRowsFromDataTableWhereIntValueIsSingleRow(data.Tables[0], "ID", ids);
+                List<int> listids = new List<int>();
+
+                listids.AddRange(listData);
+                listids.AddRange(ids);
+
+                //Remove customers from table
+                VariableManipulation.RemoveRowsFromDataTableWhereIntValueIsSingleRow(data.Tables[0], "ID", listids.ToArray());
 
                 EditCustomerGrid.ItemsSource = data.Tables[0].DefaultView;
 

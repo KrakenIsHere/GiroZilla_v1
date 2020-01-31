@@ -492,8 +492,7 @@ namespace GiroZilla
             switch (e.Key)
             {
                 case Key.NumPad0:
-                    UpdateDialog.IsOpen = !UpdateDialog.IsOpen;
-                    Console.WriteLine($@"Update dialog is open: {UpdateDialog.IsOpen}");
+                    
                     break;
 
                 case Key.Enter when LicenseTextBox.IsFocused:
