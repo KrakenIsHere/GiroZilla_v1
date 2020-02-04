@@ -870,14 +870,21 @@ namespace GiroZilla.Views
 
         private async void SetCountyDataToCombos()
         {
-            var query = "SELECT * FROM cities";
-
-            var data = await AsyncMySqlHelper.GetDataFromDatabase<City>(query, "ConnString");
-
-            foreach (City city in data)
+            try
             {
-                NewCustomersCity.Items.Add(city.City_NAME);
-                NewCustomersZipCode.Items.Add(city.City_ZIP);
+                var query = "SELECT * FROM cities";
+
+                var data = await AsyncMySqlHelper.GetDataFromDatabase<City>(query, "ConnString");
+
+                foreach (City city in data)
+                {
+                    NewCustomersCity.Items.Add(city.City_NAME);
+                    NewCustomersZipCode.Items.Add(city.City_ZIP);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected error");
             }
         }
 

@@ -324,7 +324,6 @@ namespace GiroZilla
             {
                 Log.Information("Manual update requested");
                 CheckForUpdates(true, true);
-                mgr.Dispose();
                 await Task.FromResult(true);
             }
             catch (Exception ex)
