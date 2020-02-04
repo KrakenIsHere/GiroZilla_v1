@@ -31,6 +31,7 @@ namespace GiroZilla.Views
             AddObjectsToPaymentCombo();
             AddObjectsToInvoiceCombo();
             AddMonthsToCombobox();
+            SetCountyDataToCombos();
             PrintHelper.FillInvoiceDesignCombo(InvoiceDesignCombo);
             SetData();
         }
@@ -867,6 +868,19 @@ namespace GiroZilla.Views
 
         #region City/County
 
+        private async void SetCountyDataToCombos()
+        {
+            var query = "SELECT * FROM cities";
+
+            var data = await AsyncMySqlHelper.GetDataFromDatabase<City>(query, "ConnString");
+
+            foreach (City city in data)
+            {
+                NewCustomersCity.Items.Add(city.City_NAME);
+                NewCustomersZipCode.Items.Add(city.City_ZIP);
+            }
+        }
+
         /// <summary>
         ///   <para>
         ///  Adds the new county data.
@@ -909,6 +923,8 @@ namespace GiroZilla.Views
                                         string caption = "Tilføj Område";
                                         System.Windows.MessageBoxButton buttons = System.Windows.MessageBoxButton.YesNo;
                                         System.Windows.MessageBoxResult result = System.Windows.MessageBoxResult.Yes;
+
+                                        Console.WriteLine(NewCustomersCity.SelectedIndex + " : " + NewCustomersZipCode.SelectedIndex);
 
                                         // Displays the MessageBox.
                                         result = MessageBox.Show(message, caption, buttons);
@@ -1311,6 +1327,30 @@ namespace GiroZilla.Views
         private void ListViewPriceTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             PrintHelper.CalculatePrice(ProductList, PriceTextBox);
+        }
+
+        private void NewCustomersCity_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch (NewCustomersCity.SelectedIndex != -1)
+            {
+                case true:
+                    {
+                        NewCustomersZipCode.SelectedIndex = NewCustomersCity.SelectedIndex;
+                        break;
+                    }
+            }
+        }
+
+        private void NewCustomersZipCode_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch (NewCustomersZipCode.SelectedIndex != -1)
+            {
+                case true:
+                    {
+                        NewCustomersCity.SelectedIndex = NewCustomersZipCode.SelectedIndex;
+                        break;
+                    }
+            }
         }
     }
 }

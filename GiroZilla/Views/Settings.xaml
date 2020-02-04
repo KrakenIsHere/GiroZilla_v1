@@ -220,7 +220,7 @@
 
                 <StackPanel Orientation="Vertical" Margin="0,135,0,0">
 
-                    <Label Margin="5,5,0,0" Content="Licens ændringer: (WIP)"/>
+                    <Label Margin="5,5,0,0" Content="Licens ændringer:"/>
 
                     <StackPanel Orientation="Horizontal">
 

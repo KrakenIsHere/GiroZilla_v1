@@ -229,30 +229,31 @@
                                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                                         VerticalAlignment="Top" 
                                         Width="166"/>
-                                    <TextBox 
-                                        Name="NewCustomersZipCode" 
+                                    <ComboBox 
+                                        Name="NewCustomersCity"
+                                        SelectionChanged="NewCustomersCity_SelectionChanged"
                                         TabIndex="3"
                                         LostFocus="AddCounty_LostFocus" 
-                                        PreviewTextInput="NumbersOnly_PreviewTextInput" 
-                                        MaxLength="6" 
                                         HorizontalAlignment="Center" 
                                         Height="37" 
-                                        TextWrapping="Wrap" 
-                                        materialDesign:HintAssist.Hint="Post nummer" 
-                                        Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                                        materialDesign:HintAssist.Hint="By" 
+                                        Style="{StaticResource MaterialDesignFloatingHintComboBox}" 
                                         VerticalAlignment="Top" 
-                                        Width="166"/>
-                                    <TextBox 
-                                        Name="NewCustomersCity" 
+                                        Width="166" 
+                                        IsEditable="True"/>
+                                    <ComboBox 
+                                        Name="NewCustomersZipCode" 
+                                        SelectionChanged="NewCustomersZipCode_SelectionChanged"
                                         TabIndex="4"
                                         LostFocus="AddCounty_LostFocus" 
+                                        PreviewTextInput="NumbersOnly_PreviewTextInput" 
                                         HorizontalAlignment="Center" 
                                         Height="37" 
-                                        TextWrapping="Wrap" 
-                                        materialDesign:HintAssist.Hint="By" 
-                                        Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                                        materialDesign:HintAssist.Hint="Post nummer" 
+                                        Style="{StaticResource MaterialDesignFloatingHintComboBox}" 
                                         VerticalAlignment="Top" 
-                                        Width="166"/>
+                                        Width="166"
+                                        IsEditable="True"/>
                                     <TextBox 
                                         Name="NewCustomersMail" 
                                         TabIndex="5"
