@@ -29,6 +29,7 @@ namespace GiroZilla
     public partial class MainWindow
     {
         private static readonly ILogger Log = Serilog.Log.ForContext<MainWindow>();
+        public static MainWindow mainWindow;
 
         UpdateManager mgr;
         UpdateInfo updates;
@@ -40,11 +41,13 @@ namespace GiroZilla
 
         private bool _isCorrect;
 
+        private bool _isManualChangeLicense = false;
+
         /// <summary>Initializes a new instance of the <see cref="MainWindow"/> class.</summary>
         public MainWindow()
         {
             InitializeComponent();
-
+            mainWindow = this;
             Application.Current.MainWindow.Closing += new CancelEventHandler(MainWindow_Closing);
 
             VerifyLogsFolder();
@@ -126,6 +129,13 @@ namespace GiroZilla
         #endregion
 
         #region License
+
+        public void OpenLicenseDialog()
+        {
+            _isManualChangeLicense = true;
+            LicenseDialog.IsOpen = true;
+        }
+
         /// <summary>Verifies the program license key.</summary>
         /// <param name="sender">The source of the event.</param>,
         /// <param name="e">The <see cref="ItemClickEventArgs"/> instance containing the event data.</param>
@@ -133,6 +143,7 @@ namespace GiroZilla
         {
             try
             {
+                _isManualChangeLicense = false;
                 Log.Information("Verifying License");
 
                 var verified = PyroSquidUniLib.Verification.VerifyLicense.Verify(LicenseTextBox.Text, ErrorText);
@@ -155,7 +166,20 @@ namespace GiroZilla
         {
             try
             {
-                Application.Current.Shutdown();
+                switch (_isManualChangeLicense)
+                {
+                    default:
+                        {
+                            Application.Current.Shutdown();
+                            break;
+                        }
+                    case true:
+                        {
+                            LicenseDialog.IsOpen = false;
+                            _isManualChangeLicense = false;
+                            break;
+                        }
+                }
             }
             catch (Exception ex)
             {

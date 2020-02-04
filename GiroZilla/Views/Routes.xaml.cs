@@ -1046,12 +1046,11 @@ namespace GiroZilla.Views
                 table.Rows[_routeSelected]["Navn"].ToString() 
                 );
 
-            table.Dispose();
-
             UpdateRouteData();
 
             PrintRouteDialog.IsOpen = false;
             Log.Information($"Successfully printed route {table.Rows[_routeSelected]["Navn"].ToString()}");
+            table.Dispose();
             await Task.FromResult(true);
         }
 
@@ -1711,8 +1710,6 @@ namespace GiroZilla.Views
                             }
                     }
                     i++;
-
-
                 }
 
                 UpdateCustomerData();

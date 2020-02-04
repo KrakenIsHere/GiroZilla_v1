@@ -231,7 +231,7 @@ namespace GiroZilla.Views
 
         private async void OverrideLicenseButton_Click(object sender, RoutedEventArgs e)
         {
-            VerifyLicense.Verify(NewLicenseTextBox.Text, NewLicenseError);
+            MainWindow.mainWindow.OpenLicenseDialog();
 
             await Task.FromResult(true);
         }

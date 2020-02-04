@@ -224,28 +224,15 @@
 
                     <StackPanel Orientation="Horizontal">
 
-                        <TextBox 
-                            x:Name="NewLicenseTextBox"
-                            Text="" 
-                            materialDesign:HintAssist.Hint=" Ny Licens"
-                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                            ToolTip="HUSK: Bindestreg '-'"
-                            Margin="5,0,0,0"
-                            Height="40"
-                            Width="220"
-                            VerticalAlignment="Top"
-                            HorizontalAlignment="Left"/>
-
                         <Button 
                             x:Name="OverrideLicenseButton" 
                             Style="{StaticResource MaterialDesignRaisedDarkButton}"
-                            Content="Gem og Brug den nye Licens"
+                            Content="Skift Licens"
                             Width="230"
                             Margin="18,0,0,0"
                             HorizontalAlignment="Left"
                             Click="OverrideLicenseButton_Click"/>
                     </StackPanel>
-                    <TextBlock x:Name="NewLicenseError"/>
 
 
                     <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
