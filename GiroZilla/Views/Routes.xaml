@@ -210,11 +210,11 @@
 
         <GroupBox x:Name="CustomerGridGroupBox" Header="Kunder i rute: " Grid.ColumnSpan="3" Margin="10,-70,10,10" Grid.Row="2">
             <DataGrid 
-                Name="CustomerGrid" 
+                Name="CustomerGrid"
+                CurrentCellChanged="CustomerGrid_CurrentCellChanged"
                 CanUserDeleteRows="False" 
                 CanUserReorderColumns="False" 
                 CanUserAddRows="False" 
-                IsReadOnly="True"
                 Grid.Column="0"
                 Grid.ColumnSpan="3"
                 Grid.Row="1"

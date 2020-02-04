@@ -145,8 +145,8 @@ namespace GiroZilla.Views
         private async void FinalAddRoute_Click(object sender, RoutedEventArgs e)
         {
             switch (!string.IsNullOrWhiteSpace(RouteAreaTextBox.Text) &&
-                CustomerList.Items.Count != 0 &&
-                CustomerList.Items.Count != -1)
+                    CustomerList.Items.Count != 0 &&
+                    CustomerList.Items.Count != -1)
             {
                 case true:
                     {
@@ -286,19 +286,23 @@ namespace GiroZilla.Views
                 var rows = CustomerList.Items;
 
                 var i = 0;
+                var orderNum = 0;
                 foreach (var item in rows)
                 {
+                    orderNum++;
                     var data = (RouteCustomer)CustomerList.Items[i];
 
                     query = $"INSERT INTO `route-customers` " +
                     $"(" +
                     $"`Route-Customer_CUSTOMERID`, " +
-                    $"`Route-Customer_ROUTEID` " +
+                    $"`Route-Customer_ROUTEID`, " +
+                    $"`Route-Customer_ORDERNUMBER` " +
                     $") " +
                     $"VALUES " +
                     $"(" +
                     $"{data.ID}, " +
-                    $"{id} " +
+                    $"{id}, " +
+                    $"{orderNum} " +
                     $");";
 
                     AsyncMySqlHelper.SetDataToDatabase(query, "ConnString").Wait();
@@ -679,9 +683,11 @@ namespace GiroZilla.Views
                     "AND " +
                     $"`customer-service-data_SERVICENUM` = {serviceNum}";
 
-            if (AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString") != null)
+            var serviceSet = await AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString");
+
+            if (serviceSet != null)
             {
-                var serviceSet = await AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString");
+                
                 var serviceData = serviceSet.Tables[0].Rows;
 
                 //Service
@@ -978,7 +984,8 @@ namespace GiroZilla.Views
             {
                 case true:
                     {
-                        _printRouteCustomerData = VariableManipulation.DataGridtoDataTable(CustomerGrid);
+                        var table = VariableManipulation.DataGridtoDataTable(CustomerGrid);
+                        _printRouteCustomerData = VariableManipulation.SortDataTable(table, "Opstilling");
 
                         _routeCustomerNum = 0;
                         _routeSelected = RouteGrid.SelectedIndex;
@@ -1274,19 +1281,24 @@ namespace GiroZilla.Views
                 var rows = EditCustomerList.Items;
 
                 var i = 0;
+                var orderNum = CustomerGrid.Items.Count;
                 foreach (var item in rows)
                 {
+                    orderNum++;
+
                     var data = (RouteCustomer)EditCustomerList.Items[i];
 
                     var query = $"INSERT INTO `route-customers` " +
                     $"(" +
                     $"`Route-Customer_CUSTOMERID`, " +
-                    $"`Route-Customer_ROUTEID` " +
+                    $"`Route-Customer_ROUTEID`, " +
+                    $"`Route-Customer_ORDERNUMBER`" +
                     $") " +
                     $"VALUES " +
                     $"(" +
                     $"{data.ID}, " +
-                    $"{id} " +
+                    $"{id}, " +
+                    $"{orderNum} " +
                     $");";
 
                     AsyncMySqlHelper.SetDataToDatabase(query, "ConnString").Wait();
@@ -1642,6 +1654,8 @@ namespace GiroZilla.Views
 
                 CustomerGridGroupBox.Header = "Kunder i rute: " + _customerData.Tables[0].Rows.Count;
 
+                //var data = VariableManipulation.SortDataTable(_customerData.Tables[0], "Opstilling");
+
                 CustomerGrid.ItemsSource = _customerData.Tables[0].DefaultView;
 
                 await Task.FromResult(true);
@@ -1651,6 +1665,61 @@ namespace GiroZilla.Views
             {
                 await Task.FromResult(false);
                 Log.Error(ex, "An error occured while setting CustomerGrid data!");
+            }
+        }
+
+        private async void UpdateCustomerData()
+        {
+            try
+            {
+                AsyncMySqlHelper.UpdateSetToDatabase($"SELECT * FROM `all_route-customers`", _customerData.Tables[0].DataSet, "ConnString");
+                await Task.FromResult(true);
+                Log.Information($"Successfully updated route customer data");
+            }
+            catch (Exception ex)
+            {
+                await Task.FromResult(false);
+                Log.Error(ex, "Unexpected Error");
+            }
+        }
+
+        private void CustomerGrid_CurrentCellChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                var grid = sender as DataGrid;
+
+                int i = 0;
+                foreach (DataGridColumn column in grid.Columns)
+                {
+                    if (column.IsReadOnly)
+                    {
+                        break;
+                    }
+
+                    switch (i == 3)
+                    {
+                        case true:
+                            {
+                                column.IsReadOnly = false;
+                                break;
+                            }
+                        default:
+                            {
+                                column.IsReadOnly = true;
+                                break;
+                            }
+                    }
+                    i++;
+
+
+                }
+
+                UpdateCustomerData();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected error");
             }
         }
 
