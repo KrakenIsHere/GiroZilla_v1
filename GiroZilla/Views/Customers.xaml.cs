@@ -162,7 +162,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Something went wrong setting the data for the CustomerGrid!");
+                Log.Error(ex, "Something went wrong setting the data for the CustomerGrid");
             }
         }
 
@@ -178,7 +178,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "Something went wrong updating customer data!");
+                Log.Error(ex, "Something went wrong updating customer data");
             }
         }
 
@@ -222,7 +222,7 @@ namespace GiroZilla.Views
             {
                 await Task.FromResult(false);
                 MessageBox.Show("En uventet fejl er sket", "FEJL");
-                Log.Error(ex, "An error occured while deleting a customer!");
+                Log.Error(ex, "An error occured while deleting a customer");
             }
         }
 
@@ -262,7 +262,7 @@ namespace GiroZilla.Views
             {
                 await Task.FromResult(false);
                 MessageBox.Show("En uventet fejl er sket", "FEJL");
-                Log.Error(ex, "An error occured while deleting a customer!");
+                Log.Error(ex, "An error occured while deleting a customer");
             }
         }
 
@@ -368,8 +368,6 @@ namespace GiroZilla.Views
 
                             AsyncMySqlHelper.SetDataToDatabase(query, "ConnString").Wait();
 
-                            Log.Error(query, "Added a new customer!");
-
                             await Task.FromResult(true);
                             Log.Information("Successfully Added a new customer");
                             return true;
@@ -385,7 +383,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "An error occured while adding a new customer!");
+                Log.Error(ex, "An error occured while adding a new customer");
             }
 
             return false;
@@ -621,7 +619,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "Something went wrong adding new service data!");
+                Log.Error(ex, "Something went wrong adding new service data");
             }
             return false;
         }
@@ -653,7 +651,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "Something went wrong setting the ServiceGrid data!");
+                Log.Error(ex, "Something went wrong setting the ServiceGrid data");
             }
         }
 
@@ -844,7 +842,7 @@ namespace GiroZilla.Views
                             }
                             catch (Exception ex)
                             {
-                                Log.Warning(ex, "No service amount");
+                                Log.Error(ex, "No service amount");
                                 ServicesNeeded = 0;
                             }
 
@@ -889,7 +887,7 @@ namespace GiroZilla.Views
                                         }
                                         catch (Exception ex)
                                         {
-                                            Log.Error(ex, "Unable to get any Service Data!");
+                                            Log.Error(ex, "Unable to get any Service Data");
                                         }
 
                                         NewServiceID.Text = amountOfTotalServices.ToString();
@@ -946,7 +944,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -1031,7 +1029,7 @@ namespace GiroZilla.Views
             {
                 await Task.FromResult(false);
                 MessageBox.Show("En uventet fejl er sket", "FEJL");
-                Log.Error(ex, "An error occured while adding new county data!");
+                Log.Error(ex, "An error occured while adding new county data");
             }
             return false;
         }
@@ -1060,7 +1058,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -1151,7 +1149,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "An error occured while disabling columns!");
+                Log.Error(ex, "An error occured while disabling columns");
             }
         }
 
@@ -1370,7 +1368,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -1393,7 +1391,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -1422,7 +1420,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -1441,7 +1439,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -1460,7 +1458,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
     }

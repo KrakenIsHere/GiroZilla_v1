@@ -110,7 +110,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(true);
-                Log.Error(ex, "An error occured while setting up the PrintService Dialog!");
+                Log.Error(ex, "An error occured while setting up the PrintService Dialog");
             }
         }
 
@@ -126,7 +126,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "Something went wrong updating the service data!");
+                Log.Error(ex, "Something went wrong updating the service data");
             }
         }
 
@@ -273,7 +273,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "An error occured while setting ServiceGrid data!");
+                Log.Warning(ex, "Something went wrong setting the data for the ServiceGrid");
             }
         }
 
@@ -289,7 +289,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "An error occured while disabling columns!");
+                Log.Error(ex, "An error occured while disabling columns");
             }
         }
 
@@ -342,7 +342,7 @@ namespace GiroZilla.Views
             {
                 await Task.FromResult(false);
                 MessageBox.Show("Venligst vælg en fejning");
-                Log.Warning(ex, "No service picked!");
+                Log.Warning(ex, "No service picked");
             }
         }
 
@@ -418,7 +418,7 @@ namespace GiroZilla.Views
 
                                 Log.Information($"Successfully deleted service #{row.Row.ItemArray[0]}");
                             }
-                            MessageBox.Show($"Fejning nr:{rows.Length} er nu slettet");
+                            MessageBox.Show($"{rows.Length} Fejninger blev slettet");
                             break;
                         }
                 }
@@ -532,7 +532,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -698,7 +698,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -735,7 +735,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 

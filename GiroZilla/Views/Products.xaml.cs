@@ -87,7 +87,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "Unexpected Error");
+                Log.Warning(ex, "Something went wrong setting the data for the ProductGrid");
             }
         }
 
@@ -183,7 +183,7 @@ namespace GiroZilla.Views
 
                                 Log.Information($"Successfully deleted product #{row.Row.ItemArray[0].ToString()}");
                             }
-                            MessageBox.Show($"{rows.Length} Produkter er nu slettet");
+                            MessageBox.Show($"{rows.Length} Produkter blev slettet");
                             break;
                         }
                 }
@@ -303,7 +303,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -349,7 +349,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -420,7 +420,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 

@@ -66,7 +66,7 @@ namespace GiroZilla
             catch (Exception ex)
             {
 
-                Log.Error(ex, "An error occured while fetching the Version!");
+                Log.Error(ex, "An error occured while fetching the version!");
                 return string.Empty;
             }
         }
@@ -264,7 +264,7 @@ namespace GiroZilla
 
                                             if (!string.IsNullOrWhiteSpace(localLicense))
                                             {
-                                                Log.Information("This license is invalid and wil be reset!");
+                                                Log.Warning("This license is invalid and wil be reset!");
 
                                                 ErrorText.Text = "Din nuværende licens er ugyldig & vil blive nulstillet";
 
@@ -283,7 +283,7 @@ namespace GiroZilla
 
                                             if (!string.IsNullOrWhiteSpace(localLicense))
                                             {
-                                                Log.Information("Something went wrong validating this license, try again later!");
+                                                Log.Warning("Something went wrong validating this license, try again later!");
 
                                                 ErrorText.Text = "Kunne ikke validere din licens prøv igen senere";
                                             }
@@ -303,7 +303,7 @@ namespace GiroZilla
                     LicenseDialog.IsOpen = true;
                     IsLicenseVerified = false;
 
-                    Log.Error("The license was not found!");
+                    Log.Warning("The license was not found!");
 
                     ErrorText.Text = "Licensen blev ikke fundet!";
                 }
@@ -312,7 +312,7 @@ namespace GiroZilla
             {
                 _connectionStatus = 2;
 
-                Log.Error(ex, "Something went wrong!");
+                Log.Error(ex, "Unexpected Error");
             }
         }
         #endregion
@@ -363,7 +363,7 @@ namespace GiroZilla
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -417,7 +417,7 @@ namespace GiroZilla
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -508,7 +508,7 @@ namespace GiroZilla
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Something went wrong while checking for updates");
+                Log.Warning(ex, "Something went wrong while checking for updates");
                 UpdateDialog.IsOpen = false;
             }
         }
