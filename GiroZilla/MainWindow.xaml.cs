@@ -302,11 +302,22 @@ namespace GiroZilla
                                                                     LicenseDialog.IsOpen = true;
                                                                     IsLicenseVerified = false;
 
-                                                                    if (!string.IsNullOrWhiteSpace(localLicense))
+                                                                    switch (!string.IsNullOrWhiteSpace(localLicense))
                                                                     {
-                                                                        Log.Warning("Something went wrong validating this license, try again later");
+                                                                        case true:
+                                                                            {
+                                                                                Log.Warning("Something went wrong validating this license");
 
-                                                                        ErrorText.Text = "Kunne ikke validere din licens prøv igen senere";
+                                                                                ErrorText.Text = "Kunne ikke validere din licens prøv igen senere";
+                                                                                break;
+                                                                            }
+                                                                        default:
+                                                                            {
+                                                                                Log.Warning("Something went wrong validating this license (String empty or null)");
+
+                                                                                ErrorText.Text = "Kunne ikke validere din licens";
+                                                                                break;
+                                                                            }
                                                                     }
                                                                     break;
                                                                 }
