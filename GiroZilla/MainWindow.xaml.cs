@@ -476,35 +476,28 @@ namespace GiroZilla
 
             try
             {
-                switch (IsLicenseVerified)
-                {
-                    case true:
-                        {
-                            var result = PropertiesExtension.Get<string>("ShowUpdatePromptOnStart");
+                var result = PropertiesExtension.Get<string>("ShowUpdatePromptOnStart");
 
-                            switch (result)
+                switch (result)
+                {
+                    case "Yes":
+                        {
+                            DoCheck(manualUpdate);
+                            break;
+                        }
+                    case "Disabled":
+                        {
+                            switch (manualUpdate)
                             {
-                                case "Yes":
+                                case true:
                                     {
                                         DoCheck(manualUpdate);
                                         break;
                                     }
-                                case "Disabled":
+                                default:
                                     {
-                                        switch (manualUpdate)
-                                        {
-                                            case true:
-                                                {
-                                                    DoCheck(manualUpdate);
-                                                    break;
-                                                }
-                                            default:
-                                                {
-                                                    Log.Information("Update check is disabled.");
-                                                    UpdateDialog.IsOpen = false;
-                                                    break;
-                                                }
-                                        }
+                                        Log.Information("Update check is disabled.");
+                                        UpdateDialog.IsOpen = false;
                                         break;
                                     }
                             }

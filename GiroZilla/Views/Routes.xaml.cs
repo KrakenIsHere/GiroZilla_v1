@@ -404,6 +404,51 @@ namespace GiroZilla.Views
 
         /// <summary>Deletes the selected route from the RouteGrid.</summary>
         /// <param name="row">The row.</param>
+        private async void DeleteRoutes(DataRowView[] rows)
+        {
+            try
+            {
+                string message = $"Er du sikker du vil slette {rows.Count()} ruter?";
+                string caption = "Advarsel";
+                MessageBoxButton buttons = MessageBoxButton.YesNo;
+
+                // Displays the MessageBox.
+                var result = MessageBox.Show(message, caption, buttons);
+
+                switch (result == System.Windows.MessageBoxResult.Yes)
+                {
+                    case true:
+                        {
+                            foreach (DataRowView row in rows)
+                            {
+                                var query = $"DELETE FROM `girozilla`.`route-customers` WHERE `Route-Customer_ROUTEID` = {row.Row.ItemArray[0]}";
+
+                                AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
+
+                                query = $"DELETE FROM `girozilla`.`routes` WHERE `Route_ID` = {row.Row.ItemArray[0]}";
+
+                                AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
+
+                                Log.Information($"Successfully deleted route #{row.Row.ItemArray[0].ToString()}");
+                            }
+
+                            MessageBox.Show($"{rows.Length} Ruter blev slettet");
+                            break;
+                        }
+                }
+
+                await Task.FromResult(true);
+            }
+            catch (Exception ex)
+            {
+                await Task.FromResult(false);
+                MessageBox.Show("En uventet fejl er sket", "FEJL");
+                Log.Error(ex, "Unexpected Error");
+            }
+        }
+
+        /// <summary>Deletes the selected route from the RouteGrid.</summary>
+        /// <param name="row">The row.</param>
         private async void DeleteRoute(DataRowView row)
         {
             try
@@ -485,7 +530,25 @@ namespace GiroZilla.Views
                 {
                     case true:
                         {
-                            DeleteRoute(RouteGrid.SelectedItem as DataRowView);
+                            switch (RouteGrid.SelectedItems.Count > 1)
+                            {
+                                case true:
+                                    {
+                                        List<DataRowView> dataList = new List<DataRowView>();
+                                        foreach (object obj in RouteGrid.SelectedItems)
+                                        {
+                                            dataList.Add(obj as DataRowView);
+                                        }
+
+                                        DeleteRoutes(dataList.ToArray());
+                                        break;
+                                    }
+                                default:
+                                    {
+                                        DeleteRoute(CustomerGrid.SelectedItem as DataRowView);
+                                        break;
+                                    }
+                            }
 
                             SetRouteData();
                             _customerData.Clear();
@@ -1431,7 +1494,25 @@ namespace GiroZilla.Views
                 {
                     case true:
                         {
-                            DeleteRouteCustomer(CustomerGrid.SelectedItem as DataRowView);
+                            switch (CustomerGrid.SelectedItems.Count > 1)
+                            {
+                                case true:
+                                    {
+                                        List<DataRowView> dataList = new List<DataRowView>();
+                                        foreach (object obj in CustomerGrid.SelectedItems)
+                                        {
+                                            dataList.Add(obj as DataRowView);
+                                        }
+
+                                        DeleteRouteCustomers(dataList.ToArray());
+                                        break;
+                                    }
+                                default:
+                                    {
+                                        DeleteRouteCustomer(CustomerGrid.SelectedItem as DataRowView);
+                                        break;
+                                    }
+                            }
 
                             await Task.FromResult(true);
                             break;
@@ -1447,6 +1528,51 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 Log.Error(ex, "Unexpected error");
+            }
+        }
+
+        private async void DeleteRouteCustomers(DataRowView[] rows)
+        {
+            try
+            {
+                string message = $"Er du sikker du vil slette {rows.Length} kunder fra ruten?";
+                string caption = "Advarsel";
+                MessageBoxButton buttons = MessageBoxButton.YesNo;
+                MessageBoxResult result;
+
+                // Displays the MessageBox.
+                result = MessageBox.Show(message, caption, buttons);
+                switch (result == System.Windows.MessageBoxResult.Yes)
+                {
+                    case true:
+                        {
+                            foreach (DataRowView row in rows)
+                            {
+
+                                var query = $"" +
+                                            $"DELETE FROM `girozilla`.`route-customers` " +
+                                            $"WHERE " +
+                                            $"`Route-Customer_ROUTEID` = {row.Row["Rute ID"]} " +
+                                            $"AND " +
+                                            $"`Route-Customer_CUSTOMERID` = {row.Row["Kunde ID"]}";
+
+                                AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
+
+                                SetCustomerData(RouteGrid.SelectedItem as DataRowView);
+                                Log.Information($"Successfully deleted customer {row.Row["Kunde ID"]} from route {row.Row["Rute ID"]}");
+                            }
+
+                            MessageBox.Show($"{rows.Length} Kunder blev slettet fra rute nr:{rows[0].Row["Rute ID"]}");
+                            break;
+                        }
+                }
+                await Task.FromResult(true);
+            }
+            catch (Exception ex)
+            {
+                await Task.FromResult(false);
+                MessageBox.Show("En uventet fejl er sket", "FEJL");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -1523,6 +1649,51 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
+                Log.Error(ex, "Unexpected Error");
+            }
+        }
+
+        /// <summary>
+        ///   <para>Deletes selected county from database</para>
+        /// </summary>
+        /// <param name="row">The row.</param>
+        private static async void DeleteCounties(DataRowView[] rows)
+        {
+            try
+            {
+                string message = $"Er du sikker du vil slette {rows.Length} Områder?";
+                string caption = "Advarsel";
+                MessageBoxButton buttons = MessageBoxButton.YesNo;
+                MessageBoxResult result;
+
+                // Displays the MessageBox.
+                result = MessageBox.Show(message, caption, buttons);
+                switch (result == System.Windows.MessageBoxResult.Yes)
+                {
+                    case true:
+                        {
+                            foreach (DataRowView row in rows)
+                            {
+
+                                var query = $"DELETE FROM `girozilla`.`cities` WHERE `City_ZIP` = {row.Row.ItemArray[0]}";
+
+                                AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
+
+                                MessageBox.Show($"Byer med postnummer: {row.Row.ItemArray[0]} er nu slettet");
+
+                                Log.Information($"Successfully deleted city #{row.Row.ItemArray[0].ToString()}");
+                            }
+
+                            MessageBox.Show($"{rows.Length} Områder er nu slettet");
+                            break;
+                        }
+                }
+                await Task.FromResult(true);
+            }
+            catch (Exception ex)
+            {
+                await Task.FromResult(false);
+                MessageBox.Show("En uventet fejl er sket", "FEJL");
                 Log.Error(ex, "Unexpected Error");
             }
         }
@@ -1689,9 +1860,28 @@ namespace GiroZilla.Views
                 {
                     case true:
                         {
-                            DeleteCounty(CityGrid.SelectedItem as DataRowView);
-                            AddCountyDialog.IsOpen = false;
+                            switch (CityGrid.SelectedItems.Count > 1)
+                            {
+                                case true:
+                                    {
+                                        List<DataRowView> dataList = new List<DataRowView>();
+                                        foreach (object obj in CityGrid.SelectedItems)
+                                        {
+                                            dataList.Add(obj as DataRowView);
+                                        }
 
+                                        DeleteCounties(dataList.ToArray());
+                                        break;
+                                    }
+                                default:
+                                    {
+                                        DeleteCounty(CityGrid.SelectedItem as DataRowView);
+                                        break;
+                                    }
+                            }
+
+
+                            AddCountyDialog.IsOpen = false;
                             SetCityData();
 
                             await Task.FromResult(true);

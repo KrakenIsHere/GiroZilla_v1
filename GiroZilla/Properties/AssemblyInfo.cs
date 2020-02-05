@@ -18,6 +18,6 @@ using System.Windows;
 
 [assembly: ThemeInfo(ResourceDictionaryLocation.None, ResourceDictionaryLocation.SourceAssembly)]
 
-[assembly: AssemblyVersion("1.3.921")]
-[assembly: AssemblyFileVersion("1.3.921")]
-[assembly: AssemblyInformationalVersion("1.3.921")]
+[assembly: AssemblyVersion("1.3.928")]
+[assembly: AssemblyFileVersion("1.3.928")]
+[assembly: AssemblyInformationalVersion("1.3.928")]

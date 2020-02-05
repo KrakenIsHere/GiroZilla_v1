@@ -182,6 +182,50 @@ namespace GiroZilla.Views
             }
         }
 
+        /// <summary>Deletes selected customers from CustomerGrid</summary>
+        /// <param name="row">The row.</param>
+        private async void DeleteCustomers(DataRowView[] rows)
+        {
+            try
+            {
+                string message = $"Er du sikker du vil slette {rows.Count()} kunder?";
+                string caption = "Advarsel";
+                System.Windows.MessageBoxButton buttons = System.Windows.MessageBoxButton.YesNo;
+                System.Windows.MessageBoxResult result;
+
+                // Displays the MessageBox.
+                result = MessageBox.Show(message, caption, buttons);
+                switch (result == System.Windows.MessageBoxResult.Yes)
+                {
+                    case true:
+                        {
+                            foreach (DataRowView row in rows)
+                            {
+                                var query = $"DELETE FROM `girozilla`.`customers` WHERE `Customer_ID` = {row.Row.ItemArray[0].ToString()}";
+
+                                AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
+
+                                query = $"DELETE FROM `girozilla`.`route-customers` WHERE `Route-Customer_CUSTOMERID` = {row.Row.ItemArray[0].ToString()}";
+
+                                AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
+
+                                Log.Information($"Successfully deleted a customer #{row.Row.ItemArray[0].ToString()}");
+                            }
+
+                            MessageBox.Show($"{rows.Length} Kunder blev slettet");
+                            break;
+                        }
+                }
+                await Task.FromResult(true);
+            }
+            catch (Exception ex)
+            {
+                await Task.FromResult(false);
+                MessageBox.Show("En uventet fejl er sket", "FEJL");
+                Log.Error(ex, "An error occured while deleting a customer!");
+            }
+        }
+
         /// <summary>Deletes selected customer from CustomerGrid</summary>
         /// <param name="row">The row.</param>
         private async void DeleteCustomer(DataRowView row)
@@ -393,7 +437,25 @@ namespace GiroZilla.Views
             {
                 case true:
                     {
-                        DeleteCustomer(CustomerGrid.SelectedItem as DataRowView);
+                        switch (CustomerGrid.SelectedItems.Count > 1)
+                        {
+                            case true:
+                                {
+                                    List<DataRowView> dataList = new List<DataRowView>();
+                                    foreach(object obj in CustomerGrid.SelectedItems)
+                                    {
+                                        dataList.Add(obj as DataRowView);
+                                    }
+
+                                    DeleteCustomers(dataList.ToArray());
+                                    break;
+                                }
+                            default:
+                                {
+                                    DeleteCustomer(CustomerGrid.SelectedItem as DataRowView);
+                                    break;
+                                }
+                        }
 
                         SetData();
                         break;
