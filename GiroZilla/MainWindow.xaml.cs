@@ -337,73 +337,88 @@ namespace GiroZilla
 
         private void ResultBtn_Click(object sender, EventArgs e)
         {
-            switch ((sender as Button)?.Name)
+            try
             {
-                case "ResultYes":
-                    PropertiesExtension.Set("ShowUpdatePromptOnStart", "Yes");
-                    DoUpdate();
-                    mgr.Dispose();
-                    UpdateDialog.IsOpen = false;
-                    break;
+                switch ((sender as Button)?.Name)
+                {
+                    case "ResultYes":
+                        PropertiesExtension.Set("ShowUpdatePromptOnStart", "Yes");
+                        DoUpdate();
+                        mgr.Dispose();
+                        UpdateDialog.IsOpen = false;
+                        break;
 
-                case "ResultNo":
-                    UpdateDialog.IsOpen = false;
-                    mgr.Dispose();
-                    break;
+                    case "ResultNo":
+                        UpdateDialog.IsOpen = false;
+                        mgr.Dispose();
+                        break;
 
-                case "ResultDontRemind":
-                    PropertiesExtension.Set("ShowUpdatePromptOnStart", "Disabled");
-                    Log.Information("Update check on start was disabled by the user.");
-                    mgr.Dispose();
-                    UpdateDialog.IsOpen = false;
-                    break;
+                    case "ResultDontRemind":
+                        PropertiesExtension.Set("ShowUpdatePromptOnStart", "Disabled");
+                        Log.Information("Update check on start was disabled by the user.");
+                        mgr.Dispose();
+                        UpdateDialog.IsOpen = false;
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected error");
             }
         }
 
         private async void DoUpdate()
         {
-            PropertiesExtension.Set("ShowUpdatePromptOnStart", "");
-
-            Log.Information("Update accepted by the user.");
-
             try
             {
-                Log.Information("Downloading updates.");
-                await mgr.DownloadReleases(updates.ReleasesToApply);
+                PropertiesExtension.Set("ShowUpdatePromptOnStart", "");
+
+                Log.Information("Update accepted by the user.");
+
+                try
+                {
+                    Log.Information("Downloading updates.");
+                    await mgr.DownloadReleases(updates.ReleasesToApply);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Error downloading the release!");
+                    // Notify user of the error
+                }
+
+                try
+                {
+                    Log.Information("Applying updates.");
+                    await mgr.ApplyReleases(updates);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Error while applying updates!");
+                    // Notify user of the error
+                }
+
+                try
+                {
+                    await mgr.CreateUninstallerRegistryEntry();
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Error while trying to create uninstaller registry entry!");
+                    // Notify user of the error
+                }
+
+
+                var latestExe = Path.Combine(mgr.RootAppDirectory, string.Concat("app-", latestVersion.Version.Version.Major, ".", latestVersion.Version.Version.Minor, ".", latestVersion.Version.Version.Build), "GiroZilla.exe");
+                Log.Information("Updates applied successfully.");
+
+                Log.Information($"New exe path: {latestExe}");
+
+                UpdateManager.RestartApp(latestExe);
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Error downloading the release!");
-                // Notify user of the error
+                Log.Error(ex, "Unexpected error");
             }
-
-            try
-            {
-                Log.Information("Applying updates.");
-                await mgr.ApplyReleases(updates);
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Error while applying updates!");
-                // Notify user of the error
-            }
-
-            try
-            {
-                await mgr.CreateUninstallerRegistryEntry();
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Error while trying to create uninstaller registry entry!");
-                // Notify user of the error
-            }
-
-            var latestExe = Path.Combine(mgr.RootAppDirectory, string.Concat("app-", latestVersion.Version.Version.Major, ".", latestVersion.Version.Version.Minor, ".", latestVersion.Version.Version.Build), "GiroZilla.exe");
-            Log.Information("Updates applied successfully.");
-
-            Log.Information($"New exe path: {latestExe}");
-
-            UpdateManager.RestartApp(latestExe);
         }
 
         private async void DoCheck(bool manualUpdate = false)

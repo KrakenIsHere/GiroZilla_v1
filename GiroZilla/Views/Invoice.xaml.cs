@@ -442,45 +442,52 @@ namespace GiroZilla.Views
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private async void InvoicePrintButton_Click(object sender, RoutedEventArgs e)
         {
-            switch (customerExists)
+            try
             {
-                case true:
-                    {
-                        switch (ServiceGrid.SelectedIndex != -1)
+                switch (customerExists)
+                {
+                    case true:
                         {
-                            case true:
-                                {
-                                    PrintServiceDialog.IsOpen = true;
-
-                                    var table = VariableManipulation.DataGridtoDataTable(ProductGrid);
-
-                                    SetupPrintServiceDialog(ServiceGrid.SelectedItem as DataRowView, table);
-
-                                    switch (table != null)
+                            switch (ServiceGrid.SelectedIndex != -1)
+                            {
+                                case true:
                                     {
-                                        case true:
-                                            {
-                                                table.Dispose();
-                                                break;
-                                            }
+                                        PrintServiceDialog.IsOpen = true;
+
+                                        var table = VariableManipulation.DataGridtoDataTable(ProductGrid);
+
+                                        SetupPrintServiceDialog(ServiceGrid.SelectedItem as DataRowView, table);
+
+                                        switch (table != null)
+                                        {
+                                            case true:
+                                                {
+                                                    table.Dispose();
+                                                    break;
+                                                }
+                                        }
+                                        await Task.FromResult(true);
+                                        break;
                                     }
-                                    await Task.FromResult(true);
-                                    break;
-                                }
-                            default:
-                                {
-                                    await Task.FromResult(false);
-                                    MessageBox.Show("Venligst vælg en fejning");
-                                    break;
-                                }
+                                default:
+                                    {
+                                        await Task.FromResult(false);
+                                        MessageBox.Show("Venligst vælg en fejning");
+                                        break;
+                                    }
+                            }
+                            break;
                         }
-                        break;
-                    }
-                default:
-                    {
-                        MessageBox.Show("Kunden for denne fejning er blevet slettet");
-                        break;
-                    }
+                    default:
+                        {
+                            MessageBox.Show("Kunden for denne fejning er blevet slettet");
+                            break;
+                        }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected error");
             }
         }
 
@@ -606,22 +613,29 @@ namespace GiroZilla.Views
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private async void InvoiceDeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            switch (ServiceGrid.SelectedIndex != -1)
+            try
             {
-                case true:
-                    {
-                        DeleteSelectedService(ServiceGrid.SelectedItem as DataRowView);
+                switch (ServiceGrid.SelectedIndex != -1)
+                {
+                    case true:
+                        {
+                            DeleteSelectedService(ServiceGrid.SelectedItem as DataRowView);
 
-                        SetData();
-                        await Task.FromResult(true);
-                        break;
-                    }
-                default:
-                    {
-                        await Task.FromResult(false);
-                        MessageBox.Show("Venligst vælg en fejning");
-                        break;
-                    }
+                            SetData();
+                            await Task.FromResult(true);
+                            break;
+                        }
+                    default:
+                        {
+                            await Task.FromResult(false);
+                            MessageBox.Show("Venligst vælg en fejning");
+                            break;
+                        }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected error");
             }
         }
 
@@ -648,11 +662,18 @@ namespace GiroZilla.Views
                 Log.Error(ex, "Unexpected Error");
             }
 
-            UpdateServiceData();
-            InsertInvoiceCustomerInfo(ServiceGrid.SelectedItem as DataRowView);
-            DisableCollumnsForDataGrid();
+            try
+            {
+                UpdateServiceData();
+                InsertInvoiceCustomerInfo(ServiceGrid.SelectedItem as DataRowView);
+                DisableCollumnsForDataGrid();
 
-            await Task.FromResult(true);
+                await Task.FromResult(true);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected error");
+            }
         }
 
         #endregion

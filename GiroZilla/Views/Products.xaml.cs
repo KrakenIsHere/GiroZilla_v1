@@ -222,23 +222,30 @@ namespace GiroZilla.Views
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private async void DeleteProductButton_Click(object sender, RoutedEventArgs e)
         {
-            switch (ProductGrid.SelectedIndex != -1)
+            try
             {
-                case true:
-                    {
-                        DeleteProduct(ProductGrid.SelectedItem as DataRowView);
+                switch (ProductGrid.SelectedIndex != -1)
+                {
+                    case true:
+                        {
+                            DeleteProduct(ProductGrid.SelectedItem as DataRowView);
 
-                        SetData();
+                            SetData();
 
-                        await Task.FromResult(true);
-                        break;
-                    }
-                default:
-                    {
-                        await Task.FromResult(false);
-                        MessageBox.Show("Venligst vælg et produkt");
-                        break;
-                    }
+                            await Task.FromResult(true);
+                            break;
+                        }
+                    default:
+                        {
+                            await Task.FromResult(false);
+                            MessageBox.Show("Venligst vælg et produkt");
+                            break;
+                        }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected error");
             }
         }
 
@@ -267,17 +274,24 @@ namespace GiroZilla.Views
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private async void FinalAddProduct_Click(object sender, RoutedEventArgs e)
         {
-            switch (AddNewProductData().Result)
+            try
             {
-                case true:
-                    {
-                        AddProductDialog.IsOpen = false;
+                switch (AddNewProductData().Result)
+                {
+                    case true:
+                        {
+                            AddProductDialog.IsOpen = false;
 
-                        SetData();
+                            SetData();
 
-                        await Task.FromResult(true);
-                        break;
-                    }
+                            await Task.FromResult(true);
+                            break;
+                        }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected error");
             }
         }
 
@@ -340,9 +354,16 @@ namespace GiroZilla.Views
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private async void ProductPriceTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
-            PrintHelper.FixPriceText(ProductPriceTextBox);
+            try
+            {
+                PrintHelper.FixPriceText(ProductPriceTextBox);
 
-            await Task.FromResult(true);
+                await Task.FromResult(true);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected error");
+            }
         }
 
         #endregion

@@ -984,15 +984,22 @@ namespace GiroZilla.Views
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private async void AddCounty_LostFocus(object sender, RoutedEventArgs e)
         {
-            switch (AddNewCountyData().Result)
+            try
             {
-                case true:
-                    {
-                        MessageBox.Show("Det nye Område er nu tilføjet");
-                        break;
-                    }
+                switch (AddNewCountyData().Result)
+                {
+                    case true:
+                        {
+                            MessageBox.Show("Det nye Område er nu tilføjet");
+                            break;
+                        }
+                }
+                await Task.FromResult(true);
             }
-            await Task.FromResult(true);
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected error");
+            }
         }
 
         #endregion
@@ -1293,9 +1300,16 @@ namespace GiroZilla.Views
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private async void PriceTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
-            PrintHelper.FixPriceText(PriceTextBox);
+            try
+            {
+                PrintHelper.FixPriceText(PriceTextBox);
 
-            await Task.FromResult(true);
+                await Task.FromResult(true);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected error");
+            }
         }
 
         /// <summary>
@@ -1308,10 +1322,17 @@ namespace GiroZilla.Views
         /// <param name="e">The <see cref="System.Windows.Input.TextCompositionEventArgs"/> instance containing the event data.</param>
         private async void NumbersOnly_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
-            Regex regex = new Regex("[^0-9]+");
-            e.Handled = regex.IsMatch(e.Text);
+            try
+            {
+                Regex regex = new Regex("[^0-9]+");
+                e.Handled = regex.IsMatch(e.Text);
 
-            await Task.FromResult(true);
+                await Task.FromResult(true);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected error");
+            }
         }
 
         /// <summary>
@@ -1333,30 +1354,51 @@ namespace GiroZilla.Views
 
         private void ListViewPriceTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
-            PrintHelper.CalculatePrice(ProductList, PriceTextBox);
+            try
+            {
+                PrintHelper.CalculatePrice(ProductList, PriceTextBox);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected error");
+            }
         }
 
         private void NewCustomersCity_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            switch (NewCustomersCity.SelectedIndex != -1)
+            try
             {
-                case true:
-                    {
-                        NewCustomersZipCode.SelectedIndex = NewCustomersCity.SelectedIndex;
-                        break;
-                    }
+                switch (NewCustomersCity.SelectedIndex != -1)
+                {
+                    case true:
+                        {
+                            NewCustomersZipCode.SelectedIndex = NewCustomersCity.SelectedIndex;
+                            break;
+                        }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected error");
             }
         }
 
         private void NewCustomersZipCode_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            switch (NewCustomersZipCode.SelectedIndex != -1)
+            try
             {
-                case true:
-                    {
-                        NewCustomersCity.SelectedIndex = NewCustomersZipCode.SelectedIndex;
-                        break;
-                    }
+                switch (NewCustomersZipCode.SelectedIndex != -1)
+                {
+                    case true:
+                        {
+                            NewCustomersCity.SelectedIndex = NewCustomersZipCode.SelectedIndex;
+                            break;
+                        }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected error");
             }
         }
     }

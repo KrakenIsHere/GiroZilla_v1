@@ -144,30 +144,37 @@ namespace GiroZilla.Views
 
         private async void FinalAddRoute_Click(object sender, RoutedEventArgs e)
         {
-            switch (!string.IsNullOrWhiteSpace(RouteAreaTextBox.Text) &&
-                    CustomerList.Items.Count != 0 &&
-                    CustomerList.Items.Count != -1)
+            try
             {
-                case true:
-                    {
-                        switch (AddNewRouteData().Result)
+                switch (!string.IsNullOrWhiteSpace(RouteAreaTextBox.Text) &&
+                        CustomerList.Items.Count != 0 &&
+                        CustomerList.Items.Count != -1)
+                {
+                    case true:
                         {
-                            case true:
-                                {
-                                    AddRouteDialog.IsOpen = false;
-                                    SetRouteData();
-                                    break;
-                                }
+                            switch (AddNewRouteData().Result)
+                            {
+                                case true:
+                                    {
+                                        AddRouteDialog.IsOpen = false;
+                                        SetRouteData();
+                                        break;
+                                    }
+                            }
+                            await Task.FromResult(true);
+                            break;
                         }
-                        await Task.FromResult(true);
-                        break;
-                    }
-                default:
-                    {
-                        await Task.FromResult(false);
-                        MessageBox.Show("Data mangler");
-                        break;
-                    }
+                    default:
+                        {
+                            await Task.FromResult(false);
+                            MessageBox.Show("Data mangler");
+                            break;
+                        }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected error");
             }
         }
 
@@ -472,34 +479,48 @@ namespace GiroZilla.Views
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private async void DeleteRouteButton_Click(object sender, RoutedEventArgs e)
         {
-            switch (RouteGrid.SelectedIndex != -1)
+            try
             {
-                case true:
-                    {
-                        DeleteRoute(RouteGrid.SelectedItem as DataRowView);
+                switch (RouteGrid.SelectedIndex != -1)
+                {
+                    case true:
+                        {
+                            DeleteRoute(RouteGrid.SelectedItem as DataRowView);
 
-                        SetRouteData();
-                        _customerData.Clear();
+                            SetRouteData();
+                            _customerData.Clear();
 
-                        await Task.FromResult(true);
-                        break;
-                    }
-                default:
-                    {
-                        await Task.FromResult(false);
-                        MessageBox.Show("Venligst vælg en rute");
-                        break;
-                    }
+                            await Task.FromResult(true);
+                            break;
+                        }
+                    default:
+                        {
+                            await Task.FromResult(false);
+                            MessageBox.Show("Venligst vælg en rute");
+                            break;
+                        }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected error");
             }
         }
 
         private async void ResetAddRouteDialog()
         {
-            CustomerList.Items.Clear();
-            RouteAreaTextBox.Text = "";
-            RouteMonthComboBox.SelectedIndex = -1;
+            try
+            {
+                CustomerList.Items.Clear();
+                RouteAreaTextBox.Text = "";
+                RouteMonthComboBox.SelectedIndex = -1;
 
-            await Task.FromResult(true);
+                await Task.FromResult(true);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected error");
+            }
         }
 
         #endregion
@@ -578,203 +599,224 @@ namespace GiroZilla.Views
 
         private async void SetupPrintRouteDialog(DataTable table, bool isNext = true)
         {
-            switch (isNext)
-            {
-                case true:
-                    {
-                        _routeCustomerNum++;
-                        break;
-                    }
-                case false:
-                    {
-                        _routeCustomerNum--;
-                        break;
-                    }
-            }
-
-            int year;
-
-            switch (DateTime.Now.Month == 12 && DateTime.Now.Day > 15)
-            {
-                case true:
-                    {
-                        year = DateTime.Now.Year + 1;
-                        break;
-                    }
-                default:
-                    {
-                        year = DateTime.Now.Year;
-                        break;
-                    }
-            }
-
-            var query = $"SELECT * FROM `user_services` " +
-                $"WHERE `Kunde ID` = {table.Rows[_routeCustomerNum - 1]["Kunde ID"]} AND `Aar` = {year}";
-
-            int serviceNum;
-
             try
             {
-                var dataset = await AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString");
-
-                var data = dataset.Tables[0];
-
-                serviceNum = data.Rows.Count;
-            }
-            catch(NullReferenceException)
-            {
-                serviceNum = 0;
-            }
-
-            var comment = table.Rows[_routeCustomerNum - 1]["Kommentar"].ToString();
-
-            var serviceNeeded = table.Rows[_routeCustomerNum - 1]["Fejninger"].ToString();
-
-            //Customer
-            CustomerIDTextBox.Text = table.Rows[_routeCustomerNum - 1]["Kunde ID"].ToString();
-            CustomerNameTextBox.Text = table.Rows[_routeCustomerNum - 1]["Fornavn"] + " " + table.Rows[_routeCustomerNum - 1]["Efternavn"];
-            CustomerAddressTextBox.Text = table.Rows[_routeCustomerNum - 1]["Adresse"].ToString();
-            CustomerZipCodeTextBox.Text = table.Rows[_routeCustomerNum - 1]["Postnr"].ToString();
-            CustomerCountyTextBox.Text = table.Rows[_routeCustomerNum - 1]["By"].ToString();
-            CustomerServicesTextBox.Text = serviceNeeded;
-            CustomerServiceNumTextBox.Text = (serviceNum + 1).ToString();
-            try
-            {
-                switch (!string.IsNullOrWhiteSpace(comment))
+                switch (isNext)
                 {
                     case true:
                         {
-                            CustomerCommentTextBox.Text = comment;
-                            CustomerCommentTextBox.IsEnabled = true;
-                            ContainCommentCheck.IsEnabled = true;
-
-                            switch (_customerDataList[_routeCustomerNum - 1][11] == "True")
-                            {
-                                case true:
-                                    {
-                                        ContainCommentCheck.IsChecked = true;
-                                        break;
-                                    }
-                            }
+                            _routeCustomerNum++;
+                            break;
+                        }
+                    case false:
+                        {
+                            _routeCustomerNum--;
                             break;
                         }
                 }
 
-                //Prints the list to console for debugging
-                //for (int i = 0; i < _customerDataList.Count - 1; i++)
-                //{
-                //    Console.WriteLine($"{i}/{_routeCustomerNum - 1} : " + String.Join(", ", _customerDataList[i]));
-                //}
+                int year;
+
+                switch (DateTime.Now.Month == 12 && DateTime.Now.Day > 15)
+                {
+                    case true:
+                        {
+                            year = DateTime.Now.Year + 1;
+                            break;
+                        }
+                    default:
+                        {
+                            year = DateTime.Now.Year;
+                            break;
+                        }
+                }
+
+                var query = $"SELECT * FROM `user_services` " +
+                    $"WHERE `Kunde ID` = {table.Rows[_routeCustomerNum - 1]["Kunde ID"]} AND `Aar` = {year}";
+
+                int serviceNum;
+
+                try
+                {
+                    var dataset = await AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString");
+
+                    var data = dataset.Tables[0];
+
+                    serviceNum = data.Rows.Count;
+                }
+                catch (NullReferenceException)
+                {
+                    serviceNum = 0;
+                }
+
+                var comment = table.Rows[_routeCustomerNum - 1]["Kommentar"].ToString();
+
+                var serviceNeeded = table.Rows[_routeCustomerNum - 1]["Fejninger"].ToString();
+
+                //Customer
+                CustomerIDTextBox.Text = table.Rows[_routeCustomerNum - 1]["Kunde ID"].ToString();
+                CustomerNameTextBox.Text = table.Rows[_routeCustomerNum - 1]["Fornavn"] + " " + table.Rows[_routeCustomerNum - 1]["Efternavn"];
+                CustomerAddressTextBox.Text = table.Rows[_routeCustomerNum - 1]["Adresse"].ToString();
+                CustomerZipCodeTextBox.Text = table.Rows[_routeCustomerNum - 1]["Postnr"].ToString();
+                CustomerCountyTextBox.Text = table.Rows[_routeCustomerNum - 1]["By"].ToString();
+                CustomerServicesTextBox.Text = serviceNeeded;
+                CustomerServiceNumTextBox.Text = (serviceNum + 1).ToString();
+                try
+                {
+                    switch (!string.IsNullOrWhiteSpace(comment))
+                    {
+                        case true:
+                            {
+                                CustomerCommentTextBox.Text = comment;
+                                CustomerCommentTextBox.IsEnabled = true;
+                                ContainCommentCheck.IsEnabled = true;
+
+                                switch (_customerDataList[_routeCustomerNum - 1][11] == "True")
+                                {
+                                    case true:
+                                        {
+                                            ContainCommentCheck.IsChecked = true;
+                                            break;
+                                        }
+                                }
+                                break;
+                            }
+                    }
+
+                    //Prints the list to console for debugging
+                    //for (int i = 0; i < _customerDataList.Count - 1; i++)
+                    //{
+                    //    Console.WriteLine($"{i}/{_routeCustomerNum - 1} : " + String.Join(", ", _customerDataList[i]));
+                    //}
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Unexpected Error");
+                }
+
+                var customerId = table.Rows[_routeCustomerNum - 1]["Kunde ID"].ToString();
+
+                query = int.Parse(serviceNeeded) > serviceNum
+                    ? "SELECT * FROM `customer-service-data` " +
+                        $"WHERE `customer-service-data_CUSTOMERID` = {customerId} " +
+                        "AND " +
+                        $"`customer-service-data_SERVICENUM` = {serviceNum + 1}"
+                    : "SELECT * FROM `customer-service-data` " +
+                        $"WHERE `customer-service-data_CUSTOMERID` = {customerId} " +
+                        "AND " +
+                        $"`customer-service-data_SERVICENUM` = {serviceNum}";
+
+                var serviceSet = await AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString");
+
+                if (serviceSet != null)
+                {
+
+                    var serviceData = serviceSet.Tables[0].Rows;
+
+                    //Service
+
+                    if (serviceData.Count > 0)
+                    {
+                        _didServiceDataExist = true;
+                        //Amount
+                        CustomerChimneysTextBox.Text = serviceData[0]["customer-service-data_CHIMNEYS"].ToString();
+                        CustomerPipesTextBox.Text = serviceData[0]["customer-service-data_PIPES"].ToString();
+                        CustomerKWTextBox.Text = serviceData[0]["customer-service-data_KW"].ToString();
+
+                        CustomerLightingTextBox.Text = serviceData[0]["customer-service-data_LIGHTING"].ToString();
+                        CustomerHeightTextBox.Text = serviceData[0]["customer-service-data_HEIGHT"].ToString();
+
+                        //Pipe
+                        CustomerDiaTextBox.Text = serviceData[0]["customer-service-data_DIA"].ToString();
+                        CustomerLengthTextBox.Text = serviceData[0]["customer-service-data_LENGTH"].ToString();
+
+                        CustomerTypeTextBox.Text = serviceData[0]["customer-service-data_TYPE"].ToString();
+                    }
+                }
+
+                _routeCustomerAmount = table.Rows.Count;
+
+                CustomerInfoGroupBox.Header = $"Kunde {_routeCustomerNum} / {_routeCustomerAmount}";
+                _didServiceDataChange = false;
+
+                await Task.FromResult(true);
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected Error");
+                Log.Error(ex, "Unexpected error");
             }
-
-            var customerId = table.Rows[_routeCustomerNum - 1]["Kunde ID"].ToString();
-
-            query = int.Parse(serviceNeeded) > serviceNum
-                ? "SELECT * FROM `customer-service-data` " +
-                    $"WHERE `customer-service-data_CUSTOMERID` = {customerId} " +
-                    "AND " +
-                    $"`customer-service-data_SERVICENUM` = {serviceNum + 1}"
-                : "SELECT * FROM `customer-service-data` " +
-                    $"WHERE `customer-service-data_CUSTOMERID` = {customerId} " +
-                    "AND " +
-                    $"`customer-service-data_SERVICENUM` = {serviceNum}";
-
-            var serviceSet = await AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString");
-
-            if (serviceSet != null)
-            {
-                
-                var serviceData = serviceSet.Tables[0].Rows;
-
-                //Service
-
-                if (serviceData.Count > 0)
-                {
-                    _didServiceDataExist = true;
-                    //Amount
-                    CustomerChimneysTextBox.Text = serviceData[0]["customer-service-data_CHIMNEYS"].ToString();
-                    CustomerPipesTextBox.Text = serviceData[0]["customer-service-data_PIPES"].ToString();
-                    CustomerKWTextBox.Text = serviceData[0]["customer-service-data_KW"].ToString();
-
-                    CustomerLightingTextBox.Text = serviceData[0]["customer-service-data_LIGHTING"].ToString();
-                    CustomerHeightTextBox.Text = serviceData[0]["customer-service-data_HEIGHT"].ToString();
-
-                    //Pipe
-                    CustomerDiaTextBox.Text = serviceData[0]["customer-service-data_DIA"].ToString();
-                    CustomerLengthTextBox.Text = serviceData[0]["customer-service-data_LENGTH"].ToString();
-
-                    CustomerTypeTextBox.Text = serviceData[0]["customer-service-data_TYPE"].ToString();
-                }
-            }
-
-            _routeCustomerAmount = table.Rows.Count;
-
-            CustomerInfoGroupBox.Header = $"Kunde {_routeCustomerNum} / {_routeCustomerAmount}";
-            _didServiceDataChange = false;
-
-            await Task.FromResult(true);
         }
 
         private async void AddCustomerServiceData(string[] array)
         {
-            var query = "INSERT INTO `customer-service-data` " +
-                "(" +
-                "`customer-service-data_CUSTOMERID`, " +
-                "`customer-service-data_SERVICENUM`, " +
-                "`customer-service-data_CHIMNEYS`, " +
-                "`customer-service-data_PIPES`, " +
-                "`customer-service-data_KW`, " +
-                "`customer-service-data_LIGHTING`, " +
-                "`customer-service-data_HEIGHT`, " +
-                "`customer-service-data_DIA`, " +
-                "`customer-service-data_LENGTH`, " +
-                "`customer-service-data_TYPE` " +
-                ") " +
-                "VALUES " +
-                "(" +
-                $"'{array[0]}', " +
-                $"'{int.Parse(array[1])}', " +
-                $"'{array[2]}', " +
-                $"'{array[3]}', " +
-                $"'{array[4]}', " +
-                $"'{array[5]}', " +
-                $"'{array[6]}', " +
-                $"'{array[7]}', " +
-                $"'{array[8]}', " +
-                $"'{array[9]}'" +
-                ")";
+            try
+            {
+                var query = "INSERT INTO `customer-service-data` " +
+                    "(" +
+                    "`customer-service-data_CUSTOMERID`, " +
+                    "`customer-service-data_SERVICENUM`, " +
+                    "`customer-service-data_CHIMNEYS`, " +
+                    "`customer-service-data_PIPES`, " +
+                    "`customer-service-data_KW`, " +
+                    "`customer-service-data_LIGHTING`, " +
+                    "`customer-service-data_HEIGHT`, " +
+                    "`customer-service-data_DIA`, " +
+                    "`customer-service-data_LENGTH`, " +
+                    "`customer-service-data_TYPE` " +
+                    ") " +
+                    "VALUES " +
+                    "(" +
+                    $"'{array[0]}', " +
+                    $"'{int.Parse(array[1])}', " +
+                    $"'{array[2]}', " +
+                    $"'{array[3]}', " +
+                    $"'{array[4]}', " +
+                    $"'{array[5]}', " +
+                    $"'{array[6]}', " +
+                    $"'{array[7]}', " +
+                    $"'{array[8]}', " +
+                    $"'{array[9]}'" +
+                    ")";
 
-            AsyncMySqlHelper.SetDataToDatabase(query, "ConnString").Wait();
+                AsyncMySqlHelper.SetDataToDatabase(query, "ConnString").Wait();
 
-            await Task.FromResult(true);
+                await Task.FromResult(true);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected error");
+            }
         }
 
         private async void UpdateCustomerServiceData(string[] array)
         {
-            var query = "UPDATE `customer-service-data` " +
-                "SET " +
-                $"`customer-service-data_CHIMNEYS` = '{array[2]}', " +
-                $"`customer-service-data_PIPES` = '{array[3]}', " +
-                $"`customer-service-data_KW` = '{array[4]}', " +
-                $"`customer-service-data_LIGHTING` = '{array[5]}', " +
-                $"`customer-service-data_HEIGHT` = '{array[6]}', " +
-                $"`customer-service-data_DIA` = '{array[7]}', " +
-                $"`customer-service-data_LENGTH` = '{array[8]}', " +
-                $"`customer-service-data_TYPE` = '{array[9]}' " +
-                $"WHERE " +
-                $"(" +
-                $"`customer-service-data_CUSTOMERID` = '{array[0]}' " +
-                $"AND " +
-                $"`customer-service-data_SERVICENUM` =  '{int.Parse(array[1])}'" +
-                $")";
+            try
+            {
+                var query = "UPDATE `customer-service-data` " +
+                    "SET " +
+                    $"`customer-service-data_CHIMNEYS` = '{array[2]}', " +
+                    $"`customer-service-data_PIPES` = '{array[3]}', " +
+                    $"`customer-service-data_KW` = '{array[4]}', " +
+                    $"`customer-service-data_LIGHTING` = '{array[5]}', " +
+                    $"`customer-service-data_HEIGHT` = '{array[6]}', " +
+                    $"`customer-service-data_DIA` = '{array[7]}', " +
+                    $"`customer-service-data_LENGTH` = '{array[8]}', " +
+                    $"`customer-service-data_TYPE` = '{array[9]}' " +
+                    $"WHERE " +
+                    $"(" +
+                    $"`customer-service-data_CUSTOMERID` = '{array[0]}' " +
+                    $"AND " +
+                    $"`customer-service-data_SERVICENUM` =  '{int.Parse(array[1])}'" +
+                    $")";
 
-            AsyncMySqlHelper.SetDataToDatabase(query, "ConnString").Wait();
+                AsyncMySqlHelper.SetDataToDatabase(query, "ConnString").Wait();
 
-            await Task.FromResult(true);
+                await Task.FromResult(true);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected error");
+            }
         }
 
         private async void DoNextCustomerRow(bool isFinalPrint = false)
@@ -980,78 +1022,92 @@ namespace GiroZilla.Views
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private async void PrintRouteButton_Click(object sender, RoutedEventArgs e)
         {
-            switch (RouteGrid.SelectedIndex != -1)
+            try
             {
-                case true:
-                    {
-                        var table = VariableManipulation.DataGridtoDataTable(CustomerGrid);
-                        _printRouteCustomerData = VariableManipulation.SortDataTable(table, "Opstilling");
-
-                        _routeCustomerNum = 0;
-                        _routeSelected = RouteGrid.SelectedIndex;
-
-                        DoNextCustomerRow();
-
-                        _routeCustomerNum = 0;
-
-                        _customerDataList.Clear();
-
-                        for (int i = 0; i < _printRouteCustomerData.Rows.Count; i++)
+                switch (RouteGrid.SelectedIndex != -1)
+                {
+                    case true:
                         {
-                            _customerDataList.Add(new string[12]);
+                            var table = VariableManipulation.DataGridtoDataTable(CustomerGrid);
+                            _printRouteCustomerData = VariableManipulation.SortDataTable(table, "Opstilling");
+
+                            _routeCustomerNum = 0;
+                            _routeSelected = RouteGrid.SelectedIndex;
+
+                            DoNextCustomerRow();
+
+                            _routeCustomerNum = 0;
+
+                            _customerDataList.Clear();
+
+                            for (int i = 0; i < _printRouteCustomerData.Rows.Count; i++)
+                            {
+                                _customerDataList.Add(new string[12]);
+                            }
+
+                            SetupPrintRouteDialog(_printRouteCustomerData);
+                            PrintRouteDialog.IsOpen = true;
+
+                            switch (_printRouteCustomerData.Rows.Count > 1)
+                            {
+                                case true:
+                                    {
+                                        FinalPrintRoute.IsEnabled = false;
+                                        NextPrintRoute.IsEnabled = true;
+                                        break;
+                                    }
+                                default:
+                                    {
+                                        FinalPrintRoute.IsEnabled = true;
+                                        NextPrintRoute.IsEnabled = false;
+                                        break;
+                                    }
+
+                            }
+                            await Task.FromResult(true);
+                            break;
                         }
-
-                        SetupPrintRouteDialog(_printRouteCustomerData);
-                        PrintRouteDialog.IsOpen = true;
-
-                        switch (_printRouteCustomerData.Rows.Count > 1)
+                    default:
                         {
-                            case true:
-                                {
-                                    FinalPrintRoute.IsEnabled = false;
-                                    NextPrintRoute.IsEnabled = true;
-                                    break;
-                                }
-                            default:
-                                {
-                                    FinalPrintRoute.IsEnabled = true;
-                                    NextPrintRoute.IsEnabled = false;
-                                    break;
-                                }
-
+                            await Task.FromResult(false);
+                            MessageBox.Show("Venligst vælg en rute");
+                            break;
                         }
-                        await Task.FromResult(true);
-                        break;
-                    }
-                default:
-                    {
-                        await Task.FromResult(false);
-                        MessageBox.Show("Venligst vælg en rute");
-                        break;
-                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected error");
             }
         }
 
         private async void FinalPrintRoute_Click(object sender, RoutedEventArgs e)
         {
-            var table = VariableManipulation.DataGridtoDataTable(RouteGrid);
+            try
+            {
+                var table = VariableManipulation.DataGridtoDataTable(RouteGrid);
 
-            DoNextCustomerRow(true);
+                DoNextCustomerRow(true);
 
-            PrintHelper.SetupRoutePrint(
-                _customerData, 
-                table.Rows[_routeSelected]["Maaned"].ToString(), 
-                table.Rows[_routeSelected]["Aar"].ToString(), 
-                _customerDataList, 
-                table.Rows[_routeSelected]["Navn"].ToString() 
-                );
+                PrintHelper.SetupRoutePrint(
+                    _customerData,
+                    table.Rows[_routeSelected]["Maaned"].ToString(),
+                    table.Rows[_routeSelected]["Aar"].ToString(),
+                    _customerDataList,
+                    table.Rows[_routeSelected]["Navn"].ToString()
+                    );
 
-            UpdateRouteData();
+                UpdateRouteData();
 
-            PrintRouteDialog.IsOpen = false;
-            Log.Information($"Successfully printed route {table.Rows[_routeSelected]["Navn"].ToString()}");
-            table.Dispose();
-            await Task.FromResult(true);
+                PrintRouteDialog.IsOpen = false;
+                Log.Information($"Successfully printed route {table.Rows[_routeSelected]["Navn"].ToString()}");
+                table.Dispose();
+                await Task.FromResult(true);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected error");
+            }
         }
 
         private async void CancelPrintRoute_Click(object sender, RoutedEventArgs e)
@@ -1074,25 +1130,32 @@ namespace GiroZilla.Views
 
         private async void EditRouteButton_Click(object sender, RoutedEventArgs e)
         {
-            switch (RouteGrid.SelectedIndex != -1)
+            try
             {
-                case true:
-                    {
-                        ClearAddEditCustomerDialog();
+                switch (RouteGrid.SelectedIndex != -1)
+                {
+                    case true:
+                        {
+                            ClearAddEditCustomerDialog();
 
-                        AddEditCustomersToDataGrid();
+                            AddEditCustomersToDataGrid();
 
-                        EditRouteDialog.IsOpen = true;
+                            EditRouteDialog.IsOpen = true;
 
-                        await Task.FromResult(true);
-                        break;
-                    }
-                default:
-                    {
-                        await Task.FromResult(false);
-                        MessageBox.Show("Venligst vælg en rute");
-                        break;
-                    }
+                            await Task.FromResult(true);
+                            break;
+                        }
+                    default:
+                        {
+                            await Task.FromResult(false);
+                            MessageBox.Show("Venligst vælg en rute");
+                            break;
+                        }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected error");
             }
         }
 
@@ -1320,29 +1383,36 @@ namespace GiroZilla.Views
 
         private async void FinalEditRoute_Click(object sender, RoutedEventArgs e)
         {
-            switch (EditCustomerList.Items.Count != 0 &&
-                EditCustomerList.Items.Count != -1)
+            try
             {
-                case true:
-                    {
-                        switch (AddNewRouteCustomerData().Result)
+                switch (EditCustomerList.Items.Count != 0 &&
+                    EditCustomerList.Items.Count != -1)
+                {
+                    case true:
                         {
-                            case true:
-                                {
-                                    EditRouteDialog.IsOpen = false;
-                                    SetCustomerData(RouteGrid.SelectedItem as DataRowView);
-                                    break;
-                                }
+                            switch (AddNewRouteCustomerData().Result)
+                            {
+                                case true:
+                                    {
+                                        EditRouteDialog.IsOpen = false;
+                                        SetCustomerData(RouteGrid.SelectedItem as DataRowView);
+                                        break;
+                                    }
+                            }
+                            await Task.FromResult(true);
+                            break;
                         }
-                        await Task.FromResult(true);
-                        break;
-                    }
-                default:
-                    {
-                        await Task.FromResult(false);
-                        MessageBox.Show("Data mangler");
-                        break;
-                    }
+                    default:
+                        {
+                            await Task.FromResult(false);
+                            MessageBox.Show("Data mangler");
+                            break;
+                        }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected error");
             }
         }
 
@@ -1355,21 +1425,28 @@ namespace GiroZilla.Views
 
         private async void DeleteRouteCustomerButton_Click(object sender, RoutedEventArgs e)
         {
-            switch (CustomerGrid.SelectedIndex != -1)
+            try
             {
-                case true:
-                    {
-                        DeleteRouteCustomer(CustomerGrid.SelectedItem as DataRowView);
+                switch (CustomerGrid.SelectedIndex != -1)
+                {
+                    case true:
+                        {
+                            DeleteRouteCustomer(CustomerGrid.SelectedItem as DataRowView);
 
-                        await Task.FromResult(true);
-                        break;
-                    }
-                default:
-                    {
-                        await Task.FromResult(false);
-                        MessageBox.Show("Venligst vælg en kunde");
-                        break;
-                    }
+                            await Task.FromResult(true);
+                            break;
+                        }
+                    default:
+                        {
+                            await Task.FromResult(false);
+                            MessageBox.Show("Venligst vælg en kunde");
+                            break;
+                        }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected error");
             }
         }
 
@@ -1575,17 +1652,24 @@ namespace GiroZilla.Views
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private async void FinalAddCounty_Click(object sender, RoutedEventArgs e)
         {
-            switch (AddNewCountyData().Result)
+            try
             {
-                case true:
-                    {
-                        AddCountyDialog.IsOpen = false;
+                switch (AddNewCountyData().Result)
+                {
+                    case true:
+                        {
+                            AddCountyDialog.IsOpen = false;
 
-                        SetCityData();
+                            SetCityData();
 
-                        await Task.FromResult(true);
-                        break;
-                    }
+                            await Task.FromResult(true);
+                            break;
+                        }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected error");
             }
         }
 
@@ -1599,24 +1683,31 @@ namespace GiroZilla.Views
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private async void DeleteCountyButton_Click(object sender, RoutedEventArgs e)
         {
-            switch (CityGrid.SelectedIndex != -1)
+            try
             {
-                case true:
-                    {
-                        DeleteCounty(CityGrid.SelectedItem as DataRowView);
-                        AddCountyDialog.IsOpen = false;
+                switch (CityGrid.SelectedIndex != -1)
+                {
+                    case true:
+                        {
+                            DeleteCounty(CityGrid.SelectedItem as DataRowView);
+                            AddCountyDialog.IsOpen = false;
 
-                        SetCityData();
+                            SetCityData();
 
-                        await Task.FromResult(true);
-                        break;
-                    }
-                default:
-                    {
-                        await Task.FromResult(false);
-                        MessageBox.Show("Venligst vælg et Område");
-                        break;
-                    }
+                            await Task.FromResult(true);
+                            break;
+                        }
+                    default:
+                        {
+                            await Task.FromResult(false);
+                            MessageBox.Show("Venligst vælg et Område");
+                            break;
+                        }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected error");
             }
         }
 
@@ -1937,15 +2028,22 @@ namespace GiroZilla.Views
 
         private async void SetCollumnsInput()
         {
-            Area1TextBox.Text = _monthPrintList[_areaNum - 1][0];
-            Collumn1Row1TextBox.Text = _monthPrintList[_areaNum - 1][1];
-            Collumn2Row1TextBox.Text = _monthPrintList[_areaNum - 1][2];
-            Collumn3Row1TextBox.Text = _monthPrintList[_areaNum - 1][3];
-            Collumn4Row1TextBox.Text = _monthPrintList[_areaNum - 1][4];
-            Collumn5Row1TextBox.Text = _monthPrintList[_areaNum - 1][5];
-            Collumn6Row1TextBox.Text = _monthPrintList[_areaNum - 1][6];
+            try
+            {
+                Area1TextBox.Text = _monthPrintList[_areaNum - 1][0];
+                Collumn1Row1TextBox.Text = _monthPrintList[_areaNum - 1][1];
+                Collumn2Row1TextBox.Text = _monthPrintList[_areaNum - 1][2];
+                Collumn3Row1TextBox.Text = _monthPrintList[_areaNum - 1][3];
+                Collumn4Row1TextBox.Text = _monthPrintList[_areaNum - 1][4];
+                Collumn5Row1TextBox.Text = _monthPrintList[_areaNum - 1][5];
+                Collumn6Row1TextBox.Text = _monthPrintList[_areaNum - 1][6];
 
-            await Task.FromResult(true);
+                await Task.FromResult(true);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected error");
+            }
         }
 
         private async void ResetCollumnsInput()
@@ -1963,40 +2061,47 @@ namespace GiroZilla.Views
 
         private async void PrintMonthSheatButton_Click(object sender, RoutedEventArgs e)
         {
-            ResetCollumnsInput();
-
-            _areaNum = 1;
-            AreaAmount = int.Parse(MonthPrintValue.Value.ToString());
-
-            MonthsArea.Header = $"Område {_areaNum} / {AreaAmount}";
-
-            switch (!(AreaAmount <= 1))
+            try
             {
-                case true:
-                    {
-                        FinalPrintSheat.IsEnabled = false;
-                        NextPrintSheat.IsEnabled = true;
-                        break;
-                    }
-                default:
-                    {
-                        FinalPrintSheat.IsEnabled = true;
-                        NextPrintSheat.IsEnabled = false;
-                        break;
-                    }
+                ResetCollumnsInput();
+
+                _areaNum = 1;
+                AreaAmount = int.Parse(MonthPrintValue.Value.ToString());
+
+                MonthsArea.Header = $"Område {_areaNum} / {AreaAmount}";
+
+                switch (!(AreaAmount <= 1))
+                {
+                    case true:
+                        {
+                            FinalPrintSheat.IsEnabled = false;
+                            NextPrintSheat.IsEnabled = true;
+                            break;
+                        }
+                    default:
+                        {
+                            FinalPrintSheat.IsEnabled = true;
+                            NextPrintSheat.IsEnabled = false;
+                            break;
+                        }
+                }
+
+                _monthPrintList.Clear();
+
+                for (var i = 0; i < AreaAmount; i++)
+                {
+                    _monthPrintList.Add(GetMonthPrintValues().Result);
+                }
+
+                MonthSheatYear.Value = DateTime.Now.Year;
+
+                PrintMonthDialog.IsOpen = true;
+                await Task.FromResult(true);
             }
-
-            _monthPrintList.Clear();
-
-            for (var i = 0; i < AreaAmount; i++)
+            catch (Exception ex)
             {
-                _monthPrintList.Add(GetMonthPrintValues().Result);
+                Log.Error(ex, "Unexpected error");
             }
-
-            MonthSheatYear.Value = DateTime.Now.Year;
-
-            PrintMonthDialog.IsOpen = true;
-            await Task.FromResult(true);
         }
 
         private async void CancelPrintSheat_Click(object sender, RoutedEventArgs e)

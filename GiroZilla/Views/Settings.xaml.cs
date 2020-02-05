@@ -231,9 +231,16 @@ namespace GiroZilla.Views
 
         private async void OverrideLicenseButton_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow.mainWindow.OpenLicenseDialog();
+            try
+            {
+                MainWindow.mainWindow.OpenLicenseDialog();
 
-            await Task.FromResult(true);
+                await Task.FromResult(true);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected error");
+            }
         }
 
         #endregion
@@ -257,27 +264,34 @@ namespace GiroZilla.Views
         /// <summary>Gets the and insert giro setup from user settings.</summary>
         private async void GetAndInsertGiroSettings()
         {
-            var creditor = PropertiesExtension.Get<string>("CreditorNum");
-            var invoice = PropertiesExtension.Get<string>("LastInvoiceNum");
-            var address = PropertiesExtension.Get<string>("AddressLine");
-            var reg = PropertiesExtension.Get<string>("Regnr");
-            var account = PropertiesExtension.Get<string>("Accountnr");
-            var message = PropertiesExtension.Get<string>("InvoiceMessage");
+            try
+            {
+                var creditor = PropertiesExtension.Get<string>("CreditorNum");
+                var invoice = PropertiesExtension.Get<string>("LastInvoiceNum");
+                var address = PropertiesExtension.Get<string>("AddressLine");
+                var reg = PropertiesExtension.Get<string>("Regnr");
+                var account = PropertiesExtension.Get<string>("Accountnr");
+                var message = PropertiesExtension.Get<string>("InvoiceMessage");
 
-            var company = address.Split('+')[0];
-            var road = address.Split('+')[1];
-            var zip = address.Split('+')[2];
+                var company = address.Split('+')[0];
+                var road = address.Split('+')[1];
+                var zip = address.Split('+')[2];
 
-            CreditorNumTextBox.Text = creditor;
-            InvoiceNumTextBox.Text = invoice;
-            CompanyNameTextBox.Text = company;
-            AddressLineTextBox.Text = road;
-            ZipCodeAndCityTextBox.Text = zip;
-            RegNumTextBox.Text = reg;
-            AccountNumTextBox.Text = account;
-            InvoiceMessageTextBox.Text = message.Replace("+","\n");
+                CreditorNumTextBox.Text = creditor;
+                InvoiceNumTextBox.Text = invoice;
+                CompanyNameTextBox.Text = company;
+                AddressLineTextBox.Text = road;
+                ZipCodeAndCityTextBox.Text = zip;
+                RegNumTextBox.Text = reg;
+                AccountNumTextBox.Text = account;
+                InvoiceMessageTextBox.Text = message.Replace("+", "\n");
 
-            await Task.FromResult(true);
+                await Task.FromResult(true);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected error");
+            }
         }
 
         private static async Task<string> InvoiceMessageFormat(string input)
@@ -320,40 +334,54 @@ namespace GiroZilla.Views
 
         private async void ClearLogs_OnClick(object sender, RoutedEventArgs e)
         {
-            var currentLog = "GiroZilla_" + DateTime.Today.ToString("yyyyMMdd") + ".log";
-            var info = new DirectoryInfo(PropertiesExtension.Get<string>("LogsPath"));
-
-            foreach (var file in info.GetFiles())
+            try
             {
-                if (file.Name == currentLog) continue;
-                file.Delete();
-            }
-
-            await Task.FromResult(true);
-            Log.Information("Logs was cleared");
-        }
-
-        private async void LogsPathBrowse_OnClick(object sender, RoutedEventArgs e)
-        {
-            var currentLog = "GiroZilla_" + DateTime.Today.ToString("yyyyMMdd") + ".log";
-            var info = new DirectoryInfo(PropertiesExtension.Get<string>("LogsPath"));
-
-            using (var fd = new FolderBrowserDialog())
-            {
-                var result = fd.ShowDialog();
-
-                if (result != DialogResult.OK || string.IsNullOrWhiteSpace(fd.SelectedPath)) return;
+                var currentLog = "GiroZilla_" + DateTime.Today.ToString("yyyyMMdd") + ".log";
+                var info = new DirectoryInfo(PropertiesExtension.Get<string>("LogsPath"));
 
                 foreach (var file in info.GetFiles())
                 {
                     if (file.Name == currentLog) continue;
-                    File.Move(file.FullName, fd.SelectedPath + "/" + file.Name);
+                    file.Delete();
                 }
-                
-                LogsPath.Text = fd.SelectedPath;
-                PropertiesExtension.Set("LogsPath", fd.SelectedPath);
+
+                await Task.FromResult(true);
+                Log.Information("Logs was cleared");
             }
-            await Task.FromResult(true);
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected error");
+            }
+        }
+
+        private async void LogsPathBrowse_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var currentLog = "GiroZilla_" + DateTime.Today.ToString("yyyyMMdd") + ".log";
+                var info = new DirectoryInfo(PropertiesExtension.Get<string>("LogsPath"));
+
+                using (var fd = new FolderBrowserDialog())
+                {
+                    var result = fd.ShowDialog();
+
+                    if (result != DialogResult.OK || string.IsNullOrWhiteSpace(fd.SelectedPath)) return;
+
+                    foreach (var file in info.GetFiles())
+                    {
+                        if (file.Name == currentLog) continue;
+                        File.Move(file.FullName, fd.SelectedPath + "/" + file.Name);
+                    }
+
+                    LogsPath.Text = fd.SelectedPath;
+                    PropertiesExtension.Set("LogsPath", fd.SelectedPath);
+                }
+                await Task.FromResult(true);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected error");
+            }
         }
         #endregion
 
@@ -364,42 +392,49 @@ namespace GiroZilla.Views
 
         private void SetNewLogo()
         {
-            var imageDialog = FileSystemHelper.imageFileDialog;
-
-            imageDialog.FileName = "Vælg en fil";
-            imageDialog.Filter = "Billed filer (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png";
-            imageDialog.Title = "Åben et billed";
-
-            switch (imageDialog.ShowDialog() == DialogResult.OK)
+            try
             {
-                case true:
-                    {
-                        List<string> pathArray = new List<string>();
-                        pathArray.AddRange(imageDialog.FileName.Split((char)92)); //(char)92 = \
-                        var fileName = pathArray[pathArray.Count - 1];
+                var imageDialog = FileSystemHelper.imageFileDialog;
 
-                        pathArray.RemoveAt(pathArray.Count - 1);
+                imageDialog.FileName = "Vælg en fil";
+                imageDialog.Filter = "Billed filer (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png";
+                imageDialog.Title = "Åben et billed";
 
-                        var path = String.Join(@"\", pathArray.ToArray());
-                        var logo = FileSystemHelper.GetImageFile(path + @"\", fileName);
-
-                        switch(logo.Width > 1725 || logo.Height > 230)
+                switch (imageDialog.ShowDialog() == DialogResult.OK)
+                {
+                    case true:
                         {
-                            case true:
-                                {
-                                    System.Windows.MessageBox.Show("Billed for stort\nMax H: 230 Pixels\nMax B: 1725 Pixels");
-                                    LogoErrorLabel.Content = "Størrelses fejl";
-                                    break;
-                                }
-                            default:
-                                {
-                                    FileSystemHelper.CreateImage($@"{Environment.CurrentDirectory}\Assets\Company\Logo.png", logo);
-                                    LogoErrorLabel.Content = "Logo tilføjet";
-                                    break;
-                                }
+                            List<string> pathArray = new List<string>();
+                            pathArray.AddRange(imageDialog.FileName.Split((char)92)); //(char)92 = \
+                            var fileName = pathArray[pathArray.Count - 1];
+
+                            pathArray.RemoveAt(pathArray.Count - 1);
+
+                            var path = String.Join(@"\", pathArray.ToArray());
+                            var logo = FileSystemHelper.GetImageFile(path + @"\", fileName);
+
+                            switch (logo.Width > 1725 || logo.Height > 230)
+                            {
+                                case true:
+                                    {
+                                        System.Windows.MessageBox.Show("Billed for stort\nMax H: 230 Pixels\nMax B: 1725 Pixels");
+                                        LogoErrorLabel.Content = "Størrelses fejl";
+                                        break;
+                                    }
+                                default:
+                                    {
+                                        FileSystemHelper.CreateImage($@"{Environment.CurrentDirectory}\Assets\Company\Logo.png", logo);
+                                        LogoErrorLabel.Content = "Logo tilføjet";
+                                        break;
+                                    }
+                            }
+                            break;
                         }
-                        break;
-                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected error");
             }
         }
     }
