@@ -187,17 +187,22 @@ namespace GiroZilla.Views
                         LicenseValueTotalUses.Text = row["License_USES"].ToString();
                         LicenseValueUsesLeft.Text = (int.Parse(row["License_USES"].ToString()) - int.Parse(row["License_USED"].ToString())).ToString();
 
-                        if (!string.IsNullOrWhiteSpace(row["License_MOBILE"].ToString()))
+                        switch (!string.IsNullOrWhiteSpace(row["License_MOBILE"].ToString()))
                         {
-                            MobileLicenseValue.Text = row["License_MOBILE"].ToString();
-                            MobileLicenseValueTotalUses.Text = row["License_MUSES"].ToString();
-                            MobileLicenseValueUsesLeft.Text = (int.Parse(row["License_MUSES"].ToString()) - int.Parse(row["License_MUSED"].ToString())).ToString();
-                        }
-                        else
-                        {
-                            MobileLicenseValue.Text = "Ingen";
-                            MobileLicenseValueTotalUses.Text = "Ingen";
-                            MobileLicenseValueUsesLeft.Text = "Ingen";
+                            case true:
+                                {
+                                    MobileLicenseValue.Text = row["License_MOBILE"].ToString();
+                                    MobileLicenseValueTotalUses.Text = row["License_MUSES"].ToString();
+                                    MobileLicenseValueUsesLeft.Text = (int.Parse(row["License_MUSES"].ToString()) - int.Parse(row["License_MUSED"].ToString())).ToString();
+                                    break;
+                                }
+                            default:
+                                {
+                                    MobileLicenseValue.Text = "Ingen";
+                                    MobileLicenseValueTotalUses.Text = "Ingen";
+                                    MobileLicenseValueUsesLeft.Text = "Ingen";
+                                    break;
+                                }
                         }
                     }
                 }

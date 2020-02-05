@@ -26,7 +26,13 @@ namespace GiroZilla.Views.Controls
         {
             var pdfDrawer = (PdfViewer)d;
 
-            if (string.IsNullOrEmpty(pdfDrawer.PdfPath)) return;
+            switch (string.IsNullOrEmpty(pdfDrawer.PdfPath))
+            {
+                case true:
+                    {
+                        return;
+                    }
+            }
 
             //making sure it's an absolute path
             var path = Path.GetFullPath(pdfDrawer.PdfPath);
@@ -50,7 +56,13 @@ namespace GiroZilla.Views.Controls
             var items = pdfViewer.PagesContainer.Items;
             items.Clear();
 
-            if (pdfDoc == null) return;
+            switch (pdfDoc == null)
+            {
+                case true:
+                    {
+                        return;
+                    }
+            }
 
             for (uint i = 0; i < pdfDoc.PageCount; i++)
             {

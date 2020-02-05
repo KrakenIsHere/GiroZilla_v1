@@ -278,9 +278,12 @@ namespace GiroZilla.Views
                     $"'{RouteYearTextBox.Text}' " +
                     $");";
 
-                if (!AsyncMySqlHelper.SetDataToDatabase(query, "ConnString").Result)
+                switch (!AsyncMySqlHelper.SetDataToDatabase(query, "ConnString").Result)
                 {
-                    throw new Exception("Unable to post new Route to database under at AddNewRouteData() Routes.xaml.cs");
+                    case true:
+                        {
+                            throw new Exception("Unable to post new Route to database under at AddNewRouteData() Routes.xaml.cs");
+                        }
                 }
 
                 //Gets all saved routes from a database
@@ -460,18 +463,24 @@ namespace GiroZilla.Views
                 // Displays the MessageBox.
                 var result = MessageBox.Show(message, caption, buttons);
 
-                if (result != MessageBoxResult.Yes) return;
-                var query = $"DELETE FROM `girozilla`.`route-customers` WHERE `Route-Customer_ROUTEID` = {row.Row.ItemArray[0]}";
+                switch (result == MessageBoxResult.Yes)
+                {
+                    case true:
+                        {
+                            var query = $"DELETE FROM `girozilla`.`route-customers` WHERE `Route-Customer_ROUTEID` = {row.Row.ItemArray[0]}";
 
-                AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
+                            AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
 
-                query = $"DELETE FROM `girozilla`.`routes` WHERE `Route_ID` = {row.Row.ItemArray[0]}";
+                            query = $"DELETE FROM `girozilla`.`routes` WHERE `Route_ID` = {row.Row.ItemArray[0]}";
 
-                AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
+                            AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
 
-                MessageBox.Show($"Rute nr:{row.Row.ItemArray[0]} er nu slettet");
+                            MessageBox.Show($"Rute nr:{row.Row.ItemArray[0]} er nu slettet");
 
-                Log.Information($"Successfully deleted route # {row.Row.ItemArray[0].ToString()}");
+                            Log.Information($"Successfully deleted route # {row.Row.ItemArray[0].ToString()}");
+                            break;
+                        }
+                }
 
                 await Task.FromResult(true);
             }
@@ -622,24 +631,28 @@ namespace GiroZilla.Views
 
         private async void ResetPrintRouteDialog(bool buttonClick = false)
         {
-            if (!buttonClick)
+            switch (!buttonClick)
             {
-                _didServiceDataExist = false;
-                _didServiceDataChange = false;
+                case true:
+                    {
+                        _didServiceDataExist = false;
+                        _didServiceDataChange = false;
 
-                //Customer
-                CustomerIDTextBox.Text = "";
-                CustomerNameTextBox.Text = "";
-                CustomerAddressTextBox.Text = "";
-                CustomerZipCodeTextBox.Text = "";
-                CustomerCountyTextBox.Text = "";
-                CustomerServicesTextBox.Text = "";
-                CustomerServiceNumTextBox.Text = "";
+                        //Customer
+                        CustomerIDTextBox.Text = "";
+                        CustomerNameTextBox.Text = "";
+                        CustomerAddressTextBox.Text = "";
+                        CustomerZipCodeTextBox.Text = "";
+                        CustomerCountyTextBox.Text = "";
+                        CustomerServicesTextBox.Text = "";
+                        CustomerServiceNumTextBox.Text = "";
 
-                CustomerCommentTextBox.Text = "";
-                CustomerCommentTextBox.IsEnabled = false;
-                ContainCommentCheck.IsChecked = false;
-                ContainCommentCheck.IsEnabled = false;
+                        CustomerCommentTextBox.Text = "";
+                        CustomerCommentTextBox.IsEnabled = false;
+                        ContainCommentCheck.IsChecked = false;
+                        ContainCommentCheck.IsEnabled = false;
+                        break;
+                    }
             }
 
             //Service
@@ -771,30 +784,38 @@ namespace GiroZilla.Views
 
                 var serviceSet = await AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString");
 
-                if (serviceSet != null)
+                switch (serviceSet != null)
                 {
+                    case true:
+                        {
 
-                    var serviceData = serviceSet.Tables[0].Rows;
+                            var serviceData = serviceSet.Tables[0].Rows;
 
-                    //Service
+                            //Service
 
-                    if (serviceData.Count > 0)
-                    {
-                        _didServiceDataExist = true;
-                        //Amount
-                        CustomerChimneysTextBox.Text = serviceData[0]["customer-service-data_CHIMNEYS"].ToString();
-                        CustomerPipesTextBox.Text = serviceData[0]["customer-service-data_PIPES"].ToString();
-                        CustomerKWTextBox.Text = serviceData[0]["customer-service-data_KW"].ToString();
+                            switch (serviceData.Count > 0)
+                            {
+                                case true:
+                                    {
+                                        _didServiceDataExist = true;
+                                        //Amount
+                                        CustomerChimneysTextBox.Text = serviceData[0]["customer-service-data_CHIMNEYS"].ToString();
+                                        CustomerPipesTextBox.Text = serviceData[0]["customer-service-data_PIPES"].ToString();
+                                        CustomerKWTextBox.Text = serviceData[0]["customer-service-data_KW"].ToString();
 
-                        CustomerLightingTextBox.Text = serviceData[0]["customer-service-data_LIGHTING"].ToString();
-                        CustomerHeightTextBox.Text = serviceData[0]["customer-service-data_HEIGHT"].ToString();
+                                        CustomerLightingTextBox.Text = serviceData[0]["customer-service-data_LIGHTING"].ToString();
+                                        CustomerHeightTextBox.Text = serviceData[0]["customer-service-data_HEIGHT"].ToString();
 
-                        //Pipe
-                        CustomerDiaTextBox.Text = serviceData[0]["customer-service-data_DIA"].ToString();
-                        CustomerLengthTextBox.Text = serviceData[0]["customer-service-data_LENGTH"].ToString();
+                                        //Pipe
+                                        CustomerDiaTextBox.Text = serviceData[0]["customer-service-data_DIA"].ToString();
+                                        CustomerLengthTextBox.Text = serviceData[0]["customer-service-data_LENGTH"].ToString();
 
-                        CustomerTypeTextBox.Text = serviceData[0]["customer-service-data_TYPE"].ToString();
-                    }
+                                        CustomerTypeTextBox.Text = serviceData[0]["customer-service-data_TYPE"].ToString();
+                                        break;
+                                    }
+                            }
+                            break;
+                        }
                 }
 
                 _routeCustomerAmount = table.Rows.Count;
@@ -1050,6 +1071,7 @@ namespace GiroZilla.Views
 
             try
             {
+                //Must be an IF
                 if (!(sender is TextBox textBox) || textBox.Text.Length <= 0) return;
 
                 TextBoxExtrasHelper.FixedLineLength(5, textBox);
@@ -1587,21 +1609,26 @@ namespace GiroZilla.Views
 
                 // Displays the MessageBox.
                 result = MessageBox.Show(message, caption, buttons);
-                if (result != MessageBoxResult.Yes) return;
+                switch (result == MessageBoxResult.Yes)
+                {
+                    case true:
+                        {
+                            var query = $"" +
+                                        $"DELETE FROM `girozilla`.`route-customers` " +
+                                        $"WHERE " +
+                                        $"`Route-Customer_ROUTEID` = {row.Row["Rute ID"]} " +
+                                        $"AND " +
+                                        $"`Route-Customer_CUSTOMERID` = {row.Row["Kunde ID"]}";
 
-                var query = $"" +
-                            $"DELETE FROM `girozilla`.`route-customers` " +
-                            $"WHERE " +
-                            $"`Route-Customer_ROUTEID` = {row.Row["Rute ID"]} " +
-                            $"AND " +
-                            $"`Route-Customer_CUSTOMERID` = {row.Row["Kunde ID"]}";
+                            AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
 
-                AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
+                            MessageBox.Show($"Rute kunde nr:{row.Row["Kunde ID"]} fra rute nr:{row.Row["Rute ID"]} er nu slettet");
 
-                MessageBox.Show($"Rute kunde nr:{row.Row["Kunde ID"]} fra rute nr:{row.Row["Rute ID"]} er nu slettet");
-
-                SetCustomerData(RouteGrid.SelectedItem as DataRowView);
-                Log.Information($"Successfully deleted customer {row.Row["Kunde ID"]} from route {row.Row["Rute ID"]}");
+                            SetCustomerData(RouteGrid.SelectedItem as DataRowView);
+                            Log.Information($"Successfully deleted customer {row.Row["Kunde ID"]} from route {row.Row["Rute ID"]}");
+                            break;
+                        }
+                }
                 await Task.FromResult(true);
             }
             catch (Exception ex)
@@ -1713,15 +1740,20 @@ namespace GiroZilla.Views
 
                 // Displays the MessageBox.
                 result = MessageBox.Show(message, caption, buttons);
-                if (result != MessageBoxResult.Yes) return;
+                switch (result == MessageBoxResult.Yes)
+                {
+                    case true:
+                        {
+                            var query = $"DELETE FROM `girozilla`.`cities` WHERE `City_ZIP` = {row.Row.ItemArray[0]}";
 
-                var query = $"DELETE FROM `girozilla`.`cities` WHERE `City_ZIP` = {row.Row.ItemArray[0]}";
+                            AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
 
-                AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
+                            MessageBox.Show($"Byer med postnummer: {row.Row.ItemArray[0]} er nu slettet");
 
-                MessageBox.Show($"Byer med postnummer: {row.Row.ItemArray[0]} er nu slettet");
-
-                Log.Information($"Successfully deleted city #{row.Row.ItemArray[0].ToString()}");
+                            Log.Information($"Successfully deleted city #{row.Row.ItemArray[0].ToString()}");
+                            break;
+                        }
+                }
                 await Task.FromResult(true);
             }
             catch (Exception ex)
@@ -1972,6 +2004,7 @@ namespace GiroZilla.Views
                 int i = 0;
                 foreach (DataGridColumn column in grid.Columns)
                 {
+                    //Must be an IF
                     if (column.IsReadOnly)
                     {
                         break;
@@ -2033,11 +2066,15 @@ namespace GiroZilla.Views
         {
             try
             {
-                if (RouteGrid.ItemsSource == null) return;
-
-                RouteGrid.Columns[0].IsReadOnly = true;
-                RouteGrid.Columns[2].IsReadOnly = true;
-
+                switch (RouteGrid.ItemsSource != null)
+                {
+                    case true:
+                        {
+                            RouteGrid.Columns[0].IsReadOnly = true;
+                            RouteGrid.Columns[2].IsReadOnly = true;
+                            break;
+                        }
+                }
                 await Task.FromResult(true);
             }
             catch (Exception ex)
