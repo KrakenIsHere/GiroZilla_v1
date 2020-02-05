@@ -127,7 +127,7 @@
                         Margin="0,0,6,0"
                         VerticalAlignment="Top"
                         HorizontalAlignment="Right"
-                        Content="Slet Kunde"
+                        Content="Slet Kunde(r)"
                         IsEnabled="True"/>
                 </StackPanel>
             </GroupBox>
