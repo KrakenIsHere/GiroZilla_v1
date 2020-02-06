@@ -162,7 +162,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Something went wrong setting the data for the CustomerGrid");
+                Log.Warning(ex, "Something went wrong setting the data for the CustomerGrid");
             }
         }
 
@@ -991,8 +991,6 @@ namespace GiroZilla.Views
                                         System.Windows.MessageBoxButton buttons = System.Windows.MessageBoxButton.YesNo;
                                         System.Windows.MessageBoxResult result = System.Windows.MessageBoxResult.Yes;
 
-                                        Console.WriteLine(NewCustomersCity.SelectedIndex + " : " + NewCustomersZipCode.SelectedIndex);
-
                                         // Displays the MessageBox.
                                         result = MessageBox.Show(message, caption, buttons);
 
@@ -1410,8 +1408,6 @@ namespace GiroZilla.Views
             await Task.FromResult(true);
         }
 
-        #endregion
-
         private void ListViewPriceTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             try
@@ -1461,5 +1457,7 @@ namespace GiroZilla.Views
                 Log.Error(ex, "Unexpected Error");
             }
         }
+
+        #endregion
     }
 }

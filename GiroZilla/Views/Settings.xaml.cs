@@ -251,6 +251,7 @@ namespace GiroZilla.Views
         #endregion
 
         #region Giro & Invoice Settings
+
         /// <summary>
         ///   <para>
         ///  Handles the Click event of the SaveInvoiceSettingsButton control.
@@ -328,6 +329,60 @@ namespace GiroZilla.Views
                 GiroErrorLabel.Content = "Kunne ikke gemme ændringer";
             }
         }
+
+        private void SetLogoButton_Click(object sender, RoutedEventArgs e)
+        {
+            SetNewLogo();
+        }
+
+        private void SetNewLogo()
+        {
+            try
+            {
+                var imageDialog = FileSystemHelper.imageFileDialog;
+
+                imageDialog.FileName = "Vælg en fil";
+                imageDialog.Filter = "Billed filer (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png";
+                imageDialog.Title = "Åben et billed";
+
+                switch (imageDialog.ShowDialog() == DialogResult.OK)
+                {
+                    case true:
+                        {
+                            List<string> pathArray = new List<string>();
+                            pathArray.AddRange(imageDialog.FileName.Split((char)92)); //(char)92 = \
+                            var fileName = pathArray[pathArray.Count - 1];
+
+                            pathArray.RemoveAt(pathArray.Count - 1);
+
+                            var path = String.Join(@"\", pathArray.ToArray());
+                            var logo = FileSystemHelper.GetImageFile(path + @"\", fileName);
+
+                            switch (logo.Width > 1725 || logo.Height > 230)
+                            {
+                                case true:
+                                    {
+                                        System.Windows.MessageBox.Show("Billed for stort\nMax H: 230 Pixels\nMax B: 1725 Pixels");
+                                        LogoErrorLabel.Content = "Størrelses fejl";
+                                        break;
+                                    }
+                                default:
+                                    {
+                                        FileSystemHelper.CreateImage($@"{Environment.CurrentDirectory}\Assets\Company\Logo.png", logo);
+                                        LogoErrorLabel.Content = "Logo tilføjet";
+                                        break;
+                                    }
+                            }
+                            break;
+                        }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unexpected Error");
+            }
+        }
+
         #endregion
 
         #region Logs
@@ -389,58 +444,5 @@ namespace GiroZilla.Views
             }
         }
         #endregion
-
-        private void SetLogoButton_Click(object sender, RoutedEventArgs e)
-        {
-            SetNewLogo();
-        }
-
-        private void SetNewLogo()
-        {
-            try
-            {
-                var imageDialog = FileSystemHelper.imageFileDialog;
-
-                imageDialog.FileName = "Vælg en fil";
-                imageDialog.Filter = "Billed filer (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png";
-                imageDialog.Title = "Åben et billed";
-
-                switch (imageDialog.ShowDialog() == DialogResult.OK)
-                {
-                    case true:
-                        {
-                            List<string> pathArray = new List<string>();
-                            pathArray.AddRange(imageDialog.FileName.Split((char)92)); //(char)92 = \
-                            var fileName = pathArray[pathArray.Count - 1];
-
-                            pathArray.RemoveAt(pathArray.Count - 1);
-
-                            var path = String.Join(@"\", pathArray.ToArray());
-                            var logo = FileSystemHelper.GetImageFile(path + @"\", fileName);
-
-                            switch (logo.Width > 1725 || logo.Height > 230)
-                            {
-                                case true:
-                                    {
-                                        System.Windows.MessageBox.Show("Billed for stort\nMax H: 230 Pixels\nMax B: 1725 Pixels");
-                                        LogoErrorLabel.Content = "Størrelses fejl";
-                                        break;
-                                    }
-                                default:
-                                    {
-                                        FileSystemHelper.CreateImage($@"{Environment.CurrentDirectory}\Assets\Company\Logo.png", logo);
-                                        LogoErrorLabel.Content = "Logo tilføjet";
-                                        break;
-                                    }
-                            }
-                            break;
-                        }
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Unexpected Error");
-            }
-        }
     }
 }

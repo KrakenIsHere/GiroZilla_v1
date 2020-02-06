@@ -26,7 +26,9 @@ namespace GiroZilla.Views
         public Invoice()
         {
             InitializeComponent();
+
             InvoiceSearchYearValue.Value = DateTime.Now.Year;
+
             AddObjectsToPaymentCombo();
             PrintHelper.FillInvoiceDesignCombo(InvoiceDesignCombo);
             SetData();
@@ -893,11 +895,11 @@ namespace GiroZilla.Views
             await Task.FromResult(true);
         }
 
-        #endregion
-
         private void InvoiceSearchYearValue_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double?> e)
         {
             SetData();
         }
+
+        #endregion
     }
 }

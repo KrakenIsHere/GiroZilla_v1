@@ -20,6 +20,7 @@ namespace GiroZilla.Views
         public Products()
         {
             InitializeComponent();
+
             SetData();
         }
 
@@ -103,7 +104,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "An error occured while updating data!");
+                Log.Error(ex, "An error occured while updating data");
             }
         }
 

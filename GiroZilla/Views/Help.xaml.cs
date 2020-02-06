@@ -28,6 +28,7 @@ namespace GiroZilla.Views
         public Help()
         {
             InitializeComponent();
+
             PopulateTreeView();
 
             ViewerPDF.PDFScrollViewer.ScrollChanged += PDFScrollViewer_ScrollChanged;

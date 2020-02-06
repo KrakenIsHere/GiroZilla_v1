@@ -54,6 +54,7 @@ namespace GiroZilla.Views
         public Routes()
         {
             InitializeComponent();
+
             SetRouteData();
             SetCityData();
             AddCustomersToDataGrid();
