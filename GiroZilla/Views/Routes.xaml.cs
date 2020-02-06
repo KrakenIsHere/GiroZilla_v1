@@ -937,6 +937,7 @@ namespace GiroZilla.Views
                                     }
                             }
 
+                            //Sets data input for the previous cutomer before changeing
                             _customerDataList[_routeCustomerNum - 1] = array;
 
                             switch (!isFinalPrint)
@@ -1017,6 +1018,7 @@ namespace GiroZilla.Views
                                     }
                             }
 
+                            //Sets data input for the previous cutomer before changeing
                             _customerDataList[_routeCustomerNum - 1] = array;
 
                             switch (!isFirstPrint)
@@ -1120,9 +1122,7 @@ namespace GiroZilla.Views
                             _routeCustomerNum = 0;
                             _routeSelected = RouteGrid.SelectedIndex;
 
-                            DoNextCustomerRow();
-
-                            _routeCustomerNum = 0;
+                            ResetPrintRouteDialog();
 
                             _customerDataList.Clear();
 
