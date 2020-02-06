@@ -108,7 +108,7 @@
                             VerticalAlignment="Top" 
                             HorizontalAlignment="Right" 
                             Width="128" Grid.Column="2"
-                            Content="Slet Område"/>
+                            Content="Slet Område(r)"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Vertical" Margin="5,0,0,0">
@@ -121,7 +121,7 @@
                             VerticalAlignment="Top" 
                             HorizontalAlignment="Right" 
                             Width="128" Grid.Column="2"
-                            Content="Slet Rute"/>
+                            Content="Slet Rute(r)"/>
                     </StackPanel>
                 </StackPanel>
 
@@ -134,7 +134,7 @@
                     Click="DeleteRouteCustomerButton_Click"
                     HorizontalAlignment="Right" 
                     Width="260" Grid.Column="2"
-                    Content="Slet Kunde fra rute"/>
+                    Content="Slet Kunde(r) fra rute"/>
             </StackPanel>
         </GroupBox>
 

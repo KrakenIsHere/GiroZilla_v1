@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using PyroSquidUniLib.Database;
 using PyroSquidUniLib.Documents;
-
-
+using System.Collections.Generic;
 
 namespace GiroZilla.Views
 {
@@ -88,7 +87,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "Unexpected Error");
+                Log.Warning(ex, "Something went wrong setting the data for the ProductGrid");
             }
         }
 
@@ -155,6 +154,47 @@ namespace GiroZilla.Views
             }
 
             return false;
+        }
+
+        /// <summary>
+        ///   <para>Deletes selected product from the database</para>
+        /// </summary>
+        /// <param name="row">The row.</param>
+        private async void DeleteProducts(DataRowView[] rows)
+        {
+            try
+            {
+                string message = $"Er du sikker du vil slette {rows.Length} produkter?";
+                string caption = "Advarsel";
+                System.Windows.MessageBoxButton buttons = System.Windows.MessageBoxButton.YesNo;
+                System.Windows.MessageBoxResult result;
+
+                // Displays the MessageBox.
+                result = MessageBox.Show(message, caption, buttons);
+                switch (result == System.Windows.MessageBoxResult.Yes)
+                {
+                    case true:
+                        {
+                            foreach (DataRowView row in rows)
+                            {
+                                var query = $"DELETE FROM `girozilla`.`products` WHERE `Product_ID` = {row.Row.ItemArray[0].ToString()}";
+
+                                AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
+
+                                Log.Information($"Successfully deleted product #{row.Row.ItemArray[0].ToString()}");
+                            }
+                            MessageBox.Show($"{rows.Length} Produkter blev slettet");
+                            break;
+                        }
+                }
+                await Task.FromResult(true);
+            }
+            catch (Exception ex)
+            {
+                await Task.FromResult(false);
+                MessageBox.Show("En uventet fejl er sket", "FEJL");
+                Log.Error(ex, "Unexpected Error");
+            }
         }
 
         /// <summary>
@@ -228,7 +268,25 @@ namespace GiroZilla.Views
                 {
                     case true:
                         {
-                            DeleteProduct(ProductGrid.SelectedItem as DataRowView);
+                            switch (ProductGrid.SelectedItems.Count > 1)
+                            {
+                                case true:
+                                    {
+                                        List<DataRowView> dataList = new List<DataRowView>();
+                                        foreach (object obj in ProductGrid.SelectedItems)
+                                        {
+                                            dataList.Add(obj as DataRowView);
+                                        }
+
+                                        DeleteProducts(dataList.ToArray());
+                                        break;
+                                    }
+                                default:
+                                    {
+                                        DeleteProduct(ProductGrid.SelectedItem as DataRowView);
+                                        break;
+                                    }
+                            }
 
                             SetData();
 
@@ -245,7 +303,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -291,7 +349,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -362,7 +420,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 

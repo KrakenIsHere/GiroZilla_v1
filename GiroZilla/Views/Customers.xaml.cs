@@ -162,7 +162,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Something went wrong setting the data for the CustomerGrid!");
+                Log.Error(ex, "Something went wrong setting the data for the CustomerGrid");
             }
         }
 
@@ -178,7 +178,51 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "Something went wrong updating customer data!");
+                Log.Error(ex, "Something went wrong updating customer data");
+            }
+        }
+
+        /// <summary>Deletes selected customers from CustomerGrid</summary>
+        /// <param name="row">The row.</param>
+        private async void DeleteCustomers(DataRowView[] rows)
+        {
+            try
+            {
+                string message = $"Er du sikker du vil slette {rows.Count()} kunder?";
+                string caption = "Advarsel";
+                System.Windows.MessageBoxButton buttons = System.Windows.MessageBoxButton.YesNo;
+                System.Windows.MessageBoxResult result;
+
+                // Displays the MessageBox.
+                result = MessageBox.Show(message, caption, buttons);
+                switch (result == System.Windows.MessageBoxResult.Yes)
+                {
+                    case true:
+                        {
+                            foreach (DataRowView row in rows)
+                            {
+                                var query = $"DELETE FROM `girozilla`.`customers` WHERE `Customer_ID` = {row.Row.ItemArray[0].ToString()}";
+
+                                AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
+
+                                query = $"DELETE FROM `girozilla`.`route-customers` WHERE `Route-Customer_CUSTOMERID` = {row.Row.ItemArray[0].ToString()}";
+
+                                AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
+
+                                Log.Information($"Successfully deleted a customer #{row.Row.ItemArray[0].ToString()}");
+                            }
+
+                            MessageBox.Show($"{rows.Length} Kunder blev slettet");
+                            break;
+                        }
+                }
+                await Task.FromResult(true);
+            }
+            catch (Exception ex)
+            {
+                await Task.FromResult(false);
+                MessageBox.Show("En uventet fejl er sket", "FEJL");
+                Log.Error(ex, "An error occured while deleting a customer");
             }
         }
 
@@ -218,7 +262,7 @@ namespace GiroZilla.Views
             {
                 await Task.FromResult(false);
                 MessageBox.Show("En uventet fejl er sket", "FEJL");
-                Log.Error(ex, "An error occured while deleting a customer!");
+                Log.Error(ex, "An error occured while deleting a customer");
             }
         }
 
@@ -324,8 +368,6 @@ namespace GiroZilla.Views
 
                             AsyncMySqlHelper.SetDataToDatabase(query, "ConnString").Wait();
 
-                            Log.Error(query, "Added a new customer!");
-
                             await Task.FromResult(true);
                             Log.Information("Successfully Added a new customer");
                             return true;
@@ -341,7 +383,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "An error occured while adding a new customer!");
+                Log.Error(ex, "An error occured while adding a new customer");
             }
 
             return false;
@@ -393,7 +435,25 @@ namespace GiroZilla.Views
             {
                 case true:
                     {
-                        DeleteCustomer(CustomerGrid.SelectedItem as DataRowView);
+                        switch (CustomerGrid.SelectedItems.Count > 1)
+                        {
+                            case true:
+                                {
+                                    List<DataRowView> dataList = new List<DataRowView>();
+                                    foreach(object obj in CustomerGrid.SelectedItems)
+                                    {
+                                        dataList.Add(obj as DataRowView);
+                                    }
+
+                                    DeleteCustomers(dataList.ToArray());
+                                    break;
+                                }
+                            default:
+                                {
+                                    DeleteCustomer(CustomerGrid.SelectedItem as DataRowView);
+                                    break;
+                                }
+                        }
 
                         SetData();
                         break;
@@ -559,7 +619,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "Something went wrong adding new service data!");
+                Log.Error(ex, "Something went wrong adding new service data");
             }
             return false;
         }
@@ -591,7 +651,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "Something went wrong setting the ServiceGrid data!");
+                Log.Error(ex, "Something went wrong setting the ServiceGrid data");
             }
         }
 
@@ -782,7 +842,7 @@ namespace GiroZilla.Views
                             }
                             catch (Exception ex)
                             {
-                                Log.Warning(ex, "No service amount");
+                                Log.Error(ex, "No service amount");
                                 ServicesNeeded = 0;
                             }
 
@@ -827,7 +887,7 @@ namespace GiroZilla.Views
                                         }
                                         catch (Exception ex)
                                         {
-                                            Log.Error(ex, "Unable to get any Service Data!");
+                                            Log.Error(ex, "Unable to get any Service Data");
                                         }
 
                                         NewServiceID.Text = amountOfTotalServices.ToString();
@@ -884,7 +944,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -969,7 +1029,7 @@ namespace GiroZilla.Views
             {
                 await Task.FromResult(false);
                 MessageBox.Show("En uventet fejl er sket", "FEJL");
-                Log.Error(ex, "An error occured while adding new county data!");
+                Log.Error(ex, "An error occured while adding new county data");
             }
             return false;
         }
@@ -998,7 +1058,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -1089,7 +1149,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "An error occured while disabling columns!");
+                Log.Error(ex, "An error occured while disabling columns");
             }
         }
 
@@ -1308,7 +1368,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -1331,7 +1391,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -1360,7 +1420,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -1379,7 +1439,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -1398,7 +1458,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
     }

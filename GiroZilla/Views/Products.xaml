@@ -67,15 +67,15 @@
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Margin="0,10,10,0" Header="Slet" HorizontalAlignment="Right" Width="146" Grid.Column="2" Height="128" VerticalAlignment="Top">
+        <GroupBox Margin="0,10,10,0" Header="Slet" HorizontalAlignment="Right" Width="150" Grid.Column="2" Height="128" VerticalAlignment="Top">
             <StackPanel Orientation="Vertical">
                 <Button
                     x:Name="DeleteProductButton"
                     Click="DeleteProductButton_Click"
-                    Width="128"
+                    Width="132"
                     VerticalAlignment="Bottom"
                     HorizontalAlignment="Left"
-                    Content="Slet Produkt"
+                    Content="Slet Produkt(er)"
                     IsEnabled="True" Grid.Column="2"/>
             </StackPanel>
         </GroupBox>

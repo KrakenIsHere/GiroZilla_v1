@@ -10,6 +10,8 @@ using PyroSquidUniLib.Database;
 using PyroSquidUniLib.Documents;
 using PyroSquidUniLib.Extensions;
 using PyroSquidUniLib.Models;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace GiroZilla.Views
 {
@@ -108,7 +110,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(true);
-                Log.Error(ex, "An error occured while setting up the PrintService Dialog!");
+                Log.Error(ex, "An error occured while setting up the PrintService Dialog");
             }
         }
 
@@ -124,7 +126,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "Something went wrong updating the service data!");
+                Log.Error(ex, "Something went wrong updating the service data");
             }
         }
 
@@ -271,7 +273,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "An error occured while setting ServiceGrid data!");
+                Log.Warning(ex, "Something went wrong setting the data for the ServiceGrid");
             }
         }
 
@@ -287,7 +289,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "An error occured while disabling columns!");
+                Log.Error(ex, "An error occured while disabling columns");
             }
         }
 
@@ -340,7 +342,7 @@ namespace GiroZilla.Views
             {
                 await Task.FromResult(false);
                 MessageBox.Show("Venligst vælg en fejning");
-                Log.Warning(ex, "No service picked!");
+                Log.Warning(ex, "No service picked");
             }
         }
 
@@ -383,6 +385,49 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
+                Log.Error(ex, "Unexpected Error");
+            }
+        }
+
+        /// <summary>Deletes the selected service from ServiceGrid.</summary>
+        /// <param name="row">The row.</param>
+        private async void DeleteSelectedServices(DataRowView[] rows)
+        {
+            try
+            {
+                string message = $"Er du sikker du vil slette {rows.Count()} fejninger?";
+                string caption = "Advarsel";
+                System.Windows.MessageBoxButton buttons = System.Windows.MessageBoxButton.YesNo;
+                System.Windows.MessageBoxResult result;
+
+                // Displays the MessageBox.
+                result = MessageBox.Show(message, caption, buttons);
+                switch (result == System.Windows.MessageBoxResult.Yes)
+                {
+                    case true:
+                        {
+                            foreach (DataRowView row in rows)
+                            {
+                                var query = $"DELETE FROM `girozilla`.`service-products` WHERE `Service-Product_SERVICEID` = {row.Row.ItemArray[0].ToString()}";
+
+                                AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
+
+                                query = $"DELETE FROM `girozilla`.`services` WHERE `Service_ID` = {row.Row.ItemArray[0].ToString()}";
+
+                                AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
+
+                                Log.Information($"Successfully deleted service #{row.Row.ItemArray[0]}");
+                            }
+                            MessageBox.Show($"{rows.Length} Fejninger blev slettet");
+                            break;
+                        }
+                }
+                await Task.FromResult(true);
+            }
+            catch (Exception ex)
+            {
+                await Task.FromResult(false);
+                MessageBox.Show("En uventet fejl er sket", "FEJL");
                 Log.Error(ex, "Unexpected Error");
             }
         }
@@ -487,7 +532,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -619,7 +664,25 @@ namespace GiroZilla.Views
                 {
                     case true:
                         {
-                            DeleteSelectedService(ServiceGrid.SelectedItem as DataRowView);
+                            switch (ServiceGrid.SelectedItems.Count > 1)
+                            {
+                                case true:
+                                    {
+                                        List<DataRowView> dataList = new List<DataRowView>();
+                                        foreach (object obj in ServiceGrid.SelectedItems)
+                                        {
+                                            dataList.Add(obj as DataRowView);
+                                        }
+
+                                        DeleteSelectedServices(dataList.ToArray());
+                                        break;
+                                    }
+                                default:
+                                    {
+                                        DeleteSelectedService(ServiceGrid.SelectedItem as DataRowView);
+                                        break;
+                                    }
+                            }
 
                             SetData();
                             await Task.FromResult(true);
@@ -635,7 +698,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -672,7 +735,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 

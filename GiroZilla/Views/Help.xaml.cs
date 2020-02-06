@@ -44,6 +44,7 @@ namespace GiroZilla.Views
                             var isFirst = false;
                             foreach (CustomTreeViewItemParent item in ManualTreeView.Items)
                             {
+                                //Must be an IF
                                 if (!isFirst && ManualTreeView.ItemContainerGenerator.ContainerFromItem(item) is TreeViewItem tvi)
                                 {
                                     tvi.IsSelected = true;
@@ -60,7 +61,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -172,7 +173,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -262,7 +263,10 @@ namespace GiroZilla.Views
                                                         var foundItem = false;
                                                         foreach (CustomTreeViewItemChild subItem in tvi.Items)
                                                         {
-                                                            if (!(tvi.ItemContainerGenerator.ContainerFromItem(subItem) is TreeViewItem tvi2) || subItem.Page != _page || foundItem) continue;
+                                                            //Must be an IF
+                                                            if (!(tvi.ItemContainerGenerator.ContainerFromItem(subItem) is TreeViewItem tvi2) 
+                                                                || subItem.Page != _page 
+                                                                || foundItem) continue;
 
                                                             tvi2.IsSelected = true;
                                                             foundItem = true;
@@ -283,7 +287,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -314,7 +318,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
     }

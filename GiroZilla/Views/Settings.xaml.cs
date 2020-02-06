@@ -83,7 +83,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "something went wrong!");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -168,7 +168,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Error(ex, "An error occured while fetching the license from the database!");
+                Log.Error(ex, "An error occured while fetching the license from the database");
                 return null;
             }
         }
@@ -187,17 +187,22 @@ namespace GiroZilla.Views
                         LicenseValueTotalUses.Text = row["License_USES"].ToString();
                         LicenseValueUsesLeft.Text = (int.Parse(row["License_USES"].ToString()) - int.Parse(row["License_USED"].ToString())).ToString();
 
-                        if (!string.IsNullOrWhiteSpace(row["License_MOBILE"].ToString()))
+                        switch (!string.IsNullOrWhiteSpace(row["License_MOBILE"].ToString()))
                         {
-                            MobileLicenseValue.Text = row["License_MOBILE"].ToString();
-                            MobileLicenseValueTotalUses.Text = row["License_MUSES"].ToString();
-                            MobileLicenseValueUsesLeft.Text = (int.Parse(row["License_MUSES"].ToString()) - int.Parse(row["License_MUSED"].ToString())).ToString();
-                        }
-                        else
-                        {
-                            MobileLicenseValue.Text = "Ingen";
-                            MobileLicenseValueTotalUses.Text = "Ingen";
-                            MobileLicenseValueUsesLeft.Text = "Ingen";
+                            case true:
+                                {
+                                    MobileLicenseValue.Text = row["License_MOBILE"].ToString();
+                                    MobileLicenseValueTotalUses.Text = row["License_MUSES"].ToString();
+                                    MobileLicenseValueUsesLeft.Text = (int.Parse(row["License_MUSES"].ToString()) - int.Parse(row["License_MUSED"].ToString())).ToString();
+                                    break;
+                                }
+                            default:
+                                {
+                                    MobileLicenseValue.Text = "Ingen";
+                                    MobileLicenseValueTotalUses.Text = "Ingen";
+                                    MobileLicenseValueUsesLeft.Text = "Ingen";
+                                    break;
+                                }
                         }
                     }
                 }
@@ -239,7 +244,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -290,7 +295,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -319,7 +324,7 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 await Task.FromResult(false);
-                Log.Warning(ex, "Chagnes could not be saved!");
+                Log.Warning(ex, "Chagnes could not be saved");
                 GiroErrorLabel.Content = "Kunne ikke gemme ændringer";
             }
         }
@@ -350,7 +355,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
 
@@ -380,7 +385,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
         #endregion
@@ -434,7 +439,7 @@ namespace GiroZilla.Views
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unexpected error");
+                Log.Error(ex, "Unexpected Error");
             }
         }
     }
