@@ -31,9 +31,9 @@ namespace GiroZilla
         private static readonly ILogger Log = Serilog.Log.ForContext<MainWindow>();
         public static MainWindow mainWindow;
 
-        UpdateManager mgr;
-        UpdateInfo updates;
-        ReleaseEntry latestVersion;
+        private UpdateManager _mgr;
+        private UpdateInfo _updates;
+        private ReleaseEntry _latestVersion;
 
         public bool IsLicenseVerified { get; set; }
 
@@ -41,14 +41,14 @@ namespace GiroZilla
 
         private bool _isCorrect;
 
-        private bool _isManualChangeLicense = false;
+        private bool _isManualChangeLicense;
 
         /// <summary>Initializes a new instance of the <see cref="MainWindow"/> class.</summary>
         public MainWindow()
         {
             InitializeComponent();
             mainWindow = this;
-            Application.Current.MainWindow.Closing += new CancelEventHandler(MainWindow_Closing);
+            if (Application.Current.MainWindow != null) Application.Current.MainWindow.Closing += MainWindow_Closing;
 
             VerifyLogsFolder();
             CheckLicense();
@@ -344,19 +344,19 @@ namespace GiroZilla
                     case "ResultYes":
                         PropertiesExtension.Set("ShowUpdatePromptOnStart", "Yes");
                         DoUpdate();
-                        mgr.Dispose();
+                        _mgr.Dispose();
                         UpdateDialog.IsOpen = false;
                         break;
 
                     case "ResultNo":
                         UpdateDialog.IsOpen = false;
-                        mgr.Dispose();
+                        _mgr.Dispose();
                         break;
 
                     case "ResultDontRemind":
                         PropertiesExtension.Set("ShowUpdatePromptOnStart", "Disabled");
                         Log.Information("Update check on start was disabled by the user.");
-                        mgr.Dispose();
+                        _mgr.Dispose();
                         UpdateDialog.IsOpen = false;
                         break;
                 }
@@ -378,7 +378,7 @@ namespace GiroZilla
                 try
                 {
                     Log.Information("Downloading updates.");
-                    await mgr.DownloadReleases(updates.ReleasesToApply);
+                    await _mgr.DownloadReleases(_updates.ReleasesToApply);
                 }
                 catch (Exception ex)
                 {
@@ -389,7 +389,7 @@ namespace GiroZilla
                 try
                 {
                     Log.Information("Applying updates.");
-                    await mgr.ApplyReleases(updates);
+                    await _mgr.ApplyReleases(_updates);
                 }
                 catch (Exception ex)
                 {
@@ -399,7 +399,7 @@ namespace GiroZilla
 
                 try
                 {
-                    await mgr.CreateUninstallerRegistryEntry();
+                    await _mgr.CreateUninstallerRegistryEntry();
                 }
                 catch (Exception ex)
                 {
@@ -408,7 +408,7 @@ namespace GiroZilla
                 }
 
 
-                var latestExe = Path.Combine(mgr.RootAppDirectory, string.Concat("app-", latestVersion.Version.Version.Major, ".", latestVersion.Version.Version.Minor, ".", latestVersion.Version.Version.Build), "GiroZilla.exe");
+                var latestExe = Path.Combine(_mgr.RootAppDirectory, string.Concat("app-", _latestVersion.Version.Version.Major, ".", _latestVersion.Version.Version.Minor, ".", _latestVersion.Version.Version.Build), "GiroZilla.exe");
                 Log.Information("Updates applied successfully.");
 
                 Log.Information($"New exe path: {latestExe}");
@@ -427,23 +427,23 @@ namespace GiroZilla
             {
                 try
                 {
-                    mgr = await UpdateManager.GitHubUpdateManager("https://github.com/TheWickedKraken/GiroZilla_V1");
-                    updates = await mgr.CheckForUpdate();
+                    _mgr = await UpdateManager.GitHubUpdateManager("https://github.com/TheWickedKraken/GiroZilla_V1");
+                    _updates = await _mgr.CheckForUpdate();
                 }
                 catch (Exception ex)
                 {
                     Log.Error(ex, "Something went wrong getting the repository. Check for trailing slashes or if the repository is hosted on an enterprise server!");
                 }
 
-                Log.Information($"Updates available: {updates.ReleasesToApply.Any()} Current version: {mgr.CurrentlyInstalledVersion()}");
+                Log.Information($"Updates available: {_updates.ReleasesToApply.Any()} Current version: {_mgr.CurrentlyInstalledVersion()}");
 
-                switch (updates.ReleasesToApply.Any())
+                switch (_updates.ReleasesToApply.Any())
                 {
                     case true:
                         {
-                            latestVersion = updates.ReleasesToApply.OrderBy(x => x.Version).Last();
+                            _latestVersion = _updates.ReleasesToApply.OrderBy(x => x.Version).Last();
 
-                            Log.Information("Version {0} is available", latestVersion.Version.ToString());
+                            Log.Information("Version {0} is available", _latestVersion.Version.ToString());
                             UpdateDialog.IsOpen = true;
                             break;
                         }
@@ -458,7 +458,7 @@ namespace GiroZilla
                                         break;
                                     }
                             }
-                            mgr.Dispose();
+                            _mgr.Dispose();
                             UpdateDialog.IsOpen = false;
                             break;
                         }
@@ -530,7 +530,7 @@ namespace GiroZilla
             switch (e.Key)
             {
                 case Key.NumPad0:
-                    
+
                     break;
 
                 case Key.Enter when LicenseTextBox.IsFocused:
@@ -549,7 +549,7 @@ namespace GiroZilla
         {
             try
             {
-                mgr.Dispose();
+                _mgr.Dispose();
             }
             catch (NullReferenceException)
             {
