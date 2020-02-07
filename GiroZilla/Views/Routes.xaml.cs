@@ -1956,8 +1956,6 @@ namespace GiroZilla.Views
 
                 CustomerGridGroupBox.Header = "Kunder i rute: " + _customerData.Tables[0].Rows.Count;
 
-                //var data = VariableManipulation.SortDataTable(_customerData.Tables[0], "Opstilling");
-
                 CustomerGrid.ItemsSource = _customerData.Tables[0].DefaultView;
 
                 await Task.FromResult(true);
