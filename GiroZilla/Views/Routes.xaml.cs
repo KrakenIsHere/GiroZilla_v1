@@ -985,7 +985,7 @@ namespace GiroZilla.Views
             }
         }
 
-        private async void DoPrevCustomerRow(bool isFirstPrint = false)
+        private async void DoPrevCustomerRow()
         {
             try
             {
@@ -1020,17 +1020,6 @@ namespace GiroZilla.Views
 
                             //Sets data input for the previous cutomer before changeing
                             _customerDataList[_routeCustomerNum - 1] = array;
-
-                            switch (!isFirstPrint)
-                            {
-                                case true:
-                                    {
-                                        ResetPrintRouteDialog();
-
-                                        SetupPrintRouteDialog(table, false);
-                                        break;
-                                    }
-                            }
 
                             switch (_routeCustomerNum < _routeCustomerAmount)
                             {
