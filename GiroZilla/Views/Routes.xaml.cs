@@ -937,8 +937,15 @@ namespace GiroZilla.Views
                                     }
                             }
 
-                            //Sets data input for the previous cutomer before changeing
-                            _customerDataList[_routeCustomerNum - 1] = array;
+                            try
+                            {
+                                //Sets data input for the previous cutomer before changeing
+                                _customerDataList[_routeCustomerNum - 1] = array;
+                            }
+                            catch (ArgumentOutOfRangeException AOOREx)
+                            {
+                                Log.Error(AOOREx, $"_routeCustomerNum - 1 = {_routeCustomerNum - 1}; Which is out of index (_customerDataList.Count = {_customerDataList.Count}) At Next");
+                            }
 
                             switch (!isFinalPrint)
                             {
@@ -1018,8 +1025,19 @@ namespace GiroZilla.Views
                                     }
                             }
 
-                            //Sets data input for the previous cutomer before changeing
-                            _customerDataList[_routeCustomerNum - 1] = array;
+                            try
+                            {
+                                //Sets data input for the previous cutomer before changeing
+                                _customerDataList[_routeCustomerNum - 1] = array;
+                            }
+                            catch (ArgumentOutOfRangeException AOOREx)
+                            {
+                                Log.Error(AOOREx, $"_routeCustomerNum - 1 = {_routeCustomerNum - 1}; Which is out of index (_customerDataList.Count = {_customerDataList.Count}) At Prev");
+                            }
+
+                            ResetPrintRouteDialog();
+
+                            SetupPrintRouteDialog(table, false);
 
                             switch (_routeCustomerNum < _routeCustomerAmount)
                             {
@@ -1120,7 +1138,7 @@ namespace GiroZilla.Views
                                 _customerDataList.Add(new string[12]);
                             }
 
-                            SetupPrintRouteDialog(_printRouteCustomerData);
+                            SetupPrintRouteDialog(_printRouteCustomerData, true);
                             PrintRouteDialog.IsOpen = true;
 
                             switch (_printRouteCustomerData.Rows.Count > 1)
