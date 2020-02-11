@@ -1979,6 +1979,10 @@ namespace GiroZilla.Views
                 await Task.FromResult(true);
                 Log.Information($"Successfully filled CustomerGrid ItemSource");
             }
+            catch (NullReferenceException)
+            {
+                Log.Information("While setting the data for the CustomerGrid, _routeSelectId was liekly NULL which is ok");
+            }
             catch (Exception ex)
             {
                 await Task.FromResult(false);
