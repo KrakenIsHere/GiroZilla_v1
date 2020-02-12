@@ -420,9 +420,29 @@
             </StackPanel>
         </GroupBox>
 
-        <!--(WIP 5)-->
-        <GroupBox Header="(WIP 5)" Margin="10" Grid.Row="2" Grid.Column="0">
-            <StackPanel/>
+        <!--Save Settings-->
+        <GroupBox Header="Gem og Gendannelse" Margin="10" Grid.Row="2" Grid.Column="0">
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <Button 
+                        x:Name="SaveSettingsButton" 
+                        Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                        Content="Gem Indstillinger"
+                        Width="200"
+                        Margin="10,10,5,0"
+                        HorizontalAlignment="Left"
+                        Click="SaveSettingsButton_Click" />
+                    <Label Content="Gemmer ikke log mappe" Margin="0,12,17,0"/>
+                </StackPanel>
+                <Button 
+                    x:Name="RestoreSettingsButton" 
+                    Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                    Content="Genopret Indstillinger"
+                    Width="200"
+                    Margin="10,30,17,0"
+                    HorizontalAlignment="Left"
+                    Click="RestoreSettingsButton_Click" />
+            </StackPanel>
 
         </GroupBox>
 

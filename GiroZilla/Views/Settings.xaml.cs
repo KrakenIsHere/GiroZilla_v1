@@ -444,5 +444,48 @@ namespace GiroZilla.Views
             }
         }
         #endregion
+
+        private async void SaveSettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            var text = $"" +
+                $"{PropertiesExtension.Get<string>("CreditorNum")}\n" +
+                $"{PropertiesExtension.Get<string>("LastInvoiceNum")}\n" +
+                $"{PropertiesExtension.Get<string>("AddressLine")}\n" +
+                $"{PropertiesExtension.Get<string>("Regnr")}\n" +
+                $"{PropertiesExtension.Get<string>("Accountnr")}\n" +
+                $"{PropertiesExtension.Get<string>("InvoiceMessage")}\n" +
+                $"{PropertiesExtension.Get<string>("ConnString")}";
+
+            var path = $@"{DefaultDirectories.AppData}\GiroZilla\Settings\";
+
+            AsyncFileSystemHelper.CreateRewriteTextFileAsync(path, "Settings.txt", text);
+            await Task.FromResult(true);
+        }
+
+        private async void RestoreSettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var path = $@"{DefaultDirectories.AppData}\GiroZilla\Settings\Settings.txt";
+
+                var array = await AsyncFileSystemHelper.ReadTextFileToArrayAsync(path);
+
+                PropertiesExtension.Set("CreditorNum", array[0]);
+                PropertiesExtension.Set("LastInvoiceNum", array[1]);
+                PropertiesExtension.Set("AddressLine", array[2]);
+                PropertiesExtension.Set("Regnr", array[3]);
+                PropertiesExtension.Set("Accountnr", array[4]);
+                PropertiesExtension.Set("InvoiceMessage", array[5]);
+                PropertiesExtension.Set("ConnString", array[6]);
+
+                InsertCurrentDatabaseData();
+
+                GetAndInsertGiroSettings();
+            }
+            catch (Exception ex)
+            {
+                Log.Warning(ex, "Couldn't recover settings");
+            }
+        }
     }
 }
