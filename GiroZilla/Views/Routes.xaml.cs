@@ -461,6 +461,8 @@ namespace GiroZilla.Views
                 const string caption = "Advarsel";
                 const MessageBoxButton buttons = MessageBoxButton.YesNo;
 
+                var id = row.Row.ItemArray[0];
+
                 // Displays the MessageBox.
                 var result = MessageBox.Show(message, caption, buttons);
 
@@ -468,17 +470,17 @@ namespace GiroZilla.Views
                 {
                     case true:
                         {
-                            var query = $"DELETE FROM `girozilla`.`route-customers` WHERE `Route-Customer_ROUTEID` = {row.Row.ItemArray[0]}";
+                            var query = $"DELETE FROM `girozilla`.`route-customers` WHERE `Route-Customer_ROUTEID` = {id}";
 
                             AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
 
-                            query = $"DELETE FROM `girozilla`.`routes` WHERE `Route_ID` = {row.Row.ItemArray[0]}";
+                            query = $"DELETE FROM `girozilla`.`routes` WHERE `Route_ID` = {id}";
 
                             AsyncMySqlHelper.UpdateDataToDatabase(query, "ConnString").Wait();
 
-                            MessageBox.Show($"Rute nr:{row.Row.ItemArray[0]} er nu slettet");
+                            MessageBox.Show($"Rute nr:{id} er nu slettet");
 
-                            Log.Information($"Successfully deleted route # {row.Row.ItemArray[0].ToString()}");
+                            Log.Information($"Successfully deleted route # {id.ToString()}");
                             break;
                         }
                 }
@@ -555,7 +557,7 @@ namespace GiroZilla.Views
                                     }
                                 default:
                                     {
-                                        DeleteRoute(CustomerGrid.SelectedItem as DataRowView);
+                                        DeleteRoute(RouteGrid.SelectedItem as DataRowView);
                                         break;
                                     }
                             }
