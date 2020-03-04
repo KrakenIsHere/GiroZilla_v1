@@ -1128,6 +1128,11 @@ namespace GiroZilla.Views
                             var table = VariableManipulation.DataGridtoDataTable(CustomerGrid);
                             _printRouteCustomerData = VariableManipulation.SortDataTable(table, "Opstilling");
 
+                            //foreach (DataRow row in _printRouteCustomerData.Rows)
+                            //{
+                            //    Console.WriteLine(row.ItemArray[2]);
+                            //}
+
                             _routeCustomerNum = 0;
                             _routeSelected = RouteGrid.SelectedIndex;
 
