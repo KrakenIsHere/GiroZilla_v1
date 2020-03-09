@@ -416,6 +416,15 @@
                             HorizontalAlignment="Right"
                             Click="ClearLogs_OnClick" />
                     </StackPanel>
+
+                    <Button 
+                        x:Name="OpenLogs"
+                        Content="Åben Log mappe"
+                        Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                        Width="200"
+                        Margin="15,10,0,0"
+                        HorizontalAlignment="Left"
+                        Click="OpenLogs_Click"/>
                 </StackPanel>
             </StackPanel>
         </GroupBox>

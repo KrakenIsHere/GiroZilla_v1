@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
@@ -443,7 +444,29 @@ namespace GiroZilla.Views
                 Log.Error(ex, "Unexpected Error");
             }
         }
+
+        private void OpenLogs_Click(object sender, RoutedEventArgs e)
+        {
+            var folderPath = LogsPath.Text;
+
+            if (Directory.Exists(folderPath))
+            {
+                ProcessStartInfo startInfo = new ProcessStartInfo
+                {
+                    Arguments = folderPath,
+                    FileName = "explorer.exe"
+                };
+
+                Process.Start(startInfo);
+            }
+            else
+            {
+                Log.Error($"Directory does not exist {folderPath}");
+            }
+        }
         #endregion
+
+        #region Save Settings
 
         private async void SaveSettingsButton_Click(object sender, RoutedEventArgs e)
         {
@@ -487,5 +510,7 @@ namespace GiroZilla.Views
                 Log.Warning(ex, "Couldn't recover settings");
             }
         }
+
+        #endregion
     }
 }
