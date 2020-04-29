@@ -461,7 +461,9 @@ namespace GiroZilla.Views
             }
             else
             {
-                Log.Error($"Directory does not exist {folderPath}");
+                var ex = $"Directory does not exist {folderPath}";
+
+                Log.Error(ex, "Unexpected Error");
             }
         }
         #endregion
