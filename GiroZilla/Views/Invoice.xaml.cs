@@ -300,7 +300,7 @@ namespace GiroZilla.Views
         {
             try
             {
-                switch (string.IsNullOrWhiteSpace(row["Betaling"].ToString()))
+                switch (string.IsNullOrWhiteSpace(row["Betaling"].ToString()) || row["Betaling"].ToString() != PaymentMethod.SelectedValue)
                 {
                     case true:
                         {
