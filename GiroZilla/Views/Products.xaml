@@ -81,7 +81,7 @@
         </GroupBox>
 
         <GroupBox Margin="10,143,10,10" Grid.RowSpan="3" Grid.ColumnSpan="3">
-            <DataGrid Name="ProductGrid" CanUserResizeRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserAddRows="False" CurrentCellChanged="ProductGrid_CurrentCellChanged" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="3" />
+            <DataGrid Name="ProductGrid" CanUserResizeRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserAddRows="True" CurrentCellChanged="ProductGrid_CurrentCellChanged" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="3" />
         </GroupBox>
 
         <materialDesign:DialogHost 

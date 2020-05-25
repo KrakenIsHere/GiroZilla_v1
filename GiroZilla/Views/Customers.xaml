@@ -141,7 +141,7 @@
                 CanUserResizeRows="False"
                 CanUserDeleteRows="False" 
                 CanUserReorderColumns="False"
-                CanUserAddRows="False"
+                CanUserAddRows="True"
                 Grid.Column="0" 
                 Grid.ColumnSpan="3" 
                 Grid.RowSpan="2" 

@@ -189,7 +189,7 @@
                 Name="RouteGrid"
                 CanUserDeleteRows="False"
                 CanUserReorderColumns="False" 
-                CanUserAddRows="False"
+                CanUserAddRows="True"
                 SelectedCellsChanged="RouteGrid_SelectedCellsChanged"
                 CurrentCellChanged="RouteGrid_CurrentCellChanged"
                 Grid.Column="0"

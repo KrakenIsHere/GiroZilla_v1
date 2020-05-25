@@ -30,8 +30,6 @@ namespace GiroZilla.Views
             InsertDataToCountyDropdown();
             AddObjectsToPaymentCombo();
             AddObjectsToInvoiceCombo();
-            AddMonthsToCombobox();
-            SetCountyDataToCombos();
             PrintHelper.FillInvoiceDesignCombo(InvoiceDesignCombo);
             SetData();
         }
@@ -477,6 +475,9 @@ namespace GiroZilla.Views
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private async void AddCustomerButton_Click(object sender, RoutedEventArgs e)
         {
+            AddMonthsToCombobox();
+            SetCountyDataToCombos();
+
             ClearAddCustomerDialog();
 
             AddCustomerDialog.IsOpen = true;
@@ -936,6 +937,9 @@ namespace GiroZilla.Views
 
                 var data = await AsyncMySqlHelper.GetDataFromDatabase<City>(query, "ConnString");
 
+                NewCustomersCity.Items.Clear();
+                NewCustomersZipCode.Items.Clear();
+
                 foreach (City city in data)
                 {
                     NewCustomersCity.Items.Add(city.City_NAME);
@@ -1161,6 +1165,14 @@ namespace GiroZilla.Views
                 var set = AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString");
 
                 var months = VariableManipulation.SortDataSetToStringArray(set.Result, "Month_ID", "Month_NAME");
+
+                NewCustomersMonth1.Items.Clear();
+                NewCustomersMonth2.Items.Clear();
+                NewCustomersMonth3.Items.Clear();
+                NewCustomersMonth4.Items.Clear();
+                NewCustomersMonth5.Items.Clear();
+                NewCustomersMonth6.Items.Clear();
+                MonthSearch.Items.Clear();
 
                 foreach (string month in months)
                 {

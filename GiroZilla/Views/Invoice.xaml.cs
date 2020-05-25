@@ -121,7 +121,7 @@ namespace GiroZilla.Views
         {
             try
             {
-                AsyncMySqlHelper.UpdateSetToDatabase($"SELECT * FROM `User_services`", data.Tables[0].DataSet, "ConnString");
+                AsyncMySqlHelper.UpdateSetToDatabase($"SELECT * FROM `user_services`", data.Tables[0].DataSet, "ConnString");
                 await Task.FromResult(true);
                 Log.Information("Successfully updated service data");
             }
@@ -714,6 +714,8 @@ namespace GiroZilla.Views
         /// <param name="e">The <see cref="SelectedCellsChangedEventArgs"/> instance containing the event data.</param>
         private async void ServiceGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
+            Log.Information("Selected Cell Changed");
+
             try
             {
                 SetProductsInGrid(ServiceGrid.SelectedItem as DataRowView);
