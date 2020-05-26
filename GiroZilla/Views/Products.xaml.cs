@@ -248,6 +248,7 @@ namespace GiroZilla.Views
         private async void ProductGrid_CurrentCellChanged(object sender, EventArgs e)
         {
             UpdateData();
+            SetData();
             ProductGrid.Columns[0].IsReadOnly = true;
 
             await Task.FromResult(true);

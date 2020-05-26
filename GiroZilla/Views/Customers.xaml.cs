@@ -30,6 +30,7 @@ namespace GiroZilla.Views
             InsertDataToCountyDropdown();
             AddObjectsToPaymentCombo();
             AddObjectsToInvoiceCombo();
+            AddMonthsToCombobox(true);
             PrintHelper.FillInvoiceDesignCombo(InvoiceDesignCombo);
             SetData();
         }
@@ -104,7 +105,7 @@ namespace GiroZilla.Views
                                         break;
                                     }
                             }
-                            switch (MonthSearch.SelectedIndex != 0 && MonthSearch.SelectedIndex != -1)
+                            switch (MonthSearch.SelectedIndex != 0 && MonthSearch.SelectedIndex != -1 && MonthSearch.SelectedValue.ToString() != "Ingen Valgt")
                             {
                                 case true:
                                     {
@@ -122,7 +123,7 @@ namespace GiroZilla.Views
                                     {
                                         query += $"WHERE (Postnr = {CountySearch.SelectedItem.ToString().Split(' ')[0]}) ";
 
-                                        switch (MonthSearch.SelectedIndex != 0 && MonthSearch.SelectedIndex != -1)
+                                        switch (MonthSearch.SelectedIndex != 0 && MonthSearch.SelectedIndex != -1 && MonthSearch.SelectedValue.ToString() != "Ingen Valgt")
                                         {
                                             case true:
                                                 {
@@ -312,7 +313,7 @@ namespace GiroZilla.Views
 
                             foreach (string str in months)
                             {
-                                switch (!string.IsNullOrWhiteSpace(str) && str != "System.Windows.Controls.ComboBoxItem: Ingen Valgt")
+                                switch (!string.IsNullOrWhiteSpace(str) && str != "System.Windows.Controls.ComboBoxItem: Ingen Valgt" && str != "Ingen Valgt")
                                 {
                                     case true:
                                         {
@@ -1170,7 +1171,7 @@ namespace GiroZilla.Views
         }
 
         /// <summary>Adds months from database to combobox.</summary>
-        private async void AddMonthsToCombobox()
+        private async void AddMonthsToCombobox(bool isOnLoad = false)
         {
             try
             {
@@ -1186,7 +1187,19 @@ namespace GiroZilla.Views
                 NewCustomersMonth4.Items.Clear();
                 NewCustomersMonth5.Items.Clear();
                 NewCustomersMonth6.Items.Clear();
-                MonthSearch.Items.Clear();
+
+                if (isOnLoad)
+                {
+                    MonthSearch.Items.Clear();
+                    MonthSearch.Items.Add("Ingen Valgt");
+                }
+
+                NewCustomersMonth1.Items.Add("Ingen Valgt");
+                NewCustomersMonth2.Items.Add("Ingen Valgt");
+                NewCustomersMonth3.Items.Add("Ingen Valgt");
+                NewCustomersMonth4.Items.Add("Ingen Valgt");
+                NewCustomersMonth5.Items.Add("Ingen Valgt");
+                NewCustomersMonth6.Items.Add("Ingen Valgt");
 
                 foreach (string month in months)
                 {
@@ -1196,8 +1209,19 @@ namespace GiroZilla.Views
                     NewCustomersMonth4.Items.Add(month);
                     NewCustomersMonth5.Items.Add(month);
                     NewCustomersMonth6.Items.Add(month);
-                    MonthSearch.Items.Add(month);
+
+                    if (isOnLoad)
+                    {
+                        MonthSearch.Items.Add(month);
+                    }
                 }
+
+                NewCustomersMonth1.SelectedIndex = 0;
+                NewCustomersMonth2.SelectedIndex = -1;
+                NewCustomersMonth3.SelectedIndex = -1;
+                NewCustomersMonth4.SelectedIndex = -1;
+                NewCustomersMonth5.SelectedIndex = -1;
+                NewCustomersMonth6.SelectedIndex = -1;
                 await Task.FromResult(true);
             }
             catch (Exception ex)
