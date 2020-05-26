@@ -533,6 +533,20 @@ namespace GiroZilla.Views
         {
             try
             {
+                var queryFind = $"SELECT * FROM `user_services` WHERE `Nummer` = '{InvoiceMethod.SelectedItem.ToString()} {InvoiceNum.Text}'";
+
+                Console.WriteLine(queryFind); 
+
+                switch (await AsyncMySqlHelper.CheckDataFromDatabase(queryFind, "ConnString"))
+                {
+                    case true:
+                        {
+                            MessageBox.Show($"{InvoiceMethod.SelectedItem.ToString()} {InvoiceNum.Text}\nExistere allerede!");
+                            return false;
+                        }
+                }
+
+
                 var year = 0;
 
                 switch (DateTime.Now.Month == 12 && DateTime.Now.Day > 26)
