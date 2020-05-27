@@ -27,6 +27,8 @@
         <metro:WindowCommands>
             <Button Content="{materialDesign:PackIcon Update}" 
                     Click="Update" />
+            <Button Content="{materialDesign:PackIcon FileDocument}" 
+                    Click="EULA" />
         </metro:WindowCommands>
     </metro:MetroWindow.RightWindowCommands>
 

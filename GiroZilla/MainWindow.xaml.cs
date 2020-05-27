@@ -590,5 +590,12 @@ namespace GiroZilla
         }
 
         #endregion
+
+        private void EULA(object sender, RoutedEventArgs e)
+        {
+            //https://drive.google.com/file/d/1vsE3ZIjDY9sEnh_tGcfKN-f3PC39U6LF/view?usp=sharing
+
+            System.Diagnostics.Process.Start("https://drive.google.com/file/d/1vsE3ZIjDY9sEnh_tGcfKN-f3PC39U6LF/view?usp=sharing");
+        }
     }
 }

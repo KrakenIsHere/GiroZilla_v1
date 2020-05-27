@@ -457,7 +457,9 @@
 
         <!--(WIP 6)-->
         <GroupBox Header="(WIP 6)" Grid.Column="1" Margin="11,10,10,10" Grid.Row="2">
-            <StackPanel/>
+            <StackPanel Orientation="Horizontal" Margin="10">
+                
+            </StackPanel>
 
         </GroupBox>
 
