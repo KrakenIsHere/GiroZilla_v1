@@ -775,15 +775,17 @@ namespace GiroZilla.Views
 
                 var customerId = table.Rows[_routeCustomerNum - 1]["Kunde ID"].ToString();
 
-                query = int.Parse(serviceNeeded) > serviceNum
+                query = int.Parse(serviceNeeded) <= serviceNum
+
                     ? "SELECT * FROM `customer-service-data` " +
-                        $"WHERE `customer-service-data_CUSTOMERID` = {customerId} " +
-                        "AND " +
-                        $"`customer-service-data_SERVICENUM` = {serviceNum + 1}"
+                      $"WHERE `customer-service-data_CUSTOMERID` = {customerId} " +
+                      "AND " +
+                      $"`customer-service-data_SERVICENUM` = {serviceNum + 1}"
+
                     : "SELECT * FROM `customer-service-data` " +
-                        $"WHERE `customer-service-data_CUSTOMERID` = {customerId} " +
-                        "AND " +
-                        $"`customer-service-data_SERVICENUM` = {serviceNum}";
+                      $"WHERE `customer-service-data_CUSTOMERID` = {customerId} " +
+                      "AND " +
+                      $"`customer-service-data_SERVICENUM` = {serviceNum}";
 
                 var serviceSet = await AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString");
 
