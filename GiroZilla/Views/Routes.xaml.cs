@@ -723,8 +723,8 @@ namespace GiroZilla.Views
 
                     serviceNum = data.Rows.Count;
 
-                    Console.WriteLine(serviceNum);
-                    Console.WriteLine(query);
+                    Log.Information($"Amount of services: {serviceNum}");
+                    Log.Information($"Query: {query}");
 
                 }
                 catch (NullReferenceException)
