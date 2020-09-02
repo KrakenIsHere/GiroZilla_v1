@@ -722,6 +722,10 @@ namespace GiroZilla.Views
                     var data = dataset.Tables[0];
 
                     serviceNum = data.Rows.Count;
+
+                    Console.WriteLine(serviceNum);
+                    Console.WriteLine(query);
+
                 }
                 catch (NullReferenceException)
                 {
@@ -780,12 +784,12 @@ namespace GiroZilla.Views
                     ? "SELECT * FROM `customer-service-data` " +
                       $"WHERE `customer-service-data_CUSTOMERID` = {customerId} " +
                       "AND " +
-                      $"`customer-service-data_SERVICENUM` = {serviceNum + 1}"
+                      $"`customer-service-data_SERVICENUM` = {serviceNum}"
 
                     : "SELECT * FROM `customer-service-data` " +
                       $"WHERE `customer-service-data_CUSTOMERID` = {customerId} " +
                       "AND " +
-                      $"`customer-service-data_SERVICENUM` = {serviceNum}";
+                      $"`customer-service-data_SERVICENUM` = {serviceNum + 1}";
 
                 var serviceSet = await AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString");
 
