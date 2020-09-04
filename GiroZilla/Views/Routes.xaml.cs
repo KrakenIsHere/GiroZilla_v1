@@ -696,7 +696,7 @@ namespace GiroZilla.Views
 
                 int year;
 
-                switch (DateTime.Now.Month == 12 && DateTime.Now.Day > 15)
+                switch (DateTime.Now.Month == 12 && DateTime.Now.Day > 20)
                 {
                     case true:
                         {
@@ -1132,12 +1132,12 @@ namespace GiroZilla.Views
                     case true:
                         {
                             var table = VariableManipulation.DataGridtoDataTable(CustomerGrid);
-                            _printRouteCustomerData = VariableManipulation.SortDataTable(table, "Opstilling");
+                            _printRouteCustomerData = table; //VariableManipulation.SortDataTable(table, "Opstilling ASC");
 
-                            //foreach (DataRow row in _printRouteCustomerData.Rows)
-                            //{
-                            //    Console.WriteLine(row.ItemArray[2]);
-                            //}
+                            foreach (DataRow row in _printRouteCustomerData.Rows)
+                            {
+                                Console.WriteLine(row.ItemArray[2]);
+                            }
 
                             _routeCustomerNum = 0;
                             _routeSelected = RouteGrid.SelectedIndex;
