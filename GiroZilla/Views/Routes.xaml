@@ -642,12 +642,16 @@
                                     materialDesign:HintAssist.Hint=" Fejninger" 
                                     Width="190"
                                     IsReadOnly="True"/>
-                                <TextBox 
-                                    Name="CustomerServiceNumTextBox" 
-                                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                    materialDesign:HintAssist.Hint=" Fejnings nr" 
-                                    Width="190"
-                                    IsReadOnly="True"/>
+                                <StackPanel Orientation="Horizontal" Margin="10,3,0,0">
+                                    <TextBox 
+                                        Name="CustomerServiceNumTextBox" 
+                                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                        materialDesign:HintAssist.Hint=" Fejnings nr" 
+                                        Width="90"
+                                        IsReadOnly="True"/>
+                                    <Button x:Name="PrevServiceButton" Content="&lt;" Margin="10,0,0,0" IsEnabled="True" Click="PrevService_Click"/>
+                                    <Button x:Name="NextServiceButton" Content=">" Margin="10,0,0,0" IsEnabled="True" Click="NextService_Click"/>
+                                </StackPanel>
                             </StackPanel>
                         </GroupBox>
 

@@ -723,11 +723,16 @@ namespace GiroZilla.Views
 
                     serviceNum = data.Rows.Count;
 
+                    //if (serviceNum == null || serviceNum == 0)
+                    //{
+                    //    serviceNum = 0;
+                    //}
+
                     Log.Information($"Amount of services: {serviceNum}");
                     Log.Information($"Query: {query}");
 
                 }
-                catch (NullReferenceException)
+                catch (Exception)
                 {
                     serviceNum = 0;
                 }
@@ -735,6 +740,17 @@ namespace GiroZilla.Views
                 var comment = table.Rows[_routeCustomerNum - 1]["Kommentar"].ToString();
 
                 var serviceNeeded = table.Rows[_routeCustomerNum - 1]["Fejninger"].ToString();
+
+                try
+                {
+                    var _ = int.Parse(serviceNeeded);
+                }
+                catch (Exception)
+                {
+                    serviceNeeded = (1).ToString();
+                }
+
+                Console.WriteLine("Needed: " + serviceNeeded);
 
                 //Customer
                 CustomerIDTextBox.Text = table.Rows[_routeCustomerNum - 1]["Kunde ID"].ToString();
@@ -779,53 +795,7 @@ namespace GiroZilla.Views
 
                 var customerId = table.Rows[_routeCustomerNum - 1]["Kunde ID"].ToString();
 
-                query = int.Parse(serviceNeeded) <= serviceNum
-
-                    ? "SELECT * FROM `customer-service-data` " +
-                      $"WHERE `customer-service-data_CUSTOMERID` = {customerId} " +
-                      "AND " +
-                      $"`customer-service-data_SERVICENUM` = {serviceNum}"
-
-                    : "SELECT * FROM `customer-service-data` " +
-                      $"WHERE `customer-service-data_CUSTOMERID` = {customerId} " +
-                      "AND " +
-                      $"`customer-service-data_SERVICENUM` = {serviceNum + 1}";
-
-                var serviceSet = await AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString");
-
-                switch (serviceSet != null)
-                {
-                    case true:
-                        {
-
-                            var serviceData = serviceSet.Tables[0].Rows;
-
-                            //Service
-
-                            switch (serviceData.Count > 0)
-                            {
-                                case true:
-                                    {
-                                        _didServiceDataExist = true;
-                                        //Amount
-                                        CustomerChimneysTextBox.Text = serviceData[0]["customer-service-data_CHIMNEYS"].ToString();
-                                        CustomerPipesTextBox.Text = serviceData[0]["customer-service-data_PIPES"].ToString();
-                                        CustomerKWTextBox.Text = serviceData[0]["customer-service-data_KW"].ToString();
-
-                                        CustomerLightingTextBox.Text = serviceData[0]["customer-service-data_LIGHTING"].ToString();
-                                        CustomerHeightTextBox.Text = serviceData[0]["customer-service-data_HEIGHT"].ToString();
-
-                                        //Pipe
-                                        CustomerDiaTextBox.Text = serviceData[0]["customer-service-data_DIA"].ToString();
-                                        CustomerLengthTextBox.Text = serviceData[0]["customer-service-data_LENGTH"].ToString();
-
-                                        CustomerTypeTextBox.Text = serviceData[0]["customer-service-data_TYPE"].ToString();
-                                        break;
-                                    }
-                            }
-                            break;
-                        }
-                }
+                SetServiceData(int.Parse(serviceNeeded), serviceNum, int.Parse(customerId));
 
                 _routeCustomerAmount = table.Rows.Count;
 
@@ -837,6 +807,98 @@ namespace GiroZilla.Views
             catch (Exception ex)
             {
                 Log.Error(ex, "Unexpected Error");
+            }
+        }
+
+        private async void SetServiceData(int serviceNeeded, int serviceNum, int customerId, bool manual = false)
+        {
+
+            string query = "";
+
+            if (serviceNeeded <= serviceNum || manual)
+            {
+                query = "SELECT * FROM `customer-service-data` " +
+                      $"WHERE `customer-service-data_CUSTOMERID` = {customerId} " +
+                      "AND " +
+                      $"`customer-service-data_SERVICENUM` = {serviceNum}";
+            }
+            else
+            {
+                query = "SELECT * FROM `customer-service-data` " +
+                      $"WHERE `customer-service-data_CUSTOMERID` = {customerId} " +
+                      "AND " +
+                      $"`customer-service-data_SERVICENUM` = {serviceNum + 1}";
+            }
+
+            var serviceSet = await AsyncMySqlHelper.GetSetFromDatabase(query, "ConnString");
+
+            if (serviceNum < 1)
+            {
+                PrevServiceButton.IsEnabled = false;
+            }
+            else
+            {
+                PrevServiceButton.IsEnabled = true;
+            }
+
+            switch (serviceSet != null)
+            {
+                case true:
+                    {
+
+                        var serviceData = serviceSet.Tables[0].Rows;
+
+                        Console.WriteLine("Count: " + serviceData.Count);
+
+                        //Service
+                        switch (serviceData.Count > 0)
+                        {
+                            case true:
+                                {
+                                    _didServiceDataExist = true;
+                                    //Amount
+                                    CustomerChimneysTextBox.Text = serviceData[0]["customer-service-data_CHIMNEYS"].ToString();
+                                    CustomerPipesTextBox.Text = serviceData[0]["customer-service-data_PIPES"].ToString();
+                                    CustomerKWTextBox.Text = serviceData[0]["customer-service-data_KW"].ToString();
+
+                                    CustomerLightingTextBox.Text = serviceData[0]["customer-service-data_LIGHTING"].ToString();
+                                    CustomerHeightTextBox.Text = serviceData[0]["customer-service-data_HEIGHT"].ToString();
+
+                                    //Pipe
+                                    CustomerDiaTextBox.Text = serviceData[0]["customer-service-data_DIA"].ToString();
+                                    CustomerLengthTextBox.Text = serviceData[0]["customer-service-data_LENGTH"].ToString();
+
+                                    CustomerTypeTextBox.Text = serviceData[0]["customer-service-data_TYPE"].ToString();
+                                    break;
+                                }
+                            default:
+                                {
+                                    if (manual)
+                                    {
+                                        //Amount
+                                        CustomerChimneysTextBox.Text = "";
+                                        CustomerPipesTextBox.Text = "";
+                                        CustomerKWTextBox.Text = "";
+
+                                        CustomerLightingTextBox.Text = "";
+                                        CustomerHeightTextBox.Text = "";
+
+                                        //Pipe
+                                        CustomerDiaTextBox.Text = "";
+                                        CustomerLengthTextBox.Text = "";
+
+                                        CustomerTypeTextBox.Text = "";
+                                    }
+                                    break;
+                                }
+                        }
+                        break;
+                    }
+                default:
+                    {
+                        Console.WriteLine("ServiceSet is null");
+                        break;
+                    }
             }
         }
 
@@ -1152,6 +1214,7 @@ namespace GiroZilla.Views
                             }
 
                             SetupPrintRouteDialog(_printRouteCustomerData, true);
+
                             PrintRouteDialog.IsOpen = true;
 
                             switch (_printRouteCustomerData.Rows.Count > 1)
@@ -2418,5 +2481,62 @@ namespace GiroZilla.Views
             }
         }
         #endregion
+
+        private async void PrevService_Click(object sender, RoutedEventArgs e)
+        {
+            var data = await DataInput();
+
+            if (!_didServiceDataExist)
+            {
+                AddCustomerServiceData(data);
+            }
+            if (_didServiceDataChange)
+            {
+                UpdateCustomerServiceData(data);
+            }
+
+            var num = int.Parse(CustomerServiceNumTextBox.Text);
+
+            num -= 1;
+
+            if (num > 0)
+            {
+                CustomerServiceNumTextBox.Text = num.ToString();
+
+                SetServiceData(int.Parse(CustomerServicesTextBox.Text), int.Parse(CustomerServiceNumTextBox.Text), int.Parse(CustomerIDTextBox.Text), true);
+            }
+            else
+            {
+                PrevServiceButton.IsEnabled = false;
+            }
+            await Task.FromResult(true);
+        }
+        private async void NextService_Click(object sender, RoutedEventArgs e)
+        {
+            PrevServiceButton.IsEnabled = true;
+
+            var data = await DataInput();
+
+            if (!_didServiceDataExist)
+            {
+                AddCustomerServiceData(data);
+            }
+            if (_didServiceDataChange)
+            {
+                UpdateCustomerServiceData(data);
+            }
+
+            var num = int.Parse(CustomerServiceNumTextBox.Text);
+
+            num += 1;
+
+            if (num > 0)
+            {
+                CustomerServiceNumTextBox.Text = num.ToString();
+
+                SetServiceData(int.Parse(CustomerServicesTextBox.Text), int.Parse(CustomerServiceNumTextBox.Text), int.Parse(CustomerIDTextBox.Text), true);
+            }
+            await Task.FromResult(true);
+        }
     }
 }
